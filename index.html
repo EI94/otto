@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottodrom | Piano Industriale</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+    }
+    h1, h2, h3, h4 {
+        font-family: 'Oswald', sans-serif;
+    }
+
+    .chart-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    .action-card {
+        transition: all 0.3s ease;
+    }
+    .action-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .active-tab {
+        border-bottom: 3px solid #0f766e;
+        color: #0f766e;
+        font-weight: 600;
+    }
+    .inactive-tab {
+        border-bottom: 3px solid transparent;
+        color: #64748b;
+    }
+    .inactive-tab:hover {
+        color: #334155;
+        border-bottom: 3px solid #cbd5e1;
+    }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <i class="fa-solid fa-motorcycle text-teal-700 text-2xl mr-3"></i>
+                <span class="font-bold text-xl tracking-wide uppercase">Ottodrom <span class="text-slate-500 font-light">| Piano Industriale</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#situation" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">La Crisi</a>
+                <a href="#benchmarks" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">Benchmark</a>
+                <a href="#actions" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">Le 7 Azioni</a>
+                <a href="#future" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">Project Green</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="bg-slate-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-3xl font-bold leading-7 text-amber-500 sm:text-4xl sm:truncate uppercase">
+                    Dal Pantano al "Mobility Lab"
+                </h2>
+                <p class="mt-2 text-slate-300 text-lg max-w-2xl">
+                    Un piano di riconversione radicale per salvare Ottodrom: dall'artigianato in perdita alla productizzazione scalabile e ricavi ricorrenti.
+                </p>
+            </div>
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <div class="bg-rose-900/50 border border-rose-700 rounded p-4 text-center">
+                    <span class="block text-rose-400 text-sm uppercase font-bold">EBITDA 2025 (Forecast)</span>
+                    <span class="block text-2xl font-bold text-white">-€350.900</span>
+                </div>
+                <div class="ml-4 bg-teal-900/50 border border-teal-700 rounded p-4 text-center">
+                    <span class="block text-teal-400 text-sm uppercase font-bold">Obiettivo Pivot</span>
+                    <span class="block text-2xl font-bold text-white">Iconic Mobility Lab</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 1: THE SITUATION ROOM -->
+<section id="situation" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 border-l-4 border-rose-600 pl-4">
+        <h3 class="text-2xl font-bold text-slate-900 uppercase">1. Analisi della Crisi & Contesto</h3>
+        <p class="mt-2 text-slate-600">
+            L'insostenibilità non è un "anno storto", è strutturale. Il mercato delle moto custom è crollato sotto il peso dell'inflazione e delle normative Euro 5+. Internamente, i costi fissi divorano ricavi inesistenti.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Macro Context -->
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-lg font-bold text-slate-700"><i class="fa-solid fa-globe-europe mr-2"></i>Contesto Macroeconomico</h4>
+                <select id="macroSelector" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded focus:ring-teal-500 focus:border-teal-500 block p-1">
+                    <option value="market">Crollo Mercato (H1 2025)</option>
+                    <option value="tco">Barriere all'Acquisto (TCO)</option>
+                </select>
+            </div>
+            <div class="chart-wrapper h-72">
+                <canvas id="macroChart"></canvas>
+            </div>
+            <p id="macroText" class="mt-4 text-sm text-slate-500 italic">
+                I dati mostrano una contrazione sistemica. L'Italia soffre un -19.2%, mentre gli USA scendono del 9.2%. I customizer puri sono i primi a cadere.
+            </p>
+        </div>
+
+        <!-- Internal Bleeding -->
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-lg font-bold text-rose-800"><i class="fa-solid fa-heart-crack mr-2"></i>La Verità Finanziaria 2025</h4>
+                <button onclick="toggleFinancialView()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-1 px-2 rounded border border-slate-300">
+                    Cambia Vista
+                </button>
+            </div>
+            <div class="chart-wrapper h-72">
+                <canvas id="financialChart"></canvas>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="bg-slate-50 p-2 rounded">
+                    <span class="block text-slate-500">Ricavi</span>
+                    <span class="font-bold">€190.6k</span>
+                </div>
+                <div class="bg-rose-50 p-2 rounded">
+                    <span class="block text-rose-500">Costi Tot.</span>
+                    <span class="font-bold">€541.5k</span>
+                </div>
+                <div class="bg-amber-50 p-2 rounded">
+                    <span class="block text-amber-600">Cassa</span>
+                    <span class="font-bold text-rose-600">€12.5k</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: THE BENCHMARKS -->
+<section id="benchmarks" class="py-12 bg-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 border-l-4 border-teal-600 pl-4">
+            <h3 class="text-2xl font-bold text-slate-900 uppercase">2. La Strategia: Cosa Rubare ai Migliori</h3>
+            <p class="mt-2 text-slate-600">
+                I customizer che sopravvivono non vendono manodopera. Vendono prodotti, membership ed esperienze. Esplora i casi studio per capire il modello target.
+            </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200 overflow-x-auto">
+                <button class="px-6 py-4 text-sm font-medium active-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('revival', this)">
+                    <i class="fa-solid fa-warehouse mr-2"></i>Revival Cycles
+                </button>
+                <button class="px-6 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('rsd', this)">
+                    <i class="fa-solid fa-gear mr-2"></i>Roland Sands
+                </button>
+                <button class="px-6 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('unit', this)">
+                    <i class="fa-solid fa-box-open mr-2"></i>Unit Garage
+                </button>
+                <button class="px-6 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('bikeshed', this)">
+                    <i class="fa-solid fa-users mr-2"></i>The Bike Shed
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 md:p-8" id="benchmarkContent">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: THE 7 ACTIONS -->
+<section id="actions" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 border-l-4 border-amber-500 pl-4">
+        <h3 class="text-2xl font-bold text-slate-900 uppercase">3. Il Piano Operativo: 7 Azioni Sinergiche</h3>
+        <p class="mt-2 text-slate-600">
+            Non opzioni, ma passaggi obbligati. La somma di queste azioni inverte matematicamente il P&L trasformando i costi fissi in asset e la proprietà intellettuale in prodotti.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="actionsGrid">
+    </div>
+
+    <!-- Detail Panel (Initially Hidden) -->
+    <div id="actionDetailPanel" class="hidden mt-8 bg-slate-50 border border-slate-200 rounded-lg p-6 shadow-inner transition-all duration-500">
+        <div class="flex justify-between items-start">
+            <div>
+                <h4 id="detailTitle" class="text-xl font-bold text-slate-800 mb-2"></h4>
+                <span id="detailTag" class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full uppercase font-bold mb-4"></span>
+            </div>
+            <button onclick="closeDetail()" class="text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <p id="detailDesc" class="text-slate-600 mb-4"></p>
+                <h5 class="font-bold text-sm uppercase text-slate-500 mb-2">Implementazione Pratica:</h5>
+                <ul id="detailSteps" class="list-disc list-inside text-sm text-slate-700 space-y-1"></ul>
+            </div>
+            <div class="bg-white p-4 rounded border border-slate-200">
+                <h5 class="font-bold text-sm uppercase text-teal-700 mb-2"><i class="fa-solid fa-chart-line mr-2"></i>Impatto Finanziario</h5>
+                <p id="detailImpact" class="text-2xl font-bold text-slate-800"></p>
+                <p id="detailSubImpact" class="text-xs text-slate-500 mt-1"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: PROJECT GREEN -->
+<section id="future" class="py-12 bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            <div>
+                <div class="inline-block bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 4: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Iconic Mobility Lab: <span class="text-teal-400">Project Green</span></h3>
+                <p class="text-slate-300 mb-6">
+                    Il cuore della rinascita. Transizione verso la progettazione e vendita di <strong>Kit di Retrofit Ibrido</strong>.
+                    Il Pilot partirà sulla piattaforma BMW Serie R "Airhead" (oltre 1M di unità prodotte).
+                </p>
+
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500">
+                            <i class="fa-solid fa-bolt text-teal-400"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Tecnologia Scalabile</h4>
+                            <p class="text-sm text-slate-400">Kit ibrido plug-and-play. Nessun taglio telaio. Omologabile in DE/FR/UK (e Italia 2027).</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500">
+                            <i class="fa-solid fa-boxes-stacked text-teal-400"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Modello Distributivo 2027</h4>
+                            <p class="text-sm text-slate-400">50% Retail (B2C), 40% Wholesale (B2B a officine), 10% Moto finite.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Profit Simulator -->
+            <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-xl">
+                <h4 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Simulatore Unit Economics (2027)</h4>
+
+                <!-- Chart -->
+                <div class="chart-wrapper h-48 mb-6">
+                    <canvas id="greenChart"></canvas>
+                </div>
+
+                <!-- Controls -->
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-slate-300">Volume Vendite (Kit/Anno)</span>
+                            <span class="font-bold text-teal-400" id="volDisplay">100</span>
+                        </div>
+                        <input type="range" min="20" max="300" value="100" id="volSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                            <span class="block text-xs text-slate-500 uppercase">Prezzo Medio (ASP)</span>
+                            <span class="block text-lg font-bold text-white">€5.400</span>
+                        </div>
+                        <div class="bg-teal-900/30 p-3 rounded border border-teal-700">
+                            <span class="block text-xs text-teal-400 uppercase">Margine Totale</span>
+                            <span class="block text-xl font-bold text-teal-400" id="marginDisplay">€220.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-200 mt-12 py-8">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-slate-500 text-sm">&copy; 2026 Ottodrom Business Plan | Analisi Strategica & Ristrutturazione</p>
+        <p class="text-xs text-slate-400 mt-2">Dati basati su P&L 2025 e proiezioni di mercato Aftermarket 2027.</p>
+    </div>
+</footer>
+
+<script>
+    const financials2025 = {
+        revenue: {
+            total: 190.6,
+            breakdown: [81.5, 34.7, 57.4, 17.0],
+            labels: ['Custom', 'Service', 'Fashion', 'Altro']
+        },
+        costs: {
+            total: 541.5,
+            variable: 205.7,
+            fixed: 335.8
+        },
+        ebitda: -350.9
+    };
+
+    const benchmarks = {
+        revival: {
+            name: "Revival Cycles (Texas)",
+            quote: "\"Non vogliamo essere un brand che paga persone per legittimarsi. Vogliamo costruire cose incredibili e offrire prodotti accessibili.\"",
+            author: "Alan Stulberg, Founder",
+            strategy: "Halo Builds + Ecosistema",
+            points: [
+                "<strong>Halo Effect:</strong> Moto da $250k usate solo come Marketing/PR.",
+                "<strong>Revival Stash:</strong> Storage premium per collezionisti = MRR (Ricavi Ricorrenti).",
+                "<strong>Product Scalability:</strong> Oltre $1M di vendite online (Parts & Gear).",
+                "<strong>Eventi:</strong> Handbuilt Show con 35.000 spettatori paganti."
+            ],
+            icon: "fa-warehouse",
+            color: "border-teal-600"
+        },
+        rsd: {
+            name: "Roland Sands Design (California)",
+            quote: "\"Non cerco attivamente di vendere motociclette. Costruiamo moto solo per sviluppare linee di prodotto.\"",
+            author: "Roland Sands",
+            strategy: "Brand + Products",
+            points: [
+                "<strong>Modello Industriale:</strong> La moto è il budget R&D.",
+                "<strong>Catalogo Bolt-on:</strong> Ogni special genera una linea di parti vendibili (leve, cerchi, scarichi).",
+                "<strong>Global Reach:</strong> Fatturati milionari vendendo 'pezzi' a chi vuole replicare il look nel proprio garage."
+            ],
+            icon: "fa-gear",
+            color: "border-amber-500"
+        },
+        unit: {
+            name: "Unit Garage (Italia)",
+            quote: "Dal taglio dei telai al 'Plug & Play'.",
+            author: "Fabio Marcaccini",
+            strategy: "Productization",
+            points: [
+                "<strong>La Svolta:</strong> Stop alle modifiche strutturali manuali.",
+                "<strong>Kit Reversibili:</strong> Design di kit che usano gli attacchi originali.",
+                "<strong>Scalabilità:</strong> Spedizione globale, installazione a cura del cliente, margini industriali."
+            ],
+            icon: "fa-box-open",
+            color: "border-blue-500"
+        },
+        bikeshed: {
+            name: "The Bike Shed (Londra/LA)",
+            quote: "\"Siamo un'azienda basata sulla proprietà intellettuale e la community.\"",
+            author: "Dutch van Someren",
+            strategy: "Membership Economy",
+            points: [
+                "<strong>Membership:</strong> 1.000 membri a $1.000/anno a LA. Cassa immediata.",
+                "<strong>Footfall:</strong> 2.000 visitatori/settimana guidano il retail.",
+                "<strong>Esclusività:</strong> Accesso prioritario a eventi e sconti, creando un imbuto di vendita perfetto."
+            ],
+            icon: "fa-users",
+            color: "border-purple-600"
+        }
+    };
+
+    const actions = [
+        {
+            id: 1,
+            title: "Sblocco Cassa (Fashion)",
+            icon: "fa-money-bill-wave",
+            color: "text-emerald-600",
+            tag: "Liquidità Immediata",
+            desc: "Liquidazione immediata dello stock Fashion (€201k) per recuperare ossigeno vitale, dato che la cassa è a €12.5k.",
+            steps: [
+                "Opzione Stocchista: Vendita in blocco al 10-15%.",
+                "Azzera costi affitto magazzino.",
+                "Elimina complessità gestionale."
+            ],
+            impact: "+€27.2k - €40.8k",
+            subImpact: "Net Cash In (Immediato)"
+        },
+        {
+            id: 2,
+            title: "Downsizing & Service",
+            icon: "fa-scissors",
+            color: "text-rose-600",
+            tag: "Taglio Costi",
+            desc: "Riduzione costi di Sede e ottimizzazione personale. Il Service deve coprire il 100% dei costi fissi residui.",
+            steps: [
+                "Compattamento Emporium.",
+                "Service: Saturazione totale per coprire overhead.",
+                "Flipping: Compravendita veicoli nei tempi morti."
+            ],
+            impact: "Break-even",
+            subImpact: "Copertura Costi Fissi Operativi"
+        },
+        {
+            id: 3,
+            title: "Sharing Risorse Officina",
+            icon: "fa-handshake",
+            color: "text-blue-600",
+            tag: "Efficienza 100%",
+            desc: "Accordo con Officine 42 e Nardi per prestito manodopera nei cali di domanda interna.",
+            steps: [
+                "Allocazione dinamica tecnici.",
+                "Fatturazione giornate lavorate a partner terzi.",
+                "Conversione costo fisso in ricavo attivo."
+            ],
+            impact: "100%",
+            subImpact: "Saturazione Personale"
+        },
+        {
+            id: 4,
+            title: "Iconic Mobility Lab",
+            icon: "fa-bolt",
+            color: "text-teal-600",
+            tag: "Core Pivot",
+            desc: "Transizione a 'Project Green': Progettazione e vendita Kit Retrofit Ibrido.",
+            steps: [
+                "Pilot: BMW Serie R (Q4 2027).",
+                "Espansione: 3 nuove piattaforme nel 2027.",
+                "Canali: 50% Retail, 40% B2B, 10% Moto."
+            ],
+            impact: "41% Margine",
+            subImpact: "Gross Margin per Unit"
+        },
+        {
+            id: 5,
+            title: "Produttivizzazione Componenti",
+            icon: "fa-industry",
+            color: "text-amber-600",
+            tag: "Intellectual Property",
+            desc: "Stop ai pezzi unici. Inserimento a catalogo di componenti iconici (selle, fari) già sviluppati.",
+            steps: [
+                "Standardizzazione disegni CAD.",
+                "Produzione piccola serie (CNC/3D).",
+                "Vendita E-commerce globale."
+            ],
+            impact: "Alto",
+            subImpact: "Scalabilità senza manodopera"
+        },
+        {
+            id: 6,
+            title: "Moto-Concierge (Stash)",
+            icon: "fa-key",
+            color: "text-purple-600",
+            tag: "Recurring Revenue",
+            desc: "Rimessaggio d'élite per collezionisti a Roma (Modello Revival Stash).",
+            steps: [
+                "Custodia e mantenimento carica.",
+                "Gestione assicurazioni (DL 184/2023).",
+                "Lock-in manutenzione esclusiva."
+            ],
+            impact: "MRR",
+            subImpact: "Flusso Cassa Fisso Mensile"
+        },
+        {
+            id: 7,
+            title: "Urban Electrification",
+            icon: "fa-city",
+            color: "text-cyan-600",
+            tag: "Restomod",
+            desc: "Elettrificazione estetica telai storici (Vespe) per superare ZTL Roma.",
+            steps: [
+                "Kit pre-certificati.",
+                "Target clientela altospendente centro storico.",
+                "Soluzione alla 'Fascia Verde'."
+            ],
+            impact: "Premium",
+            subImpact: "Marginalità su nicchia locale"
+        }
+    ];
+
+    // 1. Macro Context Chart
+    const ctxMacro = document.getElementById('macroChart').getContext('2d');
+    let macroChart = new Chart(ctxMacro, {
+        type: 'bar',
+        data: {
+            labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (H1)'],
+            datasets: [{
+                label: 'Calo Vendite Moto 2025 (%)',
+                data: [-19.2, -9.2, -7.8],
+                backgroundColor: ['#be123c', '#be123c', '#fb7185'],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) { return context.raw + '%'; }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 0,
+                    min: -25,
+                    grid: { color: '#e2e8f0' }
+                }
+            }
+        }
+    });
+
+    // 2. Internal Financial Chart
+    const ctxFin = document.getElementById('financialChart').getContext('2d');
+    let finChart = new Chart(ctxFin, {
+        type: 'bar',
+        data: {
+            labels: ['Ricavi Totali', 'Costi Variabili', 'Costi Fissi'],
+            datasets: [{
+                label: 'P&L 2025 (€k)',
+                data: [190.6, 205.7, 335.8],
+                backgroundColor: ['#94a3b8', '#fb7185', '#be123c'],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: { display: true, text: 'Struttura Costi vs Ricavi (€k)' }
+            }
+        }
+    });
+
+    // 3. Project Green Chart (Unit Economics)
+    const ctxGreen = document.getElementById('greenChart').getContext('2d');
+    let greenChart = new Chart(ctxGreen, {
+        type: 'bar',
+        data: {
+            labels: ['Prezzo (ASP)', 'Costo (BOM+Ops)', 'Margine Lordo'],
+            datasets: [{
+                data: [5400, 3200, 2200],
+                backgroundColor: ['#0f766e', '#cbd5e1', '#2dd4bf'],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) { return '€ ' + context.raw.toLocaleString(); }
+                    }
+                }
+            }
+        }
+    });
+
+    // Macro Chart Toggle
+    document.getElementById('macroSelector').addEventListener('change', function(e) {
+        if (e.target.value === 'market') {
+            macroChart.data.labels = ['Italia (ANCMA)', 'USA (MIC)', 'Europa (H1)'];
+            macroChart.data.datasets[0].label = 'Calo Vendite 2025 (%)';
+            macroChart.data.datasets[0].data = [-19.2, -9.2, -7.8];
+            macroChart.data.datasets[0].backgroundColor = ['#be123c', '#be123c', '#fb7185'];
+            macroChart.options.scales.y.max = 0;
+            macroChart.options.scales.y.min = -25;
+            document.getElementById('macroText').innerText = "I dati mostrano una contrazione sistemica. L'Italia soffre un -19.2%, mentre gli USA scendono del 9.2%.";
+        } else {
+            macroChart.data.labels = ['Prezzo Moto', 'Finanziamento', 'Assicurazione'];
+            macroChart.data.datasets[0].label = 'Inflazione Costi vs 2020 (%)';
+            macroChart.data.datasets[0].data = [40, 35, 25];
+            macroChart.data.datasets[0].backgroundColor = ['#f59e0b', '#f59e0b', '#fcd34d'];
+            macroChart.options.scales.y.max = 50;
+            macroChart.options.scales.y.min = 0;
+            document.getElementById('macroText').innerText = "Il costo totale di possesso (TCO) è esploso. Moto +40%, tassi di interesse ai massimi.";
+        }
+        macroChart.update();
+    });
+
+    // Financial Chart Toggle
+    function toggleFinancialView() {
+        const currentLabel = finChart.data.datasets[0].label;
+        if (currentLabel.includes('P&L')) {
+            finChart.data.labels = ['EBITDA Gestionale'];
+            finChart.data.datasets[0].data = [-350.9];
+            finChart.data.datasets[0].backgroundColor = ['#be123c'];
+            finChart.data.datasets[0].label = 'EBITDA (€k)';
+            finChart.options.plugins.title.text = 'Il "Buco" Operativo';
+        } else {
+            finChart.data.labels = ['Ricavi Totali', 'Costi Variabili', 'Costi Fissi'];
+            finChart.data.datasets[0].data = [190.6, 205.7, 335.8];
+            finChart.data.datasets[0].backgroundColor = ['#94a3b8', '#fb7185', '#be123c'];
+            finChart.data.datasets[0].label = 'P&L 2025 (€k)';
+            finChart.options.plugins.title.text = 'Struttura Costi vs Ricavi (€k)';
+        }
+        finChart.update();
+    }
+
+    // Benchmark Tab Switcher
+    function switchBenchmark(key, btnElement) {
+        const tabs = document.querySelectorAll('#benchmarks button');
+        tabs.forEach(t => {
+            t.classList.remove('active-tab');
+            t.classList.add('inactive-tab');
+        });
+        btnElement.classList.remove('inactive-tab');
+        btnElement.classList.add('active-tab');
+
+        const data = benchmarks[key];
+        const contentDiv = document.getElementById('benchmarkContent');
+
+        let pointsHtml = data.points.map(p => `<li class="flex items-start mb-2"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-slate-600">${p}</span></li>`).join('');
+
+        contentDiv.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mr-4 border-2 ${data.color}">
+                            <i class="fa-solid ${data.icon} text-slate-700 text-xl"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold text-slate-800 font-oswald">${data.name}</h4>
+                    </div>
+                    <div class="bg-slate-50 border-l-4 ${data.color} p-4 mb-4">
+                        <p class="italic text-slate-700 font-serif text-lg">${data.quote}</p>
+                        <p class="text-xs text-slate-500 font-bold mt-2 uppercase">— ${data.author}</p>
+                    </div>
+                    <div class="inline-block bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mb-2">Modello: ${data.strategy}</div>
+                </div>
+                <div>
+                    <h5 class="font-bold text-slate-900 uppercase mb-3 border-b border-slate-200 pb-1">Punti Chiave & Numeri</h5>
+                    <ul class="space-y-2">
+                        ${pointsHtml}
+                    </ul>
+                    <div class="mt-6 bg-teal-50 p-3 rounded border border-teal-100">
+                        <p class="text-xs text-teal-800 font-bold uppercase"><i class="fa-solid fa-lightbulb mr-1"></i>Key Takeaway per Ottodrom</p>
+                        <p class="text-sm text-teal-900 mt-1">Non vendere tempo. Vendi prodotti scalabili (Unit/RSD) o accesso esclusivo (Bike Shed/Revival).</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Actions Grid Generator
+    function renderActions() {
+        const grid = document.getElementById('actionsGrid');
+        grid.innerHTML = actions.map(a => `
+            <div class="action-card bg-white p-5 rounded-lg border border-slate-200 cursor-pointer group" onclick="showActionDetail(${a.id})">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="h-10 w-10 rounded bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
+                        <i class="fa-solid ${a.icon} ${a.color} text-lg"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Azione ${a.id}</span>
+                </div>
+                <h4 class="font-bold text-slate-800 text-lg leading-tight mb-2">${a.title}</h4>
+                <p class="text-xs text-slate-500 line-clamp-2">${a.desc}</p>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">${a.tag}</span>
+                    <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-teal-500 transition-colors text-sm"></i>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Action Detail View
+    function showActionDetail(id) {
+        const act = actions.find(a => a.id === id);
+        const panel = document.getElementById('actionDetailPanel');
+
+        document.getElementById('detailTitle').innerHTML = `<span class="text-slate-400 font-normal mr-2">Azione ${act.id}:</span> ${act.title}`;
+        document.getElementById('detailTag').innerText = act.tag;
+        document.getElementById('detailTag').className = `inline-block bg-opacity-20 text-xs px-2 py-1 rounded-full uppercase font-bold mb-4 ${act.color.replace('text-', 'bg-').replace('600', '100')} ${act.color.replace('text-', 'text-').replace('600', '800')}`;
+        document.getElementById('detailDesc').innerText = act.desc;
+        document.getElementById('detailImpact').innerText = act.impact;
+        document.getElementById('detailSubImpact').innerText = act.subImpact;
+
+        const list = document.getElementById('detailSteps');
+        list.innerHTML = act.steps.map(s => `<li>${s}</li>`).join('');
+
+        panel.classList.remove('hidden');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function closeDetail() {
+        document.getElementById('actionDetailPanel').classList.add('hidden');
+    }
+
+    // Project Green Calculator
+    const volSlider = document.getElementById('volSlider');
+    const volDisplay = document.getElementById('volDisplay');
+    const marginDisplay = document.getElementById('marginDisplay');
+    const grossMarginPerUnit = 2200;
+
+    volSlider.addEventListener('input', function(e) {
+        const vol = e.target.value;
+        volDisplay.innerText = vol;
+        const totalMargin = vol * grossMarginPerUnit;
+        marginDisplay.innerText = '€ ' + totalMargin.toLocaleString();
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        switchBenchmark('revival', document.querySelector('#benchmarks button'));
+        renderActions();
+    });
+</script>
+</body>
+</html>
