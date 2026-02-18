@@ -5,70 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ottodrom | Piano Industriale</title>
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- FontAwesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f8fafc;
-        color: #1e293b;
-    }
-    h1, h2, h3, h4 {
-        font-family: 'Oswald', sans-serif;
-    }
-
-    .chart-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #f1f5f9;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-    }
-
-    .action-card {
-        transition: all 0.3s ease;
-    }
-    .action-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-    .active-tab {
-        border-bottom: 3px solid #0f766e;
-        color: #0f766e;
-        font-weight: 600;
-    }
-    .inactive-tab {
-        border-bottom: 3px solid transparent;
-        color: #64748b;
-    }
-    .inactive-tab:hover {
-        color: #334155;
-        border-bottom: 3px solid #cbd5e1;
-    }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+    h1, h2, h3, h4, .font-oswald { font-family: 'Oswald', sans-serif; }
+    .chart-wrapper { position: relative; width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .action-card { transition: all 0.3s ease; }
+    .action-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .active-tab { border-bottom: 3px solid #0f766e; color: #0f766e; font-weight: 600; }
+    .inactive-tab { border-bottom: 3px solid transparent; color: #64748b; }
+    .inactive-tab:hover { color: #334155; border-bottom: 3px solid #cbd5e1; }
 </style>
 </head>
 <body class="antialiased">
@@ -81,11 +35,12 @@
                 <i class="fa-solid fa-motorcycle text-teal-700 text-2xl mr-3"></i>
                 <span class="font-bold text-xl tracking-wide uppercase">Ottodrom <span class="text-slate-500 font-light">| Piano Industriale</span></span>
             </div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#situation" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">La Crisi</a>
-                <a href="#benchmarks" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">Benchmark</a>
-                <a href="#actions" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">Le 7 Azioni</a>
-                <a href="#future" class="text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium uppercase">Project Green</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#situation" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">La Crisi</a>
+                <a href="#market" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Il Mercato</a>
+                <a href="#benchmarks" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Benchmark</a>
+                <a href="#actions" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Le 7 Azioni</a>
+                <a href="#future" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Project Green</a>
             </div>
         </div>
     </div>
@@ -106,7 +61,7 @@
             <div class="mt-4 flex md:mt-0 md:ml-4">
                 <div class="bg-rose-900/50 border border-rose-700 rounded p-4 text-center">
                     <span class="block text-rose-400 text-sm uppercase font-bold">EBITDA 2025 (Forecast)</span>
-                    <span class="block text-2xl font-bold text-white">-€350.900</span>
+                    <span class="block text-2xl font-bold text-white">-&euro;350.900</span>
                 </div>
                 <div class="ml-4 bg-teal-900/50 border border-teal-700 rounded p-4 text-center">
                     <span class="block text-teal-400 text-sm uppercase font-bold">Obiettivo Pivot</span>
@@ -117,118 +72,278 @@
     </div>
 </div>
 
-<!-- SECTION 1: THE SITUATION ROOM -->
+<!-- ===================== SECTION 1: LA CRISI ===================== -->
 <section id="situation" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-8 border-l-4 border-rose-600 pl-4">
-        <h3 class="text-2xl font-bold text-slate-900 uppercase">1. Analisi della Crisi & Contesto</h3>
+        <h3 class="text-2xl font-bold text-slate-900 uppercase">1. Analisi della Crisi &amp; Contesto</h3>
         <p class="mt-2 text-slate-600">
-            L'insostenibilità non è un "anno storto", è strutturale. Il mercato delle moto custom è crollato sotto il peso dell'inflazione e delle normative Euro 5+. Internamente, i costi fissi divorano ricavi inesistenti.
+            L'insostenibilit&agrave; non &egrave; un "anno storto", &egrave; strutturale. Il mercato globale &egrave; in contrazione profonda per fattori demografici (Gen Z non sostituisce i Boomer), barriere finanziarie ai massimi storici e normative Euro 5+ che chiudono l'ecosistema. Il custom artigianale "one-off" &egrave; la prima spesa a essere rimandata.
         </p>
     </div>
 
+    <!-- Row 1: Macro + Financial P&L -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Macro Context -->
         <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
             <div class="flex justify-between items-center mb-4">
-                <h4 class="text-lg font-bold text-slate-700"><i class="fa-solid fa-globe-europe mr-2"></i>Contesto Macroeconomico</h4>
-                <select id="macroSelector" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded focus:ring-teal-500 focus:border-teal-500 block p-1">
-                    <option value="market">Crollo Mercato (H1 2025)</option>
-                    <option value="tco">Barriere all'Acquisto (TCO)</option>
-                </select>
+                <h4 class="text-lg font-bold text-slate-700"><i class="fa-solid fa-globe-europe mr-2"></i>Crollo Vendite Moto H1 2025</h4>
             </div>
-            <div class="chart-wrapper h-72">
+            <div class="chart-wrapper h-64">
                 <canvas id="macroChart"></canvas>
             </div>
-            <p id="macroText" class="mt-4 text-sm text-slate-500 italic">
-                I dati mostrano una contrazione sistemica. L'Italia soffre un -19.2%, mentre gli USA scendono del 9.2%. I customizer puri sono i primi a cadere.
+            <p class="mt-3 text-sm text-slate-500 italic">
+                Italia -19,2% (ANCMA), USA -9,2% (MIC), Europa -7,8% (ACEM). H-D quota di mercato in caduta verso il 17%. Cruiser usate -13% nel Q2 2025.
             </p>
         </div>
 
-        <!-- Internal Bleeding -->
         <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
             <div class="flex justify-between items-center mb-4">
-                <h4 class="text-lg font-bold text-rose-800"><i class="fa-solid fa-heart-crack mr-2"></i>La Verità Finanziaria 2025</h4>
-                <button onclick="toggleFinancialView()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-1 px-2 rounded border border-slate-300">
-                    Cambia Vista
-                </button>
+                <h4 class="text-lg font-bold text-rose-800"><i class="fa-solid fa-heart-crack mr-2"></i>P&amp;L 2025: La Verit&agrave; Nuda</h4>
+                <button onclick="toggleFinancialView()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-1 px-2 rounded border border-slate-300">Cambia Vista</button>
             </div>
-            <div class="chart-wrapper h-72">
+            <div class="chart-wrapper h-64">
                 <canvas id="financialChart"></canvas>
             </div>
-            <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-                <div class="bg-slate-50 p-2 rounded">
-                    <span class="block text-slate-500">Ricavi</span>
-                    <span class="font-bold">€190.6k</span>
+            <div class="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
+                <div class="bg-slate-50 p-2 rounded"><span class="block text-slate-500">Ricavi</span><span class="font-bold">&euro;190.6k</span></div>
+                <div class="bg-rose-50 p-2 rounded"><span class="block text-rose-500">C. Variabili</span><span class="font-bold">&euro;205.7k</span></div>
+                <div class="bg-rose-50 p-2 rounded"><span class="block text-rose-500">C. Fissi</span><span class="font-bold">&euro;335.8k</span></div>
+                <div class="bg-amber-50 p-2 rounded"><span class="block text-amber-600">Cassa</span><span class="font-bold text-rose-600">&euro;12.5k</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: TCO + Stato Patrimoniale -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <h4 class="text-lg font-bold text-amber-700 mb-1"><i class="fa-solid fa-wallet mr-2"></i>Total Cost of Ownership (1&deg; Anno)</h4>
+            <p class="text-xs text-slate-500 mb-4">Barriere finanziarie all'ingresso per nuovi motociclisti &mdash; perch&eacute; il cliente non compra.</p>
+            <div class="chart-wrapper h-64">
+                <canvas id="tcoChart"></canvas>
+            </div>
+            <div class="mt-3 flex justify-between items-center bg-amber-50 p-2 rounded text-xs">
+                <span class="text-amber-800 font-bold"><i class="fa-solid fa-calculator mr-1"></i>TCO Totale 1&deg; Anno:</span>
+                <span class="font-bold text-amber-900">$20.545 &ndash; $26.360</span>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <h4 class="text-lg font-bold text-slate-700 mb-1"><i class="fa-solid fa-building-columns mr-2"></i>Stato Patrimoniale 2025</h4>
+            <p class="text-xs text-slate-500 mb-4">Dove sono bloccati i soldi &mdash; un attivo "pesante" e drammaticamente illiquido.</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h5 class="text-xs font-bold uppercase text-slate-500 mb-2 text-center">Attivo (&euro;1.087k)</h5>
+                    <div class="chart-wrapper h-44">
+                        <canvas id="assetChart"></canvas>
+                    </div>
                 </div>
-                <div class="bg-rose-50 p-2 rounded">
-                    <span class="block text-rose-500">Costi Tot.</span>
-                    <span class="font-bold">€541.5k</span>
+                <div>
+                    <h5 class="text-xs font-bold uppercase text-slate-500 mb-2 text-center">Passivo + PN</h5>
+                    <div class="chart-wrapper h-44">
+                        <canvas id="liabChart"></canvas>
+                    </div>
                 </div>
-                <div class="bg-amber-50 p-2 rounded">
-                    <span class="block text-amber-600">Cassa</span>
-                    <span class="font-bold text-rose-600">€12.5k</span>
+            </div>
+            <div class="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="bg-rose-50 p-2 rounded"><span class="block text-rose-500">Rimanenze Fashion</span><span class="font-bold">&euro;201.1k</span></div>
+                <div class="bg-amber-50 p-2 rounded"><span class="block text-amber-600">Perdite Cumulate</span><span class="font-bold text-rose-600">-&euro;471.5k</span></div>
+                <div class="bg-slate-50 p-2 rounded"><span class="block text-slate-500">Debiti Totali</span><span class="font-bold">&euro;271.6k</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Scenari 2026 (full width) -->
+    <div class="mt-8 bg-white p-6 rounded-lg shadow border border-slate-200">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h4 class="text-lg font-bold text-rose-700"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Proiezioni 2026: I Tagli Non Bastano</h4>
+                <p class="text-xs text-slate-500">Anche lo scenario "Hard" (tagli &euro;302.7k) non porta al break-even. Servono nuovi ricavi con margine vero.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="chart-wrapper h-56 md:col-span-2">
+                <canvas id="scenarioChart"></canvas>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-rose-50 p-3 rounded border border-rose-200">
+                    <span class="text-[10px] uppercase font-bold text-rose-500">Scenario Hard</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;302.7k</p>
+                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;106.9k</span>
+                </div>
+                <div class="bg-rose-50 p-3 rounded border border-rose-200">
+                    <span class="text-[10px] uppercase font-bold text-rose-400">Scenario Medio</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;190.4k</p>
+                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;219.3k</span>
+                </div>
+                <div class="bg-rose-50 p-3 rounded border border-rose-200">
+                    <span class="text-[10px] uppercase font-bold text-rose-300">Scenario Soft</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;170.0k</p>
+                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;239.6k</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SECTION 2: THE BENCHMARKS -->
+<!-- ===================== SECTION 2: IL MERCATO ===================== -->
+<section id="market" class="py-12 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 border-l-4 border-amber-500 pl-4">
+            <h3 class="text-2xl font-bold text-slate-900 uppercase">2. Il Mercato: Opportunit&agrave; e Vincoli</h3>
+            <p class="mt-2 text-slate-600">
+                L'aftermarket "plug and play" cresce a doppia cifra mentre il custom artigianale muore. La normativa Euro 5+ chiude le porte alle modifiche strutturali. La manifattura additiva abbatte i costi delle piccole serie.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Aftermarket Growth -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-teal-700 mb-1"><i class="fa-solid fa-chart-line mr-2"></i>Crescita Aftermarket &amp; Accessori</h4>
+                <p class="text-xs text-slate-500 mb-4">Tasso di crescita annuo composto (CAGR) dei segmenti target.</p>
+                <div class="chart-wrapper h-64">
+                    <canvas id="aftermarketChart"></canvas>
+                </div>
+                <p class="mt-3 text-xs text-slate-500 italic">E-bike Conversion Kits a +10,24% CAGR guida la crescita. Mercato modifiche moto a +8,46%. L'impossibilit&agrave; di comprare il nuovo spinge i proprietari ad aggiornare l'esistente.</p>
+            </div>
+
+            <!-- Regulatory Context -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-slate-700 mb-4"><i class="fa-solid fa-gavel mr-2"></i>Il Pantano Normativo (Euro 5+)</h4>
+                <div class="space-y-4">
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-3">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-ban mr-1"></i>Euro 5+ (dal 2025)</p>
+                        <p class="text-xs text-slate-600 mt-1">OBD II obbligatorio. Impossibile sostituire scarichi o rimappare centraline. L'ecosistema elettronico &egrave; chiuso.</p>
+                    </div>
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-3">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-scissors mr-1"></i>Codice della Strada (Italia)</p>
+                        <p class="text-xs text-slate-600 mt-1">Taglio telaietto posteriore illegale se non ri-omologato. Costi omologazione: &euro;850-&euro;1.480 con tempi fino a 60 gg lavorativi. Impossibile scalare.</p>
+                    </div>
+                    <div class="bg-teal-50 border-l-4 border-teal-500 p-3">
+                        <p class="font-bold text-sm text-teal-800"><i class="fa-solid fa-check mr-1"></i>La Via d'Uscita</p>
+                        <p class="text-xs text-slate-600 mt-1">Kit reversibili che usano attacchi originali (modello Unit Garage). Nessuna alterazione strutturale = nessuna ri-omologazione. Retrofit elettrico con kit pre-certificati.</p>
+                    </div>
+                </div>
+                <div class="mt-4 bg-slate-50 p-3 rounded border border-slate-200">
+                    <p class="text-xs text-slate-700"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i><strong>Conclusione:</strong> Il business basato su modifiche strutturali &egrave; morto. Il futuro &egrave; nel "plug-and-play" e nella productizzazione.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Manufacturing Comparison + SWOT -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            <!-- Manufacturing Comparison -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-slate-700 mb-4"><i class="fa-solid fa-print mr-2"></i>Confronto Manifattura: Artigianale vs Additiva</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="p-2 font-bold text-slate-700">Tecnologia</th>
+                                <th class="p-2 font-bold text-slate-700">Costo/Pezzo</th>
+                                <th class="p-2 font-bold text-slate-700">Tempo</th>
+                                <th class="p-2 font-bold text-slate-700">Flessibilit&agrave;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-100 bg-rose-50">
+                                <td class="p-2 font-semibold">Lavorazione Manuale</td>
+                                <td class="p-2 text-rose-700 font-bold">&euro;1.500</td>
+                                <td class="p-2">24-48 ore</td>
+                                <td class="p-2">Bassa</td>
+                            </tr>
+                            <tr class="border-b border-slate-100">
+                                <td class="p-2 font-semibold">Fresatura CNC</td>
+                                <td class="p-2">&euro;250-1.000</td>
+                                <td class="p-2">2-3 settimane</td>
+                                <td class="p-2">Media</td>
+                            </tr>
+                            <tr class="border-b border-slate-100 bg-teal-50">
+                                <td class="p-2 font-semibold">Stampa 3D (Polimeri)</td>
+                                <td class="p-2 text-teal-700 font-bold">&euro;6-25</td>
+                                <td class="p-2">5-8 ore</td>
+                                <td class="p-2">Elevatissima</td>
+                            </tr>
+                            <tr class="bg-teal-50">
+                                <td class="p-2 font-semibold">Stampa 3D (Carbonio)</td>
+                                <td class="p-2 text-teal-700 font-bold">&euro;23-55</td>
+                                <td class="p-2">8-12 ore</td>
+                                <td class="p-2">Elevatissima</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-3 text-xs text-slate-500 italic">La manifattura additiva abbatte i costi delle piccole serie del 96-99%. L'investimento iniziale &egrave; minimo rispetto al CNC in-house.</p>
+            </div>
+
+            <!-- Strengths vs Weaknesses -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-slate-700 mb-4"><i class="fa-solid fa-scale-balanced mr-2"></i>Punti di Forza vs Criticit&agrave;</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h5 class="text-xs font-bold uppercase text-teal-600 mb-2"><i class="fa-solid fa-shield-halved mr-1"></i>Forza</h5>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Officina = 61% dei ricavi, domanda reale</li>
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Brand/Community convertibili in funnel prodotti</li>
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Base parts/tech gi&agrave; esistente (&euro;26.1k magazzino + &euro;77.7k WIP)</li>
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Know-how ingegneristico monetizzabile</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-xs font-bold uppercase text-rose-600 mb-2"><i class="fa-solid fa-skull-crossbones mr-1"></i>Criticit&agrave;</h5>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>EBITDA -&euro;351k: brucia, non "fatica"</li>
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>Personale &euro;218k + Sedi &euro;88k = macigni</li>
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>Fashion: stock &euro;201k, rotazione 3.5x</li>
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>Consulenze &euro;87k: overhead, non investimento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SECTION 3: BENCHMARKS ===================== -->
 <section id="benchmarks" class="py-12 bg-slate-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 border-l-4 border-teal-600 pl-4">
-            <h3 class="text-2xl font-bold text-slate-900 uppercase">2. La Strategia: Cosa Rubare ai Migliori</h3>
+            <h3 class="text-2xl font-bold text-slate-900 uppercase">3. La Strategia: Cosa Rubare ai Migliori</h3>
             <p class="mt-2 text-slate-600">
-                I customizer che sopravvivono non vendono manodopera. Vendono prodotti, membership ed esperienze. Esplora i casi studio per capire il modello target.
+                I customizer che prosperano hanno smesso di dipendere dal margine illusorio del lavoro 1-a-1. Vendono prodotti, membership ed esperienze. 6 casi studio di chi ce la sta facendo.
             </p>
         </div>
 
         <div class="bg-white rounded-lg shadow overflow-hidden">
-            <!-- Tabs -->
             <div class="flex border-b border-slate-200 overflow-x-auto">
-                <button class="px-6 py-4 text-sm font-medium active-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('revival', this)">
-                    <i class="fa-solid fa-warehouse mr-2"></i>Revival Cycles
-                </button>
-                <button class="px-6 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('rsd', this)">
-                    <i class="fa-solid fa-gear mr-2"></i>Roland Sands
-                </button>
-                <button class="px-6 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('unit', this)">
-                    <i class="fa-solid fa-box-open mr-2"></i>Unit Garage
-                </button>
-                <button class="px-6 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('bikeshed', this)">
-                    <i class="fa-solid fa-users mr-2"></i>The Bike Shed
-                </button>
+                <button class="px-4 py-4 text-sm font-medium active-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('revival', this)"><i class="fa-solid fa-warehouse mr-1"></i>Revival Cycles</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('rsd', this)"><i class="fa-solid fa-gear mr-1"></i>Roland Sands</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('unit', this)"><i class="fa-solid fa-box-open mr-1"></i>Unit Garage</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('bikeshed', this)"><i class="fa-solid fa-users mr-1"></i>The Bike Shed</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('deus', this)"><i class="fa-solid fa-store mr-1"></i>Deus Ex Machina</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('vibrazioni', this)"><i class="fa-solid fa-palette mr-1"></i>Vibrazioni Art</button>
             </div>
-
-            <!-- Content -->
-            <div class="p-6 md:p-8" id="benchmarkContent">
-            </div>
+            <div class="p-6 md:p-8" id="benchmarkContent"></div>
         </div>
     </div>
 </section>
 
-<!-- SECTION 3: THE 7 ACTIONS -->
+<!-- ===================== SECTION 4: THE 7 ACTIONS ===================== -->
 <section id="actions" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-8 border-l-4 border-amber-500 pl-4">
-        <h3 class="text-2xl font-bold text-slate-900 uppercase">3. Il Piano Operativo: 7 Azioni Sinergiche</h3>
+        <h3 class="text-2xl font-bold text-slate-900 uppercase">4. Il Piano Operativo: 7 Azioni Sinergiche</h3>
         <p class="mt-2 text-slate-600">
-            Non opzioni, ma passaggi obbligati. La somma di queste azioni inverte matematicamente il P&L trasformando i costi fissi in asset e la proprietà intellettuale in prodotti.
+            Non opzioni alternative, ma passaggi obbligati. La somma di queste azioni inverte matematicamente il P&amp;L trasformando costi fissi in asset e propriet&agrave; intellettuale in prodotti.
         </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="actionsGrid">
-    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="actionsGrid"></div>
 
-    <!-- Detail Panel (Initially Hidden) -->
     <div id="actionDetailPanel" class="hidden mt-8 bg-slate-50 border border-slate-200 rounded-lg p-6 shadow-inner transition-all duration-500">
         <div class="flex justify-between items-start">
             <div>
                 <h4 id="detailTitle" class="text-xl font-bold text-slate-800 mb-2"></h4>
                 <span id="detailTag" class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full uppercase font-bold mb-4"></span>
             </div>
-            <button onclick="closeDetail()" class="text-slate-400 hover:text-slate-600">
-                <i class="fa-solid fa-times text-xl"></i>
-            </button>
+            <button onclick="closeDetail()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times text-xl"></i></button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="md:col-span-2">
@@ -245,51 +360,47 @@
     </div>
 </section>
 
-<!-- SECTION 4: PROJECT GREEN -->
+<!-- ===================== SECTION 5: PROJECT GREEN ===================== -->
 <section id="future" class="py-12 bg-slate-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
             <div>
                 <div class="inline-block bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 4: FOCUS</div>
                 <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Iconic Mobility Lab: <span class="text-teal-400">Project Green</span></h3>
                 <p class="text-slate-300 mb-6">
                     Il cuore della rinascita. Transizione verso la progettazione e vendita di <strong>Kit di Retrofit Ibrido</strong>.
-                    Il Pilot partirà sulla piattaforma BMW Serie R "Airhead" (oltre 1M di unità prodotte).
+                    Il Pilot partir&agrave; sulla piattaforma BMW Serie R "Airhead" (oltre 1M di unit&agrave; prodotte).
                 </p>
-
                 <div class="space-y-4">
                     <div class="flex items-start">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500">
-                            <i class="fa-solid fa-bolt text-teal-400"></i>
-                        </div>
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500"><i class="fa-solid fa-bolt text-teal-400"></i></div>
                         <div class="ml-4">
                             <h4 class="text-lg font-bold">Tecnologia Scalabile</h4>
                             <p class="text-sm text-slate-400">Kit ibrido plug-and-play. Nessun taglio telaio. Omologabile in DE/FR/UK (e Italia 2027).</p>
                         </div>
                     </div>
                     <div class="flex items-start">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500">
-                            <i class="fa-solid fa-boxes-stacked text-teal-400"></i>
-                        </div>
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500"><i class="fa-solid fa-boxes-stacked text-teal-400"></i></div>
                         <div class="ml-4">
                             <h4 class="text-lg font-bold">Modello Distributivo 2027</h4>
                             <p class="text-sm text-slate-400">50% Retail (B2C), 40% Wholesale (B2B a officine), 10% Moto finite.</p>
                         </div>
                     </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-900 flex items-center justify-center border border-teal-500"><i class="fa-solid fa-road text-teal-400"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Roadmap Piattaforme</h4>
+                            <p class="text-sm text-slate-400">Pilot BMW R2V "Airhead" (Q4 2027). Poi Royal Enfield, H-D Sportster, Yamaha MT-07.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Interactive Profit Simulator -->
             <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-xl">
                 <h4 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Simulatore Unit Economics (2027)</h4>
-
-                <!-- Chart -->
                 <div class="chart-wrapper h-48 mb-6">
                     <canvas id="greenChart"></canvas>
                 </div>
-
-                <!-- Controls -->
                 <div class="space-y-5">
                     <div>
                         <div class="flex justify-between text-sm mb-1">
@@ -298,43 +409,36 @@
                         </div>
                         <input type="range" min="20" max="300" value="100" id="volSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-500">
                     </div>
-
                     <div>
                         <div class="flex justify-between text-sm mb-1">
                             <span class="text-slate-300">Prezzo Medio Kit (ASP)</span>
-                            <span class="font-bold text-amber-400" id="aspDisplay">€5.400</span>
+                            <span class="font-bold text-amber-400" id="aspDisplay">&euro;5.400</span>
                         </div>
                         <input type="range" min="3500" max="9000" step="100" value="5400" id="aspSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
-                        <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
-                            <span>€3.500</span>
-                            <span>€9.000</span>
-                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-0.5"><span>&euro;3.500</span><span>&euro;9.000</span></div>
                     </div>
-
                     <div class="grid grid-cols-3 gap-3 text-center">
                         <div class="bg-slate-900 p-3 rounded border border-slate-700">
                             <span class="block text-[10px] text-slate-500 uppercase">Ricavi Totali</span>
-                            <span class="block text-lg font-bold text-white" id="revenueDisplay">€540.000</span>
+                            <span class="block text-lg font-bold text-white" id="revenueDisplay">&euro;540.000</span>
                         </div>
                         <div class="bg-slate-900 p-3 rounded border border-slate-700">
                             <span class="block text-[10px] text-slate-500 uppercase">Costi Totali</span>
-                            <span class="block text-lg font-bold text-rose-400" id="costDisplay">€320.000</span>
+                            <span class="block text-lg font-bold text-rose-400" id="costDisplay">&euro;320.000</span>
                         </div>
                         <div class="bg-teal-900/30 p-3 rounded border border-teal-700">
                             <span class="block text-[10px] text-teal-400 uppercase">Margine Totale</span>
-                            <span class="block text-lg font-bold text-teal-400" id="marginDisplay">€220.000</span>
+                            <span class="block text-lg font-bold text-teal-400" id="marginDisplay">&euro;220.000</span>
                         </div>
                     </div>
-
                     <div class="text-[11px] text-slate-500 bg-slate-900/50 rounded p-2">
                         <span class="text-slate-400 font-semibold">Formula:</span>
                         Margine = Volume &times; (ASP &minus; Costo Unitario) &nbsp;|&nbsp;
-                        <span class="text-slate-400">Costo BOM+Ops:</span> <span class="font-bold text-slate-300">€3.200/kit</span> &nbsp;|&nbsp;
+                        <span class="text-slate-400">Costo BOM+Ops:</span> <span class="font-bold text-slate-300">&euro;3.200/kit</span> &nbsp;|&nbsp;
                         <span class="text-slate-400">Margine %:</span> <span class="font-bold text-teal-400" id="marginPctDisplay">40.7%</span>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -342,26 +446,14 @@
 <!-- Footer -->
 <footer class="bg-white border-t border-slate-200 mt-12 py-8">
     <div class="max-w-7xl mx-auto px-4 text-center">
-        <p class="text-slate-500 text-sm">&copy; 2026 Ottodrom Business Plan | Analisi Strategica & Ristrutturazione</p>
-        <p class="text-xs text-slate-400 mt-2">Dati basati su P&L 2025 e proiezioni di mercato Aftermarket 2027.</p>
+        <p class="text-slate-500 text-sm">&copy; 2026 Ottodrom Business Plan | Analisi Strategica &amp; Ristrutturazione</p>
+        <p class="text-xs text-slate-400 mt-2">Dati basati su P&amp;L 2025 e proiezioni di mercato Aftermarket 2027.</p>
     </div>
 </footer>
 
+<!-- ===================== JAVASCRIPT ===================== -->
 <script>
-    const financials2025 = {
-        revenue: {
-            total: 190.6,
-            breakdown: [81.5, 34.7, 57.4, 17.0],
-            labels: ['Custom', 'Service', 'Fashion', 'Altro']
-        },
-        costs: {
-            total: 541.5,
-            variable: 205.7,
-            fixed: 335.8
-        },
-        ebitda: -350.9
-    };
-
+    // --- BENCHMARKS DATA ---
     const benchmarks = {
         revival: {
             name: "Revival Cycles (Texas)",
@@ -370,10 +462,10 @@
             author: "Alan Stulberg, Founder",
             strategy: "Halo Builds + Ecosistema",
             points: [
-                "<strong>Halo Effect:</strong> Moto da $250k usate solo come Marketing/PR.",
-                "<strong>Revival Stash:</strong> Storage premium per collezionisti = MRR (Ricavi Ricorrenti).",
-                "<strong>Product Scalability:</strong> Oltre $1M di vendite online (Parts & Gear).",
-                "<strong>Eventi:</strong> Handbuilt Show con 35.000 spettatori paganti."
+                "<strong>Halo Effect:</strong> Moto da $250k (es. \"Revival Fuse\" Ducati) usate solo come PR globali per spingere traffico sul sito.",
+                "<strong>Revival Stash:</strong> Storage premium per collezionisti in centro ad Austin. Mantenitori di carica, accensioni mensili, assicurazione dedicata = MRR solido.",
+                "<strong>E-commerce:</strong> Oltre $1M di vendite online (Parts & Gear) grazie al posizionamento estremo.",
+                "<strong>Eventi:</strong> Handbuilt Show (durante MotoGP): 25.000+ spettatori, $65/pass. Sponsor: BMW Motorrad, Indian, Red Bull."
             ],
             icon: "fa-warehouse",
             color: "border-teal-600"
@@ -382,12 +474,13 @@
             name: "Roland Sands Design (California)",
             url: "https://rolandsands.com",
             quote: "\"Non cerco attivamente di vendere motociclette. Costruiamo moto solo per sviluppare linee di prodotto.\"",
-            author: "Roland Sands",
+            author: "Roland Sands, Ex Campione AMA 250GP",
             strategy: "Brand + Products",
             points: [
-                "<strong>Modello Industriale:</strong> La moto è il budget R&D.",
-                "<strong>Catalogo Bolt-on:</strong> Ogni special genera una linea di parti vendibili (leve, cerchi, scarichi).",
-                "<strong>Global Reach:</strong> Fatturati milionari vendendo 'pezzi' a chi vuole replicare il look nel proprio garage."
+                "<strong>Modello Industriale:</strong> La moto &egrave; il budget R&D, non il prodotto finale. Ogni special lancia una linea di componenti.",
+                "<strong>Catalogo Bolt-on:</strong> Coperture motore, leve, cerchi in lega, scarichi e supporti strumentazione a catalogo globale.",
+                "<strong>Global Reach:</strong> Fatturati milionari vendendo componenti a motociclisti che replicano il look della BMW R18 Dragster o Indian FTR nel proprio box.",
+                "<strong>Margine:</strong> Il fatturato vero viene dalla vendita di cerchi, selle, giacche e marmitte, non dalle moto custom."
             ],
             icon: "fa-gear",
             color: "border-amber-500"
@@ -395,13 +488,14 @@
         unit: {
             name: "Unit Garage (Italia)",
             url: "https://www.unitgarage.com",
-            quote: "Dal taglio dei telai al 'Plug & Play'.",
-            author: "Fabio Marcaccini",
-            strategy: "Productization",
+            quote: "\"Dal taglio dei telai al Plug & Play. Il cliente riceve un pacco e si monta la moto da solo.\"",
+            author: "Fabio Marcaccini, Ex Pilota Parigi-Dakar",
+            strategy: "Productizzazione Kit",
             points: [
-                "<strong>La Svolta:</strong> Stop alle modifiche strutturali manuali.",
-                "<strong>Kit Reversibili:</strong> Design di kit che usano gli attacchi originali.",
-                "<strong>Scalabilità:</strong> Spedizione globale, installazione a cura del cliente, margini industriali."
+                "<strong>Il Problema:</strong> Costruivano special complete (BMW R120 G/S, Scrambler). Limiti di tempo, costo e omologazioni per esemplari unici.",
+                "<strong>La Svolta:</strong> Con Michiel Verstockt (designer industriale), hanno smesso di tagliare telai e creato kit completi (serbatoi, selle, fianchetti) sugli attacchi originali.",
+                "<strong>Scalabilit&agrave;:</strong> Spedizione globale. Il cliente monta da solo o dal meccanico. Volumi industriali, margini artigianali.",
+                "<strong>La traiettoria esatta che Ottodrom deve perseguire.</strong>"
             ],
             icon: "fa-box-open",
             color: "border-blue-500"
@@ -409,187 +503,249 @@
         bikeshed: {
             name: "The Bike Shed (Londra/LA)",
             url: "https://thebikeshedmc.com",
-            quote: "\"Siamo un'azienda basata sulla proprietà intellettuale e la community.\"",
-            author: "Dutch van Someren",
+            quote: "\"Siamo un'azienda basata sulla propriet&agrave; intellettuale, non un ristorante. Puntiamo tutto sulla community e sull'esperienza.\"",
+            author: "Dutch van Someren, Founder",
             strategy: "Membership Economy",
             points: [
-                "<strong>Membership:</strong> 1.000 membri a $1.000/anno a LA. Cassa immediata.",
-                "<strong>Footfall:</strong> 2.000 visitatori/settimana guidano il retail.",
-                "<strong>Esclusività:</strong> Accesso prioritario a eventi e sconti, creando un imbuto di vendita perfetto."
+                "<strong>Membership LA:</strong> Limitata a 1.000 persone, $1.000/anno. Genera liquidit&agrave; senza vendere una singola moto.",
+                "<strong>Membership Londra:</strong> &pound;250-350/anno. Sconti 20% retail, 15% ristorazione, accesso prioritario a eventi.",
+                "<strong>Footfall:</strong> 2.000 visitatori/settimana a Londra. Volano perfetto per vendita abbigliamento, caschi e accessori ad alto margine.",
+                "<strong>Il modello Community-first genera lock-in totale sulla clientela altospendente.</strong>"
             ],
             icon: "fa-users",
             color: "border-purple-600"
+        },
+        deus: {
+            name: "Deus Ex Machina (Australia)",
+            url: "https://www.deuscustoms.com",
+            quote: "\"The Emporium of Post Modern Activities.\"",
+            author: "Deus Ex Machina, Sydney",
+            strategy: "Lifestyle Brand Empire",
+            points: [
+                "<strong>Modello Emporium:</strong> Officine a Bali, Los Angeles, Milano come validatori di autenticit&agrave;. Le moto (su base Kawasaki/Honda) generano PR, non margine.",
+                "<strong>Fashion Empire:</strong> Giacche a $279, t-shirt a $49, berretti. Il funnel: ammiri la moto su Instagram &rarr; compri il lifestyle nel caff&egrave; Deus.",
+                "<strong>Partnership Extra-Settore:</strong> Collaborazioni remunerative con Breitling e MINI. L'heritage motociclistico vende \"ribellione\" su scala mondiale.",
+                "<strong>L'esempio estremo di come il custom pu&ograve; diventare un brand globale svincolato dal fatturato officina.</strong>"
+            ],
+            icon: "fa-store",
+            color: "border-orange-500"
+        },
+        vibrazioni: {
+            name: "Vibrazioni Art Design (Italia)",
+            url: "https://www.vibrazioniartdesign.com",
+            quote: "\"Dal fusto petrolchimico al mobile d'arredo d'autore.\"",
+            author: "Alberto Dassasso & Riccardo Zanobini",
+            strategy: "Cross-Sector Diversification",
+            points: [
+                "<strong>Stile Brutalista:</strong> Carenature e lamiere per moto (Ducati 749 \"Raticosa\", BMW K100) battute a mano da vecchi fusti industriali (Texaco, Agip, Shell).",
+                "<strong>Il Pivot:</strong> Le stesse lamiere tagliate al plasma creano sedie, armadietti e lampade di altissimo design.",
+                "<strong>Clientela:</strong> Architetti, collezionisti d'arte, designer d'interni. Zero limitazioni del Codice della Strada, cliente che non bada a spese.",
+                "<strong>Genialit&agrave; italiana: aggirare la crisi del due ruote intercettando il mercato dell'arredo di lusso.</strong>"
+            ],
+            icon: "fa-palette",
+            color: "border-red-500"
         }
     };
 
+    // --- ACTIONS DATA ---
     const actions = [
-        {
-            id: 1,
-            title: "Sblocco Cassa (Fashion)",
-            icon: "fa-money-bill-wave",
-            color: "text-emerald-600",
-            tag: "Liquidità Immediata",
-            desc: "Liquidazione immediata dello stock Fashion (€201k) per recuperare ossigeno vitale, dato che la cassa è a €12.5k.",
-            steps: [
-                "Opzione Stocchista: Vendita in blocco al 10-15%.",
-                "Azzera costi affitto magazzino.",
-                "Elimina complessità gestionale."
-            ],
-            impact: "+€27.2k - €40.8k",
-            subImpact: "Net Cash In (Immediato)"
-        },
-        {
-            id: 2,
-            title: "Downsizing & Service",
-            icon: "fa-scissors",
-            color: "text-rose-600",
-            tag: "Taglio Costi",
-            desc: "Riduzione costi di Sede e ottimizzazione personale. Il Service deve coprire il 100% dei costi fissi residui.",
-            steps: [
-                "Compattamento Emporium.",
-                "Service: Saturazione totale per coprire overhead.",
-                "Flipping: Compravendita veicoli nei tempi morti."
-            ],
-            impact: "Break-even",
-            subImpact: "Copertura Costi Fissi Operativi"
-        },
-        {
-            id: 3,
-            title: "Sharing Risorse Officina",
-            icon: "fa-handshake",
-            color: "text-blue-600",
-            tag: "Efficienza 100%",
-            desc: "Accordo con Officine 42 e Nardi per prestito manodopera nei cali di domanda interna.",
-            steps: [
-                "Allocazione dinamica tecnici.",
-                "Fatturazione giornate lavorate a partner terzi.",
-                "Conversione costo fisso in ricavo attivo."
-            ],
-            impact: "100%",
-            subImpact: "Saturazione Personale"
-        },
-        {
-            id: 4,
-            title: "Iconic Mobility Lab",
-            icon: "fa-bolt",
-            color: "text-teal-600",
-            tag: "Core Pivot",
-            desc: "Transizione a 'Project Green': Progettazione e vendita Kit Retrofit Ibrido.",
-            steps: [
-                "Pilot: BMW Serie R (Q4 2027).",
-                "Espansione: 3 nuove piattaforme nel 2027.",
-                "Canali: 50% Retail, 40% B2B, 10% Moto."
-            ],
-            impact: "41% Margine",
-            subImpact: "Gross Margin per Unit"
-        },
-        {
-            id: 5,
-            title: "Produttivizzazione Componenti",
-            icon: "fa-industry",
-            color: "text-amber-600",
-            tag: "Intellectual Property",
-            desc: "Stop ai pezzi unici. Inserimento a catalogo di componenti iconici (selle, fari) già sviluppati.",
-            steps: [
-                "Standardizzazione disegni CAD.",
-                "Produzione piccola serie (CNC/3D).",
-                "Vendita E-commerce globale."
-            ],
-            impact: "Alto",
-            subImpact: "Scalabilità senza manodopera"
-        },
-        {
-            id: 6,
-            title: "Moto-Concierge (Stash)",
-            icon: "fa-key",
-            color: "text-purple-600",
-            tag: "Recurring Revenue",
-            desc: "Rimessaggio d'élite per collezionisti a Roma (Modello Revival Stash).",
-            steps: [
-                "Custodia e mantenimento carica.",
-                "Gestione assicurazioni (DL 184/2023).",
-                "Lock-in manutenzione esclusiva."
-            ],
-            impact: "MRR",
-            subImpact: "Flusso Cassa Fisso Mensile"
-        },
-        {
-            id: 7,
-            title: "Urban Electrification",
-            icon: "fa-city",
-            color: "text-cyan-600",
-            tag: "Restomod",
-            desc: "Elettrificazione estetica telai storici (Vespe) per superare ZTL Roma.",
-            steps: [
-                "Kit pre-certificati.",
-                "Target clientela altospendente centro storico.",
-                "Soluzione alla 'Fascia Verde'."
-            ],
-            impact: "Premium",
-            subImpact: "Marginalità su nicchia locale"
-        }
+        { id: 1, title: "Sblocco Cassa (Fashion)", icon: "fa-money-bill-wave", color: "text-emerald-600", tag: "Liquidit\u00e0 Immediata",
+          desc: "Liquidazione immediata dello stock Fashion (\u20ac201k) per recuperare ossigeno vitale. La cassa \u00e8 a \u20ac12.5k: il margine di sicurezza si misura in giorni, non mesi.",
+          steps: ["Opzione Stocchista: Vendita in blocco al 10-15%. Genera +\u20ac27.2k (o \u20ac40.8k al 15%).", "Azzera costi affitto magazzini.", "Elimina complessit\u00e0 gestionale. Stock/ricavi Fashion oggi \u00e8 3,5x."],
+          impact: "+\u20ac27.2k - \u20ac40.8k", subImpact: "Net Cash In (Immediato)" },
+        { id: 2, title: "Downsizing & Service", icon: "fa-scissors", color: "text-rose-600", tag: "Taglio Costi",
+          desc: "Riduzione costi di Sede (\u20ac87.7k) e ottimizzazione personale (\u20ac218.4k). Il Service in Via Adige deve coprire il 100% dei costi fissi residui.",
+          steps: ["Compattamento Emporium.", "Service: Saturazione totale per coprire overhead.", "Flipping: Compravendita veicoli nei tempi morti = rotazione rapida di cassa."],
+          impact: "Break-even", subImpact: "Copertura Costi Fissi Operativi" },
+        { id: 3, title: "Sharing Risorse Officina", icon: "fa-handshake", color: "text-blue-600", tag: "Efficienza 100%",
+          desc: "Accordi con Officine 42 e Nardi: prestito manodopera nei cali di domanda interna. Le ore passive diventano fatturato attivo.",
+          steps: ["Allocazione dinamica tecnici.", "Officine 42 e Nardi pagano le giornate lavorate.", "Conversione costo fisso (\u20ac218.4k personale) in ricavo attivo."],
+          impact: "100%", subImpact: "Saturazione Personale" },
+        { id: 4, title: "Iconic Mobility Lab", icon: "fa-bolt", color: "text-teal-600", tag: "Core Pivot",
+          desc: "Transizione a 'Project Green': Kit Retrofit Ibrido. Le special create diventano puro Marketing Asset. Il cuore operativo genera margine industriale.",
+          steps: ["Pilot: BMW R2V Airhead (Q4 2027). Prezzo base \u20ac3.990, ASP \u20ac5.400.", "Espansione: Royal Enfield, H-D Sportster, Yamaha MT-07.", "Canali: 50% Retail, 40% B2B (officine terze), 10% Moto finite. Target 100 unit\u00e0."],
+          impact: "41% Margine", subImpact: "\u20ac2.200 Gross Margin per Unit" },
+        { id: 5, title: "Produttivizzazione Componenti", icon: "fa-industry", color: "text-amber-600", tag: "Intellectual Property",
+          desc: "Stop ai pezzi unici. Componenti iconici gi\u00e0 sviluppati (selle, cupolini, telaietti, fari) inseriti a catalogo e venduti a prezzo premium.",
+          steps: ["Standardizzazione disegni CAD.", "Produzione piccola serie (CNC/Stampa 3D \u2014 da \u20ac1.500/pezzo a \u20ac6-55/pezzo).", "Vendita E-commerce globale + file CAD su Patreon per il DIY."],
+          impact: "Alto", subImpact: "Scalabilit\u00e0 senza manodopera" },
+        { id: 6, title: "Moto-Concierge (Stash)", icon: "fa-key", color: "text-purple-600", tag: "Recurring Revenue",
+          desc: "Rimessaggio d'\u00e9lite per collezionisti a Roma (modello Revival Stash). Quota mensile fissa: custodia, batterie, detailing, assicurazioni.",
+          steps: ["Custodia e mantenimento carica costante.", "Gestione assicurazioni obbligatorie per veicoli fermi (DL 184/2023).", "Lock-in: intera manutenzione del parco custodito affidata a Ottodrom."],
+          impact: "MRR", subImpact: "Flusso Cassa Fisso Mensile" },
+        { id: 7, title: "Urban Electrification", icon: "fa-city", color: "text-cyan-600", tag: "Restomod",
+          desc: "Elettrificazione estetica telai storici (Vespe d'epoca) con kit leggeri e pre-certificati. Soluzione alla Fascia Verde di Roma.",
+          steps: ["Kit pre-certificati per mobilit\u00e0 urbana.", "Target: clientela altospendente centro storico frustrata da ZTL/blocchi.", "CAGR E-bike Conversion Kits: +10,24%. Mercato da $13,5B al 2031."],
+          impact: "Premium", subImpact: "Marginalit\u00e0 su nicchia locale" }
     ];
 
-    // 1. Macro Context Chart
-    const ctxMacro = document.getElementById('macroChart').getContext('2d');
-    let macroChart = new Chart(ctxMacro, {
+    // --- CHARTS ---
+
+    // 1. Macro Market Decline
+    new Chart(document.getElementById('macroChart').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (H1)'],
+            labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (ACEM)', 'Cruiser Usato Q2'],
             datasets: [{
-                label: 'Calo Vendite Moto 2025 (%)',
-                data: [-19.2, -9.2, -7.8],
-                backgroundColor: ['#be123c', '#be123c', '#fb7185'],
+                label: 'Variazione %',
+                data: [-19.2, -9.2, -7.8, -13.0],
+                backgroundColor: ['#be123c', '#e11d48', '#fb7185', '#fda4af'],
                 borderRadius: 4
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw + '%' } } },
+            scales: { y: { max: 0, min: -25, grid: { color: '#e2e8f0' } } }
+        }
+    });
+
+    // 2. Financial P&L
+    let finChart = new Chart(document.getElementById('financialChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Officina', 'Fashion', 'Altro', 'C.Variabili', 'Personale', 'Sedi', 'IT/Servizi'],
+            datasets: [{
+                label: 'P&L 2025 (\u20ack)',
+                data: [116.2, 57.4, 17.0, -205.7, -218.4, -87.7, -27.4],
+                backgroundColor: ctx => ctx.raw >= 0 ? '#94a3b8' : '#be123c',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
             plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) { return context.raw + '%'; }
-                    }
-                }
+                title: { display: true, text: 'Ricavi vs Costi Dettagliati (\u20ack)', font: { size: 11 } },
+                tooltip: { callbacks: { label: ctx => '\u20ac ' + ctx.raw.toLocaleString() + 'k' } }
+            },
+            scales: { y: { grid: { color: '#e2e8f0' } } }
+        }
+    });
+
+    function toggleFinancialView() {
+        const lbl = finChart.data.datasets[0].label;
+        if (lbl.includes('P&L')) {
+            finChart.data.labels = ['Ricavi', 'C.Variabili', 'C.Fissi', 'EBITDA'];
+            finChart.data.datasets[0].data = [190.6, -205.7, -335.8, -350.9];
+            finChart.data.datasets[0].backgroundColor = ['#94a3b8', '#fb7185', '#be123c', '#881337'];
+            finChart.data.datasets[0].label = 'Sintesi (\u20ack)';
+            finChart.options.plugins.title.text = 'Il "Buco" Operativo: EBITDA -\u20ac350.9k';
+        } else {
+            finChart.data.labels = ['Officina', 'Fashion', 'Altro', 'C.Variabili', 'Personale', 'Sedi', 'IT/Servizi'];
+            finChart.data.datasets[0].data = [116.2, 57.4, 17.0, -205.7, -218.4, -87.7, -27.4];
+            finChart.data.datasets[0].backgroundColor = finChart.data.datasets[0].data.map(v => v >= 0 ? '#94a3b8' : '#be123c');
+            finChart.data.datasets[0].label = 'P&L 2025 (\u20ack)';
+            finChart.options.plugins.title.text = 'Ricavi vs Costi Dettagliati (\u20ack)';
+        }
+        finChart.update();
+    }
+
+    // 3. TCO Chart
+    new Chart(document.getElementById('tcoChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Prezzo Acquisto Moto', 'Finanziamento (Anticipo)', 'Assicurazione RC', 'Abbigliamento Tecnico', 'Manutenzione/Stoccaggio'],
+            datasets: [
+                { label: 'Minimo ($)', data: [15000, 3000, 145, 1000, 1400], backgroundColor: '#f59e0b', borderRadius: 4 },
+                { label: 'Massimo ($)', data: [0, 2000, 215, 2000, 1600], backgroundColor: '#fcd34d', borderRadius: 4 }
+            ]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: {
+                tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw.toLocaleString() } }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 0,
-                    min: -25,
-                    grid: { color: '#e2e8f0' }
-                }
+                x: { stacked: true, grid: { color: '#e2e8f0' } },
+                y: { stacked: true }
             }
         }
     });
 
-    // 2. Internal Financial Chart
-    const ctxFin = document.getElementById('financialChart').getContext('2d');
-    let finChart = new Chart(ctxFin, {
+    // 4. Balance Sheet - Assets Doughnut
+    new Chart(document.getElementById('assetChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Immobilizzazioni + Crediti', 'Rimanenze Fashion', 'Rim. Officina + WIP', 'Cassa'],
+            datasets: [{
+                data: [769.6, 201.1, 103.8, 12.5],
+                backgroundColor: ['#94a3b8', '#be123c', '#f59e0b', '#2dd4bf'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } },
+                tooltip: { callbacks: { label: ctx => ctx.label + ': \u20ac' + ctx.raw.toLocaleString() + 'k' } }
+            }
+        }
+    });
+
+    // 5. Balance Sheet - Liabilities Doughnut
+    new Chart(document.getElementById('liabChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Patrimonio Netto', 'Debiti', 'Perdite Cumulate'],
+            datasets: [{
+                data: [618.8, 271.6, 471.5],
+                backgroundColor: ['#0f766e', '#94a3b8', '#be123c'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } },
+                tooltip: { callbacks: { label: ctx => ctx.label + ': \u20ac' + ctx.raw.toLocaleString() + 'k' } }
+            }
+        }
+    });
+
+    // 6. Scenario 2026
+    new Chart(document.getElementById('scenarioChart').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: ['Ricavi Totali', 'Costi Variabili', 'Costi Fissi'],
+            labels: ['Scenario Hard', 'Scenario Medio', 'Scenario Soft'],
+            datasets: [
+                { label: 'Tagli Applicati (\u20ack)', data: [302.7, 190.4, 170.0], backgroundColor: '#94a3b8', borderRadius: 4 },
+                { label: 'EBITDA Risultante (\u20ack)', data: [-106.9, -219.3, -239.6], backgroundColor: '#be123c', borderRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                title: { display: true, text: 'Anche i tagli massimi non bastano: servono nuovi ricavi', font: { size: 11 } },
+                tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': \u20ac' + ctx.raw.toLocaleString() + 'k' } }
+            },
+            scales: { y: { grid: { color: '#e2e8f0' } } }
+        }
+    });
+
+    // 7. Aftermarket Growth
+    new Chart(document.getElementById('aftermarketChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['E-bike Conversion\nKits', 'Modifiche Moto\nPlug&Play', 'Accessori\nEuropa', 'Accessori\nPilota', 'Aftermarket\nGlobale 2R'],
             datasets: [{
-                label: 'P&L 2025 (€k)',
-                data: [190.6, 205.7, 335.8],
-                backgroundColor: ['#94a3b8', '#fb7185', '#be123c'],
+                label: 'CAGR %',
+                data: [10.24, 8.46, 4.8, 4.6, 2.91],
+                backgroundColor: ['#0f766e', '#14b8a6', '#2dd4bf', '#5eead4', '#99f6e4'],
                 borderRadius: 4
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
             plugins: {
-                title: { display: true, text: 'Struttura Costi vs Ricavi (€k)' }
-            }
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => 'CAGR: ' + ctx.raw + '%' } }
+            },
+            scales: { x: { max: 12, grid: { color: '#e2e8f0' } } }
         }
     });
 
-    // 3. Project Green Chart (Unit Economics)
-    const ctxGreen = document.getElementById('greenChart').getContext('2d');
-    let greenChart = new Chart(ctxGreen, {
+    // 8. Project Green Chart
+    let greenChart = new Chart(document.getElementById('greenChart').getContext('2d'), {
         type: 'bar',
         data: {
             labels: ['Prezzo (ASP)', 'Costo (BOM+Ops)', 'Margine Lordo'],
@@ -600,112 +756,55 @@
             }]
         },
         options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) { return '€ ' + context.raw.toLocaleString(); }
-                    }
-                }
-            }
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '\u20ac ' + ctx.raw.toLocaleString() } } }
         }
     });
 
-    // Macro Chart Toggle
-    document.getElementById('macroSelector').addEventListener('change', function(e) {
-        if (e.target.value === 'market') {
-            macroChart.data.labels = ['Italia (ANCMA)', 'USA (MIC)', 'Europa (H1)'];
-            macroChart.data.datasets[0].label = 'Calo Vendite 2025 (%)';
-            macroChart.data.datasets[0].data = [-19.2, -9.2, -7.8];
-            macroChart.data.datasets[0].backgroundColor = ['#be123c', '#be123c', '#fb7185'];
-            macroChart.options.scales.y.max = 0;
-            macroChart.options.scales.y.min = -25;
-            document.getElementById('macroText').innerText = "I dati mostrano una contrazione sistemica. L'Italia soffre un -19.2%, mentre gli USA scendono del 9.2%.";
-        } else {
-            macroChart.data.labels = ['Prezzo Moto', 'Finanziamento', 'Assicurazione'];
-            macroChart.data.datasets[0].label = 'Inflazione Costi vs 2020 (%)';
-            macroChart.data.datasets[0].data = [40, 35, 25];
-            macroChart.data.datasets[0].backgroundColor = ['#f59e0b', '#f59e0b', '#fcd34d'];
-            macroChart.options.scales.y.max = 50;
-            macroChart.options.scales.y.min = 0;
-            document.getElementById('macroText').innerText = "Il costo totale di possesso (TCO) è esploso. Moto +40%, tassi di interesse ai massimi.";
-        }
-        macroChart.update();
-    });
-
-    // Financial Chart Toggle
-    function toggleFinancialView() {
-        const currentLabel = finChart.data.datasets[0].label;
-        if (currentLabel.includes('P&L')) {
-            finChart.data.labels = ['EBITDA Gestionale'];
-            finChart.data.datasets[0].data = [-350.9];
-            finChart.data.datasets[0].backgroundColor = ['#be123c'];
-            finChart.data.datasets[0].label = 'EBITDA (€k)';
-            finChart.options.plugins.title.text = 'Il "Buco" Operativo';
-        } else {
-            finChart.data.labels = ['Ricavi Totali', 'Costi Variabili', 'Costi Fissi'];
-            finChart.data.datasets[0].data = [190.6, 205.7, 335.8];
-            finChart.data.datasets[0].backgroundColor = ['#94a3b8', '#fb7185', '#be123c'];
-            finChart.data.datasets[0].label = 'P&L 2025 (€k)';
-            finChart.options.plugins.title.text = 'Struttura Costi vs Ricavi (€k)';
-        }
-        finChart.update();
-    }
-
-    // Benchmark Tab Switcher
+    // --- BENCHMARK SWITCHER ---
     function switchBenchmark(key, btnElement) {
-        const tabs = document.querySelectorAll('#benchmarks button');
-        tabs.forEach(t => {
+        document.querySelectorAll('#benchmarks button').forEach(t => {
             t.classList.remove('active-tab');
             t.classList.add('inactive-tab');
         });
         btnElement.classList.remove('inactive-tab');
         btnElement.classList.add('active-tab');
 
-        const data = benchmarks[key];
-        const contentDiv = document.getElementById('benchmarkContent');
+        const d = benchmarks[key];
+        const pts = d.points.map(p => `<li class="flex items-start mb-2"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-slate-600">${p}</span></li>`).join('');
 
-        let pointsHtml = data.points.map(p => `<li class="flex items-start mb-2"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-slate-600">${p}</span></li>`).join('');
-
-        contentDiv.innerHTML = `
+        document.getElementById('benchmarkContent').innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <div class="flex items-center mb-4">
-                        <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mr-4 border-2 ${data.color}">
-                            <i class="fa-solid ${data.icon} text-slate-700 text-xl"></i>
+                        <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mr-4 border-2 ${d.color}">
+                            <i class="fa-solid ${d.icon} text-slate-700 text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="text-2xl font-bold text-slate-800 font-oswald">${data.name}</h4>
-                            <a href="${data.url}" target="_blank" rel="noopener noreferrer" class="text-sm text-teal-600 hover:text-teal-800 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square text-xs mr-1"></i>${data.url}</a>
+                            <h4 class="text-2xl font-bold text-slate-800 font-oswald">${d.name}</h4>
+                            <a href="${d.url}" target="_blank" rel="noopener noreferrer" class="text-sm text-teal-600 hover:text-teal-800 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square text-xs mr-1"></i>${d.url}</a>
                         </div>
                     </div>
-                    <div class="bg-slate-50 border-l-4 ${data.color} p-4 mb-4">
-                        <p class="italic text-slate-700 font-serif text-lg">${data.quote}</p>
-                        <p class="text-xs text-slate-500 font-bold mt-2 uppercase">— ${data.author}</p>
+                    <div class="bg-slate-50 border-l-4 ${d.color} p-4 mb-4">
+                        <p class="italic text-slate-700 font-serif text-lg">${d.quote}</p>
+                        <p class="text-xs text-slate-500 font-bold mt-2 uppercase">\u2014 ${d.author}</p>
                     </div>
-                    <div class="inline-block bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mb-2">Modello: ${data.strategy}</div>
+                    <div class="inline-block bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mb-2">Modello: ${d.strategy}</div>
                 </div>
                 <div>
                     <h5 class="font-bold text-slate-900 uppercase mb-3 border-b border-slate-200 pb-1">Punti Chiave & Numeri</h5>
-                    <ul class="space-y-2">
-                        ${pointsHtml}
-                    </ul>
+                    <ul class="space-y-2">${pts}</ul>
                     <div class="mt-6 bg-teal-50 p-3 rounded border border-teal-100">
                         <p class="text-xs text-teal-800 font-bold uppercase"><i class="fa-solid fa-lightbulb mr-1"></i>Key Takeaway per Ottodrom</p>
                         <p class="text-sm text-teal-900 mt-1">Non vendere tempo. Vendi prodotti scalabili (Unit/RSD) o accesso esclusivo (Bike Shed/Revival).</p>
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
-    // Actions Grid Generator
+    // --- ACTIONS GRID ---
     function renderActions() {
-        const grid = document.getElementById('actionsGrid');
-        grid.innerHTML = actions.map(a => `
+        document.getElementById('actionsGrid').innerHTML = actions.map(a => `
             <div class="action-card bg-white p-5 rounded-lg border border-slate-200 cursor-pointer group" onclick="showActionDetail(${a.id})">
                 <div class="flex justify-between items-start mb-3">
                     <div class="h-10 w-10 rounded bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
@@ -719,25 +818,19 @@
                     <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">${a.tag}</span>
                     <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-teal-500 transition-colors text-sm"></i>
                 </div>
-            </div>
-        `).join('');
+            </div>`).join('');
     }
 
-    // Action Detail View
     function showActionDetail(id) {
         const act = actions.find(a => a.id === id);
         const panel = document.getElementById('actionDetailPanel');
-
         document.getElementById('detailTitle').innerHTML = `<span class="text-slate-400 font-normal mr-2">Azione ${act.id}:</span> ${act.title}`;
         document.getElementById('detailTag').innerText = act.tag;
         document.getElementById('detailTag').className = `inline-block bg-opacity-20 text-xs px-2 py-1 rounded-full uppercase font-bold mb-4 ${act.color.replace('text-', 'bg-').replace('600', '100')} ${act.color.replace('text-', 'text-').replace('600', '800')}`;
         document.getElementById('detailDesc').innerText = act.desc;
         document.getElementById('detailImpact').innerText = act.impact;
         document.getElementById('detailSubImpact').innerText = act.subImpact;
-
-        const list = document.getElementById('detailSteps');
-        list.innerHTML = act.steps.map(s => `<li>${s}</li>`).join('');
-
+        document.getElementById('detailSteps').innerHTML = act.steps.map(s => `<li>${s}</li>`).join('');
         panel.classList.remove('hidden');
         panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -746,7 +839,7 @@
         document.getElementById('actionDetailPanel').classList.add('hidden');
     }
 
-    // Project Green Calculator
+    // --- PROJECT GREEN SIMULATOR ---
     const volSlider = document.getElementById('volSlider');
     const aspSlider = document.getElementById('aspSlider');
     const costPerUnit = 3200;
@@ -761,10 +854,10 @@
         const marginPct = ((marginPerUnit / asp) * 100).toFixed(1);
 
         document.getElementById('volDisplay').innerText = vol;
-        document.getElementById('aspDisplay').innerText = '€' + asp.toLocaleString('it-IT');
-        document.getElementById('revenueDisplay').innerText = '€' + totalRevenue.toLocaleString('it-IT');
-        document.getElementById('costDisplay').innerText = '€' + totalCost.toLocaleString('it-IT');
-        document.getElementById('marginDisplay').innerText = '€' + totalMargin.toLocaleString('it-IT');
+        document.getElementById('aspDisplay').innerText = '\u20ac' + asp.toLocaleString('it-IT');
+        document.getElementById('revenueDisplay').innerText = '\u20ac' + totalRevenue.toLocaleString('it-IT');
+        document.getElementById('costDisplay').innerText = '\u20ac' + totalCost.toLocaleString('it-IT');
+        document.getElementById('marginDisplay').innerText = '\u20ac' + totalMargin.toLocaleString('it-IT');
         document.getElementById('marginPctDisplay').innerText = marginPct + '%';
 
         greenChart.data.datasets[0].data = [asp, costPerUnit, marginPerUnit];
@@ -774,7 +867,7 @@
     volSlider.addEventListener('input', updateSimulator);
     aspSlider.addEventListener('input', updateSimulator);
 
-    // Initialize
+    // --- INIT ---
     document.addEventListener('DOMContentLoaded', () => {
         switchBenchmark('revival', document.querySelector('#benchmarks button'));
         renderActions();
