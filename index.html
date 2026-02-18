@@ -53,10 +53,10 @@
         <div class="md:flex md:items-center md:justify-between">
             <div class="flex-1 min-w-0">
                 <h2 class="text-3xl font-bold leading-7 text-amber-500 sm:text-4xl sm:truncate uppercase">
-                    Dal Pantano al "Mobility Lab"
+                    Piano Industriale 2026-2036
                 </h2>
                 <p class="mt-2 text-slate-300 text-lg max-w-2xl">
-                    Un piano di riconversione radicale per salvare Ottodrom: dall'artigianato in perdita alla productizzazione scalabile e ricavi ricorrenti.
+                    Riconversione radicale per Ottodrom: dall'artigianato in perdita alla produttivizzazione scalabile e ricavi ricorrenti.
                 </p>
             </div>
             <div class="mt-4 flex md:mt-0 md:ml-4">
@@ -588,66 +588,87 @@
             <div>
                 <div class="inline-block bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 4: FOCUS</div>
                 <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Iconic Mobility Lab: <span class="text-teal-400">Project Green</span></h3>
-                <p class="text-slate-300 mb-4">
-                    Pilot sulla piattaforma <strong>BMW Serie R "Airhead"</strong> (1M+ unit&agrave;). Seleziona fino a <strong>3 piattaforme aggiuntive</strong> per espandere il catalogo kit.
+                <p class="text-slate-300 mb-4 text-sm">
+                    Pilot: <strong>BMW Serie R "Airhead"</strong> (TAM EU ~60k, SAM ~37.5k).
+                    3 canali: Kit Retail (installato), Kit Wholesale (B2B officine), Moto chiavi-in-mano.
+                    Seleziona fino a <strong>3 piattaforme aggiuntive</strong> per espandere il business.
                 </p>
                 <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 mb-4">
-                    <h4 class="text-sm font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-motorcycle mr-1"></i>BMW R2V Airhead (Pilot)</h4>
+                    <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>BMW R2V Airhead &mdash; Pilot (Lancio 2026)</h4>
                     <div class="space-y-3">
                         <div>
                             <div class="flex justify-between text-sm mb-1">
-                                <span class="text-slate-300">Volume Kit/Anno (a regime)</span>
-                                <span class="font-bold text-teal-400" id="volDisplay">100</span>
+                                <span class="text-slate-300">Volume Target a Regime (Anno 3+)</span>
+                                <span class="font-bold text-teal-400" id="volDisplay">375</span>
                             </div>
-                            <input type="range" min="20" max="300" value="100" id="volSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-500">
+                            <input type="range" min="50" max="800" value="375" id="volSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-500">
+                            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5"><span>50</span><span>800</span></div>
                         </div>
                         <div>
                             <div class="flex justify-between text-sm mb-1">
-                                <span class="text-slate-300">ASP Kit</span>
-                                <span class="font-bold text-amber-400" id="aspDisplay">&euro;5.400</span>
+                                <span class="text-slate-300">Prezzo Kit Retail (ASP)</span>
+                                <span class="font-bold text-amber-400" id="aspDisplay">&euro;3.900</span>
                             </div>
-                            <input type="range" min="3500" max="9000" step="100" value="5400" id="aspSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                            <input type="range" min="3000" max="7000" step="100" value="3900" id="aspSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5"><span>&euro;3.000</span><span>&euro;7.000</span></div>
                         </div>
+                    </div>
+                    <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 rounded p-2 space-y-0.5">
+                        <div class="flex justify-between"><span>Kit Wholesale (80% Retail)</span><span class="text-white font-bold" id="wsPriceDisplay">&euro;3.120</span></div>
+                        <div class="flex justify-between"><span>Moto chiavi-in-mano</span><span class="text-white font-bold">&euro;23.000</span></div>
+                        <div class="flex justify-between"><span>BOM Kit (Anno 1 &rarr; -5%/yr learning)</span><span class="text-rose-300 font-bold">&euro;2.300</span></div>
+                        <div class="flex justify-between"><span>BOM Moto (base+kit+ricambi)</span><span class="text-rose-300 font-bold">&euro;15.717</span></div>
+                        <div class="flex justify-between"><span>MdO Install Retail (Anno 3+)</span><span class="text-rose-300 font-bold">&euro;400</span></div>
+                        <div class="flex justify-between"><span>Omologa + Logistica + CAC</span><span class="text-rose-300 font-bold">&euro;800/kit</span></div>
                     </div>
                     <div class="grid grid-cols-3 gap-2 text-center mt-3">
                         <div class="bg-slate-900 p-2 rounded border border-slate-700">
-                            <span class="block text-[9px] text-slate-500 uppercase">Ricavi</span>
-                            <span class="block text-sm font-bold text-white" id="revenueDisplay">&euro;540.000</span>
+                            <span class="block text-[9px] text-slate-500 uppercase">Revenue (2028)</span>
+                            <span class="block text-sm font-bold text-white" id="revenueDisplay">-</span>
                         </div>
                         <div class="bg-slate-900 p-2 rounded border border-slate-700">
-                            <span class="block text-[9px] text-slate-500 uppercase">Costi</span>
-                            <span class="block text-sm font-bold text-rose-400" id="costDisplay">&euro;320.000</span>
+                            <span class="block text-[9px] text-slate-500 uppercase">Gross Profit</span>
+                            <span class="block text-sm font-bold text-amber-400" id="gpDisplay">-</span>
                         </div>
                         <div class="bg-teal-900/30 p-2 rounded border border-teal-700">
-                            <span class="block text-[9px] text-teal-400 uppercase">Margine</span>
-                            <span class="block text-sm font-bold text-teal-400" id="marginDisplay">&euro;220.000</span>
+                            <span class="block text-[9px] text-teal-400 uppercase">EBITDA Green</span>
+                            <span class="block text-sm font-bold text-teal-400" id="greenEbitdaDisplay">-</span>
                         </div>
                     </div>
-                    <div class="text-[10px] text-slate-500 mt-2">Costo BOM+Ops: &euro;3.200/kit | Margine: <span class="text-teal-400 font-bold" id="marginPctDisplay">40.7%</span> | Lancio: 2027</div>
+                    <div class="text-[10px] text-slate-500 mt-2">
+                        Ramp: 2% (2026) &rarr; 35% (2027) &rarr; 100% (2028+) | Mix 2028+: 30% Ret, 60% WS, 10% Moto |
+                        <span class="text-amber-400 font-bold" id="grossMarginDisplay">GM ~41%</span>
+                    </div>
                 </div>
                 <p class="text-xs font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-plus-circle mr-1"></i>Piattaforme Aggiuntive (max 3)</p>
-                <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1" id="platformList"></div>
+                <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1" id="platformList"></div>
                 <p class="text-[10px] text-slate-500 mt-2" id="platformCount">0/3 selezionate</p>
             </div>
             <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-xl">
-                <h4 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Roadmap Multi-Piattaforma</h4>
+                <h4 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Roadmap Revenue &amp; EBITDA 2026&ndash;2036</h4>
                 <div class="chart-wrapper h-64 mb-4">
                     <canvas id="greenChart"></canvas>
                 </div>
                 <div id="platformSummary" class="space-y-2"></div>
                 <div class="grid grid-cols-3 gap-3 text-center mt-4">
                     <div class="bg-slate-900 p-3 rounded border border-slate-700">
-                        <span class="block text-[10px] text-slate-500 uppercase">Ricavi Totali Kit (regime)</span>
+                        <span class="block text-[10px] text-slate-500 uppercase">Revenue Totale (regime)</span>
                         <span class="block text-lg font-bold text-white" id="greenTotalRevenue">-</span>
                     </div>
                     <div class="bg-slate-900 p-3 rounded border border-slate-700">
-                        <span class="block text-[10px] text-slate-500 uppercase">Kit Totali/Anno</span>
+                        <span class="block text-[10px] text-slate-500 uppercase">Unit Totali/Anno</span>
                         <span class="block text-lg font-bold text-amber-400" id="greenTotalKits">-</span>
                     </div>
                     <div class="bg-teal-900/30 p-3 rounded border border-teal-700">
-                        <span class="block text-[10px] text-teal-400 uppercase">Margine Totale</span>
+                        <span class="block text-[10px] text-teal-400 uppercase">EBITDA Green (regime)</span>
                         <span class="block text-lg font-bold text-teal-400" id="greenTotalMargin">-</span>
                     </div>
+                </div>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-[10px] text-left">
+                        <thead id="greenPLHead"></thead>
+                        <tbody id="greenPLBody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1106,26 +1127,26 @@
         recalcFinancialPlan();
     }
 
-    // --- PLATFORMS DATA ---
+    // --- PLATFORMS DATA (bom = BOM materiali, asp = prezzo retail kit) ---
     const platforms = [
-        { id:'hd_sportster', name:'Harley-Davidson Sportster', prod:'1M+', asp:6200, cost:3600, vol:80, launch:2029 },
-        { id:'ducati_monster', name:'Ducati Monster 600-1200', prod:'300k', asp:5800, cost:3400, vol:60, launch:2029 },
-        { id:'yamaha_mt07', name:'Yamaha MT-07 (CP2)', prod:'200k+', asp:4800, cost:2900, vol:90, launch:2028 },
-        { id:'royal_enfield_mono', name:'Royal Enfield Mono (Bullet/Classic/Himalayan)', prod:'6-8M', asp:3900, cost:2400, vol:120, launch:2028 },
-        { id:'suzuki_sv650', name:'Suzuki SV650', prod:'300-500k', asp:4600, cost:2800, vol:70, launch:2029 },
-        { id:'honda_500', name:'Honda 500 Twins (CB/CMX/CL)', prod:'300-500k', asp:4200, cost:2600, vol:85, launch:2028 },
-        { id:'triumph_bonnie', name:'Triumph Bonneville (aria)', prod:'150k+', asp:5600, cost:3300, vol:50, launch:2030 },
-        { id:'ducati_desmo2v', name:'Ducati Desmodue 2V aria', prod:'500k+', asp:5400, cost:3200, vol:65, launch:2029 },
-        { id:'moto_guzzi_v7', name:'Moto Guzzi Small-Block (V7/V9)', prod:'40-50k', asp:5200, cost:3100, vol:35, launch:2030 },
-        { id:'bmw_k_brick', name:'BMW K-Series "Flying Brick"', prod:'300-350k', asp:5800, cost:3500, vol:45, launch:2030 },
-        { id:'re_650', name:'Royal Enfield 650 Twins', prod:'250-350k', asp:4400, cost:2700, vol:75, launch:2028 },
-        { id:'honda_transalp', name:'Honda Transalp XL600/650V', prod:'200-300k', asp:4800, cost:2900, vol:55, launch:2029 },
-        { id:'yamaha_xs650', name:'Yamaha XS650', prod:'200-250k', asp:5000, cost:3000, vol:40, launch:2030 },
-        { id:'honda_cb_four', name:'Honda CB Four SOHC (500-750)', prod:'700-850k', asp:5600, cost:3400, vol:45, launch:2030 },
-        { id:'suzuki_bandit', name:'Suzuki Bandit GSF', prod:'500-800k', asp:4400, cost:2700, vol:65, launch:2029 },
-        { id:'yamaha_sr', name:'Yamaha SR400/500', prod:'150-250k', asp:4600, cost:2800, vol:40, launch:2030 },
-        { id:'kawasaki_z70s', name:'Kawasaki Z 70s (Z1/Z900/Z1000)', prod:'200-250k', asp:5800, cost:3500, vol:35, launch:2031 },
-        { id:'honda_africa', name:'Honda Africa Twin XRV650/750', prod:'70-100k', asp:5200, cost:3100, vol:30, launch:2031 }
+        { id:'hd_sportster', name:'Harley-Davidson Sportster', prod:'1M+', asp:5200, bom:2500, vol:80, launch:2029 },
+        { id:'ducati_monster', name:'Ducati Monster 600-1200', prod:'300k', asp:4800, bom:2400, vol:60, launch:2029 },
+        { id:'yamaha_mt07', name:'Yamaha MT-07 (CP2)', prod:'200k+', asp:4200, bom:2200, vol:90, launch:2029 },
+        { id:'royal_enfield_mono', name:'Royal Enfield Mono (Bullet/Classic/Himalayan)', prod:'6-8M', asp:3600, bom:2000, vol:120, launch:2028 },
+        { id:'suzuki_sv650', name:'Suzuki SV650', prod:'300-500k', asp:4000, bom:2200, vol:70, launch:2029 },
+        { id:'honda_500', name:'Honda 500 Twins (CB/CMX/CL)', prod:'300-500k', asp:3800, bom:2100, vol:85, launch:2029 },
+        { id:'triumph_bonnie', name:'Triumph Bonneville (aria)', prod:'150k+', asp:4800, bom:2400, vol:50, launch:2030 },
+        { id:'ducati_desmo2v', name:'Ducati Desmodue 2V aria', prod:'500k+', asp:4600, bom:2300, vol:65, launch:2029 },
+        { id:'moto_guzzi_v7', name:'Moto Guzzi Small-Block (V7/V9)', prod:'40-50k', asp:4600, bom:2400, vol:35, launch:2030 },
+        { id:'bmw_k_brick', name:'BMW K-Series "Flying Brick"', prod:'300-350k', asp:5000, bom:2600, vol:45, launch:2030 },
+        { id:'re_650', name:'Royal Enfield 650 Twins', prod:'250-350k', asp:3800, bom:2100, vol:75, launch:2029 },
+        { id:'honda_transalp', name:'Honda Transalp XL600/650V', prod:'200-300k', asp:4200, bom:2300, vol:55, launch:2029 },
+        { id:'yamaha_xs650', name:'Yamaha XS650', prod:'200-250k', asp:4400, bom:2200, vol:40, launch:2031 },
+        { id:'honda_cb_four', name:'Honda CB Four SOHC (500-750)', prod:'700-850k', asp:4800, bom:2500, vol:45, launch:2030 },
+        { id:'suzuki_bandit', name:'Suzuki Bandit GSF', prod:'500-800k', asp:3800, bom:2100, vol:65, launch:2029 },
+        { id:'yamaha_sr', name:'Yamaha SR400/500', prod:'150-250k', asp:4000, bom:2100, vol:40, launch:2031 },
+        { id:'kawasaki_z70s', name:'Kawasaki Z 70s (Z1/Z900/Z1000)', prod:'200-250k', asp:5000, bom:2600, vol:35, launch:2031 },
+        { id:'honda_africa', name:'Honda Africa Twin XRV650/750', prod:'70-100k', asp:4600, bom:2400, vol:30, launch:2031 }
     ];
 
     function renderPlatforms() {
@@ -1151,6 +1172,84 @@
         return [...document.querySelectorAll('.platform-cb:checked')].map(cb => platforms.find(p => p.id === cb.dataset.id));
     }
 
+    // --- PROJECT GREEN P&L ENGINE (aligned to High Level BP Feb 2026 GC) ---
+    const GREEN_BMW_LAUNCH = 2026;
+    const GREEN_MOTO_PRICE = 23000;
+    const GREEN_MOTO_BOM = 15717;
+
+    function calcPlatformPL(yr, launchYear, volRegime, retailASP, bomBase) {
+        const d = yr - launchYear;
+        if (d < 0) return { rev:0, cogs:0, varOpex:0, units:0 };
+
+        const ramp = d === 0 ? 0.02 : d === 1 ? 0.35 : Math.pow(1.03, Math.max(0, d - 2));
+        const units = volRegime * ramp;
+
+        let retPct, wsPct, motPct;
+        if (d === 0) { retPct=1; wsPct=0; motPct=0; }
+        else if (d === 1) { retPct=0.5; wsPct=0.4; motPct=0.1; }
+        else { retPct=0.3; wsPct=0.6; motPct=0.1; }
+
+        const retU = units * retPct, wsU = units * wsPct, motU = units * motPct;
+        const pEsc = d <= 0 ? 1 : 1.10 * Math.pow(1.05, Math.max(0, d - 1));
+        const pRet = retailASP * pEsc;
+        const pWS = pRet * 0.80;
+        const rev = retU * pRet + wsU * pWS + motU * GREEN_MOTO_PRICE;
+
+        const bom = Math.max(1800, bomBase * Math.pow(0.95, Math.min(d, 10)));
+        const cogs = (retU + wsU) * bom + motU * GREEN_MOTO_BOM;
+
+        const labor = d === 0 ? 2500 : d === 1 ? 700 : 400;
+        const logist = d === 0 ? 1250 : d === 1 ? 300 : 150;
+        const varOpex = retU * (labor + 500) + units * (logist + 150) + rev * 0.01;
+
+        return { rev, cogs, varOpex, units };
+    }
+
+    function calcGreenPL(yr, bmwVolRegime, retailASP, selectedPlats) {
+        const bmw = calcPlatformPL(yr, GREEN_BMW_LAUNCH, bmwVolRegime, retailASP, 2300);
+
+        let platRev=0, platCOGS=0, platVar=0, platUnits=0;
+        selectedPlats.forEach(p => {
+            const r = calcPlatformPL(yr, p.launch, p.vol, p.asp, p.bom);
+            platRev += r.rev; platCOGS += r.cogs; platVar += r.varOpex; platUnits += r.units;
+        });
+
+        const numActive = 1 + selectedPlats.filter(p => yr >= p.launch).length;
+        const fScale = 1 + (numActive - 1) * 0.3;
+        const yIdx = yr - GREEN_BMW_LAUNCH;
+
+        let payroll, mktg, cert, fac, it, ga;
+        if (yIdx <= 0) { payroll=230000; mktg=43875; cert=40000; fac=30000; it=10000; ga=14569; }
+        else if (yIdx === 1) { payroll=340000; mktg=85000; cert=40000; fac=50000; it=15000; ga=38425; }
+        else {
+            const e = Math.pow(1.03, yIdx - 2);
+            payroll=380000*e; mktg=115000*e; cert=30000+5000*(numActive-1); fac=80000*e; it=19000*e; ga=34275;
+        }
+        const fixedOpex = (payroll + mktg + cert + fac + it + ga) * fScale;
+
+        let da;
+        if (yIdx <= 0) da = 75000;
+        else if (yIdx === 1) da = 91000;
+        else da = 110000 * Math.pow(1.03, Math.max(0, yIdx - 2)) + 15000 * (numActive - 1);
+
+        const rev = bmw.rev + platRev;
+        const cogs = bmw.cogs + platCOGS;
+        const varOpex = bmw.varOpex + platVar;
+        const gp = rev - cogs;
+        const ebitda = gp - varOpex - fixedOpex;
+        const ebit = ebitda - da;
+
+        return {
+            revenue: rev, cogs, varOpex, fixedOpex, da,
+            grossProfit: gp,
+            grossMarginPct: rev > 0 ? gp / rev * 100 : 0,
+            ebitda, ebit,
+            totalUnits: bmw.units + platUnits,
+            bmwUnits: bmw.units, platUnits,
+            bmwRev: bmw.rev, platRev
+        };
+    }
+
     // --- PROJECT GREEN SIMULATOR ---
     let greenChart;
     const volSlider = document.getElementById('volSlider');
@@ -1159,42 +1258,42 @@
     function updateGreenSim() {
         const vol = parseInt(volSlider.value);
         const asp = parseInt(aspSlider.value);
-        const cost = 3200;
-        const margin = asp - cost;
         document.getElementById('volDisplay').innerText = vol;
         document.getElementById('aspDisplay').innerText = fmt(asp);
-        document.getElementById('revenueDisplay').innerText = fmt(vol * asp);
-        document.getElementById('costDisplay').innerText = fmt(vol * cost);
-        document.getElementById('marginDisplay').innerText = fmt(vol * margin);
-        document.getElementById('marginPctDisplay').innerText = ((margin / asp) * 100).toFixed(1) + '%';
+        document.getElementById('wsPriceDisplay').innerText = fmt(Math.round(asp * 0.8));
 
         const selected = getSelectedPlatforms();
-        const allPlats = [{ name: 'BMW R2V Airhead', vol, asp, cost, launch: 2027 }, ...selected];
 
-        let totalVol = 0, totalRev = 0, totalMargin = 0;
-        const summaryHtml = allPlats.map((p, i) => {
-            totalVol += p.vol; totalRev += p.vol * p.asp; totalMargin += p.vol * (p.asp - p.cost);
+        const regimeGreen = calcGreenPL(2028, vol, asp, selected);
+        document.getElementById('revenueDisplay').innerText = fmt(regimeGreen.revenue);
+        document.getElementById('gpDisplay').innerText = fmt(regimeGreen.grossProfit);
+        const ebitdaEl = document.getElementById('greenEbitdaDisplay');
+        ebitdaEl.innerText = fmt(regimeGreen.ebitda);
+        ebitdaEl.className = 'block text-sm font-bold ' + (regimeGreen.ebitda >= 0 ? 'text-teal-400' : 'text-rose-400');
+        document.getElementById('grossMarginDisplay').innerText = 'GM ' + regimeGreen.grossMarginPct.toFixed(1) + '%';
+
+        const allPlats = [{ name:'BMW R2V Airhead', vol, asp, launch:GREEN_BMW_LAUNCH }, ...selected.map(p => ({name:p.name, vol:p.vol, asp:p.asp, launch:p.launch}))];
+        document.getElementById('platformSummary').innerHTML = allPlats.map((p, i) => {
             const c = i === 0 ? 'text-teal-400' : 'text-amber-400';
             return `<div class="flex justify-between items-center text-xs p-2 bg-slate-900/60 rounded border border-slate-700">
                 <span class="${c} font-bold">${p.name}</span>
-                <span class="text-slate-400">${p.vol} kit &times; ${fmt(p.asp)} | Lancio ${p.launch}</span>
+                <span class="text-slate-400">${p.vol} u/yr &times; ${fmt(p.asp)} | ${p.launch}</span>
             </div>`;
         }).join('');
-        document.getElementById('platformSummary').innerHTML = summaryHtml;
-        document.getElementById('greenTotalRevenue').innerText = fmt(totalRev);
-        document.getElementById('greenTotalKits').innerText = totalVol;
-        document.getElementById('greenTotalMargin').innerText = fmt(totalMargin);
+
+        const maxLaunch = Math.max(...allPlats.map(p => p.launch));
+        const regimeYear = Math.max(2028, maxLaunch + 2);
+        const fullRegime = calcGreenPL(regimeYear, vol, asp, selected);
+        document.getElementById('greenTotalRevenue').innerText = fmt(fullRegime.revenue);
+        document.getElementById('greenTotalKits').innerText = Math.round(fullRegime.totalUnits);
+        document.getElementById('greenTotalMargin').innerText = fmt(fullRegime.ebitda);
+        const totalMarginEl = document.getElementById('greenTotalMargin');
+        totalMarginEl.className = 'block text-lg font-bold ' + (fullRegime.ebitda >= 0 ? 'text-teal-400' : 'text-rose-400');
 
         const years10 = [];
         for (let yr = 2026; yr <= 2036; yr++) {
-            let rev = 0;
-            allPlats.forEach(p => {
-                const diff = yr - p.launch;
-                if (diff < 0) return;
-                const ramp = diff === 0 ? 0.15 : diff === 1 ? 0.5 : diff === 2 ? 0.8 : 1.0;
-                rev += p.vol * p.asp * ramp;
-            });
-            years10.push({ yr, rev });
+            const gpl = calcGreenPL(yr, vol, asp, selected);
+            years10.push({ yr, rev: gpl.revenue, ebitda: gpl.ebitda });
         }
 
         if (greenChart) greenChart.destroy();
@@ -1202,10 +1301,49 @@
             type: 'bar',
             data: {
                 labels: years10.map(y => y.yr.toString()),
-                datasets: [{ label: 'Ricavi Kit (tutte le piattaforme)', data: years10.map(y => y.rev), backgroundColor: years10.map(y => y.rev > 0 ? '#0f766e' : '#334155'), borderRadius: 4 }]
+                datasets: [
+                    { label: 'Revenue', data: years10.map(y => y.rev), backgroundColor: '#0f766e', borderRadius: 4, order: 2 },
+                    { label: 'EBITDA Green', data: years10.map(y => y.ebitda), type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', pointBackgroundColor: years10.map(y => y.ebitda >= 0 ? '#10b981' : '#f43f5e'), pointRadius: 4, borderWidth: 2, fill: true, tension: 0.3, order: 1 }
+                ]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } }, tooltip: { callbacks: { label: ctx => fmt(ctx.raw) } } }, scales: { y: { grid: { color: 'rgba(148,163,184,0.1)' }, ticks: { color: '#94a3b8', callback: v => fmt(v) } }, x: { ticks: { color: '#94a3b8' } } } }
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } } },
+                scales: { y: { grid: { color: 'rgba(148,163,184,0.1)' }, ticks: { color: '#94a3b8', callback: v => fmt(v), font: { size: 10 } } }, x: { ticks: { color: '#94a3b8', font: { size: 10 } } } }
+            }
         });
+
+        renderGreenPLTable(vol, asp, selected);
+    }
+
+    function renderGreenPLTable(vol, asp, sel) {
+        const yrs = [2026, 2027, 2028, 2030, 2033, 2036];
+        const data = yrs.map(yr => calcGreenPL(yr, vol, asp, sel));
+        document.getElementById('greenPLHead').innerHTML = `<tr class="border-b border-slate-700 text-slate-500 uppercase text-[9px]">
+            <th class="p-1.5 text-left">Green P&L</th>${yrs.map(yr => `<th class="p-1.5 text-right">${yr}</th>`).join('')}</tr>`;
+        const rows = [
+            { l:'Revenue', v:data.map(d=>d.revenue), b:true },
+            { l:'(-) COGS', v:data.map(d=>-d.cogs), neg:true },
+            { l:'Gross Profit', v:data.map(d=>d.grossProfit), b:true, gp:true },
+            { l:'  GM%', v:data.map(d=>d.grossMarginPct.toFixed(1)+'%'), pct:true },
+            { l:'(-) Var Opex', v:data.map(d=>-d.varOpex), neg:true },
+            { l:'(-) Fixed Opex', v:data.map(d=>-d.fixedOpex), neg:true },
+            { l:'EBITDA', v:data.map(d=>d.ebitda), b:true, ebitda:true },
+            { l:'Units', v:data.map(d=>Math.round(d.totalUnits)), units:true }
+        ];
+        document.getElementById('greenPLBody').innerHTML = rows.map(r => `
+            <tr class="border-b border-slate-800/40 ${r.b ? 'font-bold' : ''}">
+                <td class="p-1.5 text-[9px] ${r.ebitda ? 'text-teal-400' : r.gp ? 'text-amber-400' : 'text-slate-400'}">${r.l}</td>
+                ${r.v.map(v => {
+                    if (r.pct) return `<td class="p-1.5 text-right text-[9px] text-amber-400 tabular-nums">${v}</td>`;
+                    if (r.units) return `<td class="p-1.5 text-right text-[9px] text-slate-300 tabular-nums">${v}</td>`;
+                    let c = 'text-slate-300';
+                    if (r.ebitda) c = v >= 0 ? 'text-teal-400' : 'text-rose-400';
+                    else if (r.neg) c = 'text-rose-300';
+                    else if (r.gp) c = 'text-amber-400';
+                    return `<td class="p-1.5 text-right text-[9px] ${c} tabular-nums">${fmt(v)}</td>`;
+                }).join('')}
+            </tr>`).join('');
     }
 
     volSlider.addEventListener('input', () => { updateGreenSim(); recalcFinancialPlan(); });
@@ -1387,7 +1525,7 @@
 
         const greenVol = parseInt(document.getElementById('volSlider').value) || 0;
         const greenAsp = parseInt(document.getElementById('aspSlider').value) || 0;
-        const greenCost = 3200;
+        const selectedPlats = getSelectedPlatforms();
 
         let pY1=0,pY2=0,pY3=0;
         productsCatalog.forEach(p => { pY1+=p.price*p.q1; pY2+=p.price*p.q2; pY3+=p.price*p.q3; });
@@ -1396,12 +1534,6 @@
         let mcPerMoto = 0;
         document.querySelectorAll('.mc-service').forEach(cb => { if(cb.checked) mcPerMoto += parseInt(cb.dataset.cost); });
         const mcArr = mcMoto * mcPerMoto * 12;
-
-        const selectedPlats = getSelectedPlatforms();
-        const allPlats = [
-            { vol: greenVol, asp: greenAsp, cost: greenCost, launch: 2027 },
-            ...selectedPlats
-        ];
 
         const years = [];
         for (let y = 0; y < 11; y++) {
@@ -1432,14 +1564,7 @@
             const totalShPct = Math.min(sh42pct + shNardipct, 0.8);
             const sharingRev = 108000 * totalShPct * (1 + shMarkup);
 
-            let greenRev = 0, greenCV = 0;
-            allPlats.forEach(p => {
-                const diff = yr - p.launch;
-                if (diff < 0) return;
-                const ramp = diff === 0 ? 0.15 : diff === 1 ? 0.5 : diff === 2 ? 0.8 : 1.0;
-                greenRev += p.vol * p.asp * ramp;
-                greenCV += p.vol * p.cost * ramp;
-            });
+            const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
 
             const prodRev = y === 0 ? pY1 : y === 1 ? pY2 : pY3;
             const prodCV = prodRev * 0.25;
@@ -1450,13 +1575,13 @@
             const ricavi_officina = BASE.ricavi_officina * serviceGrowth;
             const ricavi_fashion = fashRev;
             const ricavi_componenti = prodRev;
-            const ricavi_kit = greenRev;
+            const ricavi_kit = gpl.revenue;
             const ricavi_sharing = sharingRev;
             const ricavi_concierge = concRev;
             const ricavi_altro = BASE.ricavi_altro;
             const totale_ricavi = ricavi_officina + ricavi_fashion + ricavi_componenti + ricavi_kit + ricavi_sharing + ricavi_concierge + ricavi_altro;
 
-            const cv_operativi = (BASE.cv_operativi - BASE.costi_fashion_prod + (fashionChoice === 'nulla' ? BASE.costi_fashion_prod : 0)) * serviceGrowth + greenCV + prodCV + concCV;
+            const cv_operativi = (BASE.cv_operativi - BASE.costi_fashion_prod + (fashionChoice === 'nulla' ? BASE.costi_fashion_prod : 0)) * serviceGrowth + gpl.cogs + gpl.varOpex + prodCV + concCV;
             const cv_commerciali = BASE.cv_commerciali - fashCostSaved - (y === 0 ? BASE.costi_marketing * 0.5 : BASE.costi_marketing * 0.3) - (y === 0 ? BASE.costi_it * 0.3 : BASE.costi_it * 0.2);
             const totale_cv = Math.max(cv_operativi, 0) + Math.max(cv_commerciali, 0);
 
@@ -1465,16 +1590,19 @@
             const cf_locali = localiNew;
             const cf_personale = BASE.cf_personale;
             const cf_ga = BASE.cf_ga_altro * (y === 0 ? 0.85 : 0.80);
-            const totale_cf = cf_locali + cf_personale + cf_ga;
+            const cf_green = gpl.fixedOpex;
+            const totale_cf = cf_locali + cf_personale + cf_ga + cf_green;
 
             const ebitda = mdc - totale_cf;
-            const ebit = ebitda - BASE.da;
+            const da = BASE.da + gpl.da;
+            const ebit = ebitda - da;
 
             years.push({
                 label, ricavi_officina, ricavi_fashion, ricavi_componenti, ricavi_kit,
                 ricavi_sharing, ricavi_concierge, ricavi_altro, totale_ricavi,
                 cv_operativi: Math.max(cv_operativi,0), cv_commerciali: Math.max(cv_commerciali,0), totale_cv,
-                mdc, cf_locali, cf_personale, cf_ga, totale_cf, ebitda, da: BASE.da, ebit
+                mdc, cf_locali, cf_personale, cf_ga, cf_green, totale_cf, ebitda, da, ebit,
+                green_ebitda: gpl.ebitda, green_units: gpl.totalUnits
             });
         }
 
