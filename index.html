@@ -8,6 +8,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -98,7 +99,7 @@
 
         <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
             <div class="flex justify-between items-center mb-4">
-                <h4 class="text-lg font-bold text-rose-800"><i class="fa-solid fa-heart-crack mr-2"></i>P&amp;L 2025: La Verit&agrave; Nuda</h4>
+                <h4 class="text-lg font-bold text-rose-800"><i class="fa-solid fa-heart-crack mr-2"></i>P&amp;L 2025</h4>
                 <button onclick="toggleFinancialView()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-1 px-2 rounded border border-slate-300">Cambia Vista</button>
             </div>
             <p class="text-xs text-slate-500 mb-2">Fonte: P&amp;L interno Ottodrom 2025.</p>
@@ -333,7 +334,7 @@
     <div class="mb-8 border-l-4 border-amber-500 pl-4">
         <h3 class="text-2xl font-bold text-slate-900 uppercase">4. Il Piano Operativo: 6 Azioni Sinergiche</h3>
         <p class="mt-2 text-slate-600">
-            Non opzioni alternative, ma passaggi obbligati. La somma di queste azioni inverte matematicamente il P&amp;L trasformando costi fissi in asset e propriet&agrave; intellettuale in prodotti.
+            Con l'obiettivo di passare da un revenue mix basato sull'artigianato ad uno su ricavi ricorrenti e scalabili. La somma di queste azioni inverte matematicamente il P&amp;L trasformando costi fissi in asset e propriet&agrave; intellettuale in prodotti.
         </p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="actionsGrid"></div>
@@ -853,8 +854,47 @@
                 <tbody id="ceTableBody"></tbody>
             </table>
         </div>
-        <div class="text-[11px] text-slate-500 bg-slate-800 rounded p-3 mt-4">
-            <i class="fa-solid fa-info-circle mr-1"></i> I valori 2025 provengono dal CE Analitico consuntivo. Le proiezioni 2026&ndash;2036 si aggiornano in tempo reale in base ai parametri selezionati in ogni simulatore.
+        <div class="flex items-center justify-between mt-6">
+            <div class="text-[11px] text-slate-500 bg-slate-800 rounded p-3 flex-1">
+                <i class="fa-solid fa-info-circle mr-1"></i> I valori 2025 provengono dal CE Analitico consuntivo. Le proiezioni 2026&ndash;2036 si aggiornano in tempo reale.
+            </div>
+            <button onclick="downloadExcel()" class="ml-4 flex-shrink-0 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-colors flex items-center">
+                <i class="fa-solid fa-file-excel mr-2"></i> Scarica Business Plan (.xlsx)
+            </button>
+        </div>
+
+        <!-- REVENUE MIX SHIFT -->
+        <div class="mt-12 mb-4 border-l-4 border-indigo-500 pl-4">
+            <h3 class="text-2xl font-bold uppercase">Revenue Mix Shift</h3>
+            <p class="mt-2 text-slate-400">Come cambia la composizione dei ricavi: da oggi (2025) al target a regime, in base alle scelte selezionate.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+            <!-- Exhibit A: Current -->
+            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                <h4 class="text-center text-sm font-bold uppercase text-slate-400 mb-1">Exhibit A</h4>
+                <h5 class="text-center text-lg font-bold text-white mb-4">Current Sales Mix <span class="text-slate-500 text-sm font-normal">(2025)</span></h5>
+                <div class="chart-wrapper h-52 mx-auto" style="max-width:240px">
+                    <canvas id="mixCurrentChart"></canvas>
+                </div>
+                <div id="mixCurrentLegend" class="mt-4 space-y-1"></div>
+            </div>
+            <!-- Arrow -->
+            <div class="flex flex-col items-center justify-center py-4 lg:py-0">
+                <div class="text-4xl font-black text-amber-400 tracking-widest rotate-0 lg:rotate-0">
+                    <i class="fa-solid fa-arrow-right hidden lg:block text-5xl"></i>
+                    <i class="fa-solid fa-arrow-down lg:hidden text-5xl"></i>
+                </div>
+                <span class="text-xs font-bold uppercase text-amber-400 mt-1 tracking-widest">SHIFT</span>
+            </div>
+            <!-- Exhibit B: Target -->
+            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700">
+                <h4 class="text-center text-sm font-bold uppercase text-slate-400 mb-1">Exhibit B</h4>
+                <h5 class="text-center text-lg font-bold text-white mb-4">Target Revenue Mix <span class="text-slate-500 text-sm font-normal" id="mixTargetYear">(regime)</span></h5>
+                <div class="chart-wrapper h-52 mx-auto" style="max-width:240px">
+                    <canvas id="mixTargetChart"></canvas>
+                </div>
+                <div id="mixTargetLegend" class="mt-4 space-y-1"></div>
+            </div>
         </div>
     </div>
 </section>
@@ -1193,14 +1233,15 @@
         const pEsc = d <= 0 ? 1 : 1.10 * Math.pow(1.05, Math.max(0, d - 1));
         const pRet = retailASP * pEsc;
         const pWS = pRet * 0.80;
-        const rev = retU * pRet + wsU * pWS + motU * GREEN_MOTO_PRICE;
+        const kitRev = retU * pRet + wsU * pWS;
+        const rev = kitRev + motU * GREEN_MOTO_PRICE;
 
         const bom = Math.max(1800, bomBase * Math.pow(0.95, Math.min(d, 10)));
         const cogs = (retU + wsU) * bom + motU * GREEN_MOTO_BOM;
 
         const labor = d === 0 ? 2500 : d === 1 ? 700 : 400;
         const logist = d === 0 ? 1250 : d === 1 ? 300 : 150;
-        const varOpex = retU * (labor + 500) + units * (logist + 150) + rev * 0.01;
+        const varOpex = retU * (labor + 500) + units * (logist + 150) + kitRev * 0.01;
 
         return { rev, cogs, varOpex, units };
     }
@@ -1510,6 +1551,7 @@
     BASE.ebitda = BASE.totale_ricavi - BASE.totale_cv - BASE.totale_cf;
 
     let ebitdaChart;
+    let lastYearsData = [];
 
     function recalcFinancialPlan() {
         const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
@@ -1566,10 +1608,13 @@
 
             const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
 
-            const prodRev = y === 0 ? pY1 : y === 1 ? pY2 : pY3;
+            const prodBase = y === 0 ? pY1 : y === 1 ? pY2 : pY3;
+            const prodGrowth = y > 2 ? Math.pow(1.05, y - 2) : 1;
+            const prodRev = prodBase * prodGrowth;
             const prodCV = prodRev * 0.25;
 
-            const concRev = mcArr * rampConc;
+            const concGrowth = y > 2 ? Math.pow(1.05, y - 2) : 1;
+            const concRev = mcArr * rampConc * concGrowth;
             const concCV = concRev * 0.35;
 
             const ricavi_officina = BASE.ricavi_officina * serviceGrowth;
@@ -1606,9 +1651,11 @@
             });
         }
 
+        lastYearsData = years;
         renderCETable(years);
         renderEbitdaChart(years);
         renderEbitdaCards(years);
+        renderMixCharts(years);
     }
 
     function renderEbitdaCards(years) {
@@ -1626,7 +1673,6 @@
     }
 
     function renderCETable(years) {
-        const nCols = 1 + years.length;
         const head = document.getElementById('ceTableHead');
         head.innerHTML = `<tr class="border-b border-slate-700 text-slate-400 uppercase text-xs">
             <th class="p-2 sticky left-0 bg-slate-900 z-10 min-w-[180px]">Voce CE</th>
@@ -1639,25 +1685,29 @@
             { label: '  Officina & Service', vals: [BASE.ricavi_officina, ...years.map(y=>y.ricavi_officina)] },
             { label: '  Fashion', vals: [BASE.ricavi_fashion, ...years.map(y=>y.ricavi_fashion)] },
             { label: '  Componenti (Az.5)', vals: [0, ...years.map(y=>y.ricavi_componenti)], accent: true },
-            { label: '  Kit Retrofit (Az.4)', vals: [0, ...years.map(y=>y.ricavi_kit)], accent: true },
+            { label: '  Kit & Moto Retrofit (Az.4)', vals: [0, ...years.map(y=>y.ricavi_kit)], accent: true },
             { label: '  Sharing (Az.3)', vals: [0, ...years.map(y=>y.ricavi_sharing)], accent: true },
             { label: '  Moto-Concierge (Az.6)', vals: [0, ...years.map(y=>y.ricavi_concierge)], accent: true },
             { label: '  Altro', vals: [BASE.ricavi_altro, ...years.map(y=>y.ricavi_altro)] },
             { sep: true },
             { label: 'COSTI VARIABILI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_cv, ...years.map(y=>y.totale_cv)], neg: true },
-            { label: '  Operativi', vals: [BASE.cv_operativi, ...years.map(y=>y.cv_operativi)], neg: true },
+            { label: '  Operativi + Green COGS & Var', vals: [BASE.cv_operativi, ...years.map(y=>y.cv_operativi)], neg: true },
             { label: '  Commerciali & Consulenze', vals: [BASE.cv_commerciali, ...years.map(y=>y.cv_commerciali)], neg: true },
             { sep: true },
             { label: 'MARGINE DI CONTRIBUZIONE', bold: true, cls: 'text-amber-400 bg-slate-800/50', vals: [BASE.totale_ricavi - BASE.totale_cv, ...years.map(y=>y.mdc)] },
             { sep: true },
             { label: 'COSTI FISSI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_cf, ...years.map(y=>y.totale_cf)], neg: true },
             { label: '  Locali (Affitti + Utenze)', vals: [BASE.cf_locali, ...years.map(y=>y.cf_locali)], neg: true },
-            { label: '  Personale', vals: [BASE.cf_personale, ...years.map(y=>y.cf_personale)], neg: true },
+            { label: '  Personale Ottodrom', vals: [BASE.cf_personale, ...years.map(y=>y.cf_personale)], neg: true },
             { label: '  G&A e Altro', vals: [BASE.cf_ga_altro, ...years.map(y=>y.cf_ga)], neg: true },
+            { label: '  Project Green Team & Opex', vals: [0, ...years.map(y=>y.cf_green)], neg: true, accent: true },
             { sep: true },
             { label: 'EBITDA', bold: true, cls: 'text-lg', vals: [BASE.ebitda, ...years.map(y=>y.ebitda)], ebitda: true },
-            { label: '  D&A', vals: [BASE.da, ...years.map(()=>BASE.da)], neg: true },
-            { label: 'EBIT', bold: true, vals: [BASE.ebitda - BASE.da, ...years.map(y=>y.ebit)], ebitda: true }
+            { label: '  D&A (Ottodrom + Green)', vals: [BASE.da, ...years.map(y=>y.da)], neg: true },
+            { label: 'EBIT', bold: true, vals: [BASE.ebitda - BASE.da, ...years.map(y=>y.ebit)], ebitda: true },
+            { sep: true },
+            { label: '  di cui: Green EBITDA', vals: [0, ...years.map(y=>y.green_ebitda)], ebitda: true, small: true },
+            { label: '  di cui: Green Units', vals: [0, ...years.map(y=>Math.round(y.green_units))], small: true, units: true }
         ];
 
         const colSpan = 2 + years.length;
@@ -1666,14 +1716,15 @@
             if (r.sep) return `<tr><td colspan="${colSpan}" class="py-1 border-b border-slate-700"></td></tr>`;
             const cls = r.cls || '';
             const bld = r.bold ? 'font-bold' : '';
-            return `<tr class="${cls} ${bld} border-b border-slate-800/50">
+            const sz = r.small ? 'text-[10px]' : '';
+            return `<tr class="${cls} ${bld} ${sz} border-b border-slate-800/50">
                 <td class="p-2 sticky left-0 bg-slate-900 ${r.accent ? 'text-teal-400' : 'text-slate-300'} whitespace-nowrap">${r.label}</td>
                 ${r.vals.map((v, i) => {
                     let color = 'text-slate-300';
                     if (r.ebitda) color = v >= 0 ? 'text-teal-400' : 'text-rose-400';
                     else if (r.neg) color = 'text-rose-300';
                     else if (r.accent && i > 0 && v > 0) color = 'text-teal-400';
-                    return `<td class="p-2 text-right ${color} tabular-nums whitespace-nowrap">${fmt(v)}</td>`;
+                    return `<td class="p-2 text-right ${color} tabular-nums whitespace-nowrap">${r.units ? v : fmt(v)}</td>`;
                 }).join('')}
             </tr>`;
         }).join('');
@@ -1713,6 +1764,169 @@
                 }
             }
         });
+    }
+
+    // --- REVENUE MIX SHIFT CHARTS ---
+    let mixCurrentChart, mixTargetChart;
+
+    function renderMixCharts(years) {
+        const currentData = [
+            { label: 'Custom / Officina', value: 42, color: '#0f766e' },
+            { label: 'Manutenzione', value: 18, color: '#0ea5e9' },
+            { label: 'Fashion', value: 30, color: '#8b5cf6' },
+            { label: 'Altro', value: 10, color: '#94a3b8' }
+        ];
+
+        if (mixCurrentChart) mixCurrentChart.destroy();
+        mixCurrentChart = new Chart(document.getElementById('mixCurrentChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: currentData.map(d => d.label),
+                datasets: [{ data: currentData.map(d => d.value), backgroundColor: currentData.map(d => d.color), borderWidth: 0, hoverOffset: 6 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '55%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + '%' } } } }
+        });
+        document.getElementById('mixCurrentLegend').innerHTML = currentData.map(d =>
+            `<div class="flex items-center justify-between text-xs"><span class="flex items-center"><span class="inline-block w-3 h-3 rounded mr-2" style="background:${d.color}"></span><span class="text-slate-300">${d.label}</span></span><span class="font-bold text-white">${d.value}%</span></div>`
+        ).join('');
+
+        const regimeIdx = Math.min(years.length - 1, 4);
+        const yr = years[regimeIdx];
+        if (!yr) return;
+        document.getElementById('mixTargetYear').innerText = '(' + yr.label + ')';
+        const tot = yr.totale_ricavi;
+        if (tot <= 0) return;
+
+        const scalabili = yr.ricavi_kit + yr.ricavi_componenti;
+        const ricorrenti = yr.ricavi_concierge + yr.ricavi_sharing + yr.ricavi_officina * 0.5;
+        const hero = tot - scalabili - ricorrenti;
+
+        const pScal = Math.round(scalabili / tot * 100);
+        const pRic = Math.round(ricorrenti / tot * 100);
+        const pHero = 100 - pScal - pRic;
+
+        const targetData = [
+            { label: 'Prodotti Scalabili', detail: 'Kit ibridi + Parts + E-commerce', value: pScal, color: '#0f766e' },
+            { label: 'Ricorrenti', detail: 'Concierge + Sharing + Service', value: pRic, color: '#0ea5e9' },
+            { label: 'Hero Custom / Altro', detail: 'PR/VIP, Fashion residuo, Altro', value: pHero, color: '#8b5cf6' }
+        ];
+
+        if (mixTargetChart) mixTargetChart.destroy();
+        mixTargetChart = new Chart(document.getElementById('mixTargetChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: targetData.map(d => d.label),
+                datasets: [{ data: targetData.map(d => d.value), backgroundColor: targetData.map(d => d.color), borderWidth: 0, hoverOffset: 6 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '55%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + '%' } } } }
+        });
+        document.getElementById('mixTargetLegend').innerHTML = targetData.map(d =>
+            `<div class="flex items-center justify-between text-xs"><span class="flex items-center"><span class="inline-block w-3 h-3 rounded mr-2" style="background:${d.color}"></span><span class="text-slate-300">${d.label}</span></span><span class="font-bold text-white">${d.value}%</span></div>
+            <div class="text-[10px] text-slate-500 ml-5 -mt-0.5 mb-1">${d.detail}</div>`
+        ).join('');
+    }
+
+    // --- DOWNLOAD EXCEL ---
+    function downloadExcel() {
+        if (!lastYearsData.length) { alert('Calcola prima il piano finanziario.'); return; }
+        const wb = XLSX.utils.book_new();
+        const years = lastYearsData;
+        const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
+
+        const ceRows = [
+            hdr,
+            ['RICAVI', BASE.totale_ricavi, ...years.map(y=>y.totale_ricavi)],
+            ['  Officina & Service', BASE.ricavi_officina, ...years.map(y=>y.ricavi_officina)],
+            ['  Fashion', BASE.ricavi_fashion, ...years.map(y=>y.ricavi_fashion)],
+            ['  Componenti (Az.5)', 0, ...years.map(y=>y.ricavi_componenti)],
+            ['  Kit & Moto Retrofit (Az.4)', 0, ...years.map(y=>y.ricavi_kit)],
+            ['  Sharing (Az.3)', 0, ...years.map(y=>y.ricavi_sharing)],
+            ['  Moto-Concierge (Az.6)', 0, ...years.map(y=>y.ricavi_concierge)],
+            ['  Altro', BASE.ricavi_altro, ...years.map(y=>y.ricavi_altro)],
+            [],
+            ['COSTI VARIABILI', BASE.totale_cv, ...years.map(y=>y.totale_cv)],
+            ['  Operativi + Green COGS & Var', BASE.cv_operativi, ...years.map(y=>y.cv_operativi)],
+            ['  Commerciali & Consulenze', BASE.cv_commerciali, ...years.map(y=>y.cv_commerciali)],
+            [],
+            ['MARGINE DI CONTRIBUZIONE', BASE.totale_ricavi - BASE.totale_cv, ...years.map(y=>y.mdc)],
+            [],
+            ['COSTI FISSI', BASE.totale_cf, ...years.map(y=>y.totale_cf)],
+            ['  Locali (Affitti + Utenze)', BASE.cf_locali, ...years.map(y=>y.cf_locali)],
+            ['  Personale Ottodrom', BASE.cf_personale, ...years.map(y=>y.cf_personale)],
+            ['  G&A e Altro', BASE.cf_ga_altro, ...years.map(y=>y.cf_ga)],
+            ['  Project Green Team & Opex', 0, ...years.map(y=>y.cf_green)],
+            [],
+            ['EBITDA', BASE.ebitda, ...years.map(y=>y.ebitda)],
+            ['  D&A (Ottodrom + Green)', BASE.da, ...years.map(y=>y.da)],
+            ['EBIT', BASE.ebitda - BASE.da, ...years.map(y=>y.ebit)],
+            [],
+            ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
+            ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
+        ];
+
+        const ws1 = XLSX.utils.aoa_to_sheet(ceRows);
+        ws1['!cols'] = [{ wch: 32 }, ...Array(years.length + 1).fill({ wch: 15 })];
+        XLSX.utils.book_append_sheet(wb, ws1, 'BP Ottodrom 2026-2036');
+
+        const greenVol = parseInt(document.getElementById('volSlider').value) || 375;
+        const greenAsp = parseInt(document.getElementById('aspSlider').value) || 3900;
+        const selPlats = getSelectedPlatforms();
+        const greenHdr = ['Green P&L', '2025', ...years.map(y => y.label)];
+        const greenYears = years.map(y => {
+            const yr = parseInt(y.label);
+            return calcGreenPL(yr, greenVol, greenAsp, selPlats);
+        });
+        const greenRows = [
+            greenHdr,
+            ['Revenue', 0, ...greenYears.map(g=>g.revenue)],
+            ['(-) COGS', 0, ...greenYears.map(g=>-g.cogs)],
+            ['Gross Profit', 0, ...greenYears.map(g=>g.grossProfit)],
+            ['  Gross Margin %', '', ...greenYears.map(g=>g.grossMarginPct.toFixed(1)+'%')],
+            ['(-) Variable Opex', 0, ...greenYears.map(g=>-g.varOpex)],
+            ['(-) Fixed Opex', 0, ...greenYears.map(g=>-g.fixedOpex)],
+            ['EBITDA', 0, ...greenYears.map(g=>g.ebitda)],
+            ['(-) D&A', 0, ...greenYears.map(g=>-g.da)],
+            ['EBIT', 0, ...greenYears.map(g=>g.ebit)],
+            [],
+            ['Total Units', 0, ...greenYears.map(g=>Math.round(g.totalUnits))],
+            ['  BMW R2V Units', 0, ...greenYears.map(g=>Math.round(g.bmwUnits))],
+            ['  Piattaforme Aggiuntive Units', 0, ...greenYears.map(g=>Math.round(g.platUnits))]
+        ];
+        const ws2 = XLSX.utils.aoa_to_sheet(greenRows);
+        ws2['!cols'] = [{ wch: 30 }, ...Array(years.length + 1).fill({ wch: 15 })];
+        XLSX.utils.book_append_sheet(wb, ws2, 'Project Green P&L');
+
+        const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
+        const assRows = [
+            ['ASSUMPTIONS – Piano Industriale Ottodrom'],
+            [],
+            ['Parametro', 'Valore'],
+            ['Fashion Scenario', fashionRadio ? fashionRadio.value : 'combo'],
+            ['Downsizing Via Pinciana 41', document.getElementById('togPinciana').checked ? 'SI' : 'NO'],
+            ['Downsizing Via Adige', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
+            ['Nuovo Affitto (se downsizing)', parseInt(document.getElementById('newRentSlider').value) || 0],
+            ['Sharing % Officine42', parseInt(document.getElementById('sh42Slider').value) || 0],
+            ['Sharing % Nardi', parseInt(document.getElementById('shNardiSlider').value) || 0],
+            ['Sharing Markup %', parseInt(document.getElementById('shMarkupSlider').value) || 0],
+            ['Green: Vol Target a Regime', greenVol],
+            ['Green: ASP Kit Retail', greenAsp],
+            ['Green: Piattaforme Aggiuntive', selPlats.map(p => p.name).join(', ') || 'Nessuna'],
+            ['Concierge: Moto Gestite', parseInt(document.getElementById('mcMotoSlider').value) || 0],
+            [],
+            ['Componenti (Catalogo)', 'Prezzo', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3'],
+            ...productsCatalog.map(p => [p.name, p.price, p.q1, p.q2, p.q3]),
+            [],
+            ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
+            ['Nota', 'Green: ramp 2%/35%/100%, mix Retail 30% WS 60% Moto 10% a regime.'],
+            ['Nota', 'Green Fixed Opex: da High Level BP Feb 2026 (Payroll, Mktg, Cert, Facilities, IT, G&A).'],
+            ['Nota', 'Service Ottodrom: crescita 3%/anno (cap +15%).'],
+            ['Generato il', new Date().toLocaleString('it-IT')]
+        ];
+        const ws3 = XLSX.utils.aoa_to_sheet(assRows);
+        ws3['!cols'] = [{ wch: 35 }, { wch: 15 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+        XLSX.utils.book_append_sheet(wb, ws3, 'Assumptions');
+
+        XLSX.writeFile(wb, 'Ottodrom_Business_Plan_2026-2036.xlsx');
     }
 
     // --- INIT ---
