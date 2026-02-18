@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottodrom | Piano Industriale</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+    h1, h2, h3, h4, .font-oswald { font-family: 'Oswald', sans-serif; }
+    .chart-wrapper { position: relative; width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .action-card { transition: all 0.3s ease; }
+    .action-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .active-tab { border-bottom: 3px solid #0f766e; color: #0f766e; font-weight: 600; }
+    .inactive-tab { border-bottom: 3px solid transparent; color: #64748b; }
+    .inactive-tab:hover { color: #334155; border-bottom: 3px solid #cbd5e1; }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- Navigation -->
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <img src="assets/ottodrom-logo.png" alt="Ottodrom Motorcycles" class="h-10 md:h-12 w-auto mr-3" />
+                <span class="font-bold text-xl tracking-wide uppercase">Ottodrom <span class="text-slate-500 font-light">| Piano Industriale</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#situation" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">La Crisi</a>
+                <a href="#market" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Il Mercato</a>
+                <a href="#benchmarks" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Benchmark</a>
+                <a href="#actions" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Le 6 Azioni</a>
+                <a href="#simulators" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Simulatori</a>
+                <a href="#financial-plan" class="text-slate-600 hover:text-teal-700 px-2 py-2 text-sm font-medium uppercase">Piano Finanziario</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="bg-slate-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-3xl font-bold leading-7 text-amber-500 sm:text-4xl sm:truncate uppercase">
+                    Piano Industriale 2026-2036
+                </h2>
+                <p class="mt-2 text-slate-300 text-lg max-w-2xl">
+                    Riconversione radicale per Ottodrom: dall'artigianato in perdita alla produttivizzazione scalabile e ricavi ricorrenti.
+                </p>
+            </div>
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <div class="bg-rose-900/50 border border-rose-700 rounded p-4 text-center">
+                    <span class="block text-rose-400 text-sm uppercase font-bold">EBITDA 2025 (Forecast)</span>
+                    <span class="block text-2xl font-bold text-white">-&euro;350.900</span>
+                </div>
+                <div class="ml-4 bg-teal-900/50 border border-teal-700 rounded p-4 text-center">
+                    <span class="block text-teal-400 text-sm uppercase font-bold">Obiettivo Pivot</span>
+                    <span class="block text-2xl font-bold text-white">Iconic Mobility Lab</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SECTION 1: LA CRISI ===================== -->
+<section id="situation" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 border-l-4 border-rose-600 pl-4">
+        <h3 class="text-2xl font-bold text-slate-900 uppercase">1. Analisi della Crisi &amp; Contesto</h3>
+        <p class="mt-2 text-slate-600">
+            L'insostenibilit&agrave; non &egrave; un "anno storto", &egrave; strutturale. Il mercato globale &egrave; in contrazione profonda per fattori demografici (Gen Z non sostituisce i Boomer), barriere finanziarie ai massimi storici e normative Euro 5+ che chiudono l'ecosistema. Il custom artigianale "one-off" &egrave; la prima spesa a essere rimandata.
+        </p>
+    </div>
+
+    <!-- Row 1: Macro + Financial P&L -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-lg font-bold text-slate-700"><i class="fa-solid fa-globe-europe mr-2"></i>Crollo Vendite Moto H1 2025</h4>
+            </div>
+            <div class="chart-wrapper h-64">
+                <canvas id="macroChart"></canvas>
+            </div>
+            <p class="mt-3 text-sm text-slate-500 italic">
+                Italia -19,2% (<a href="https://www.ancma.it/statistiche/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">ANCMA</a>), USA -9,2% (<a href="https://www.mic.org/#/statistics" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">MIC</a>), Europa -7,8% (<a href="https://www.acem.eu/registrations/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">ACEM</a>). H-D quota di mercato in caduta verso il 17% (<a href="https://www.mic.org/#/statistics" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">MIC</a>). Cruiser usate -13% nel Q2 2025 (<a href="https://www.mic.org/#/statistics" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">dati di settore MIC</a>).
+            </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-lg font-bold text-rose-800"><i class="fa-solid fa-heart-crack mr-2"></i>P&amp;L 2025: La Verit&agrave; Nuda</h4>
+                <button onclick="toggleFinancialView()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-1 px-2 rounded border border-slate-300">Cambia Vista</button>
+            </div>
+            <p class="text-xs text-slate-500 mb-2">Fonte: P&amp;L interno Ottodrom 2025.</p>
+            <div class="chart-wrapper h-64">
+                <canvas id="financialChart"></canvas>
+            </div>
+            <div class="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
+                <div class="bg-slate-50 p-2 rounded"><span class="block text-slate-500">Ricavi</span><span class="font-bold">&euro;190.6k</span></div>
+                <div class="bg-rose-50 p-2 rounded"><span class="block text-rose-500">C. Variabili</span><span class="font-bold">&euro;205.7k</span></div>
+                <div class="bg-rose-50 p-2 rounded"><span class="block text-rose-500">C. Fissi</span><span class="font-bold">&euro;335.8k</span></div>
+                <div class="bg-amber-50 p-2 rounded"><span class="block text-amber-600">Cassa</span><span class="font-bold text-rose-600">&euro;12.5k</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: TCO + Stato Patrimoniale -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <h4 class="text-lg font-bold text-amber-700 mb-1"><i class="fa-solid fa-wallet mr-2"></i>Total Cost of Ownership (1&deg; Anno)</h4>
+            <p class="text-xs text-slate-500 mb-4">Barriere finanziarie all'ingresso per nuovi motociclisti &mdash; perch&eacute; il cliente non compra. Fonte: stime basate su dati <a href="https://www.mic.org/#/statistics" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">MIC</a> e costi di mercato USA.</p>
+            <div class="chart-wrapper h-64">
+                <canvas id="tcoChart"></canvas>
+            </div>
+            <div class="mt-3 flex justify-between items-center bg-amber-50 p-2 rounded text-xs">
+                <span class="text-amber-800 font-bold"><i class="fa-solid fa-calculator mr-1"></i>TCO Totale 1&deg; Anno:</span>
+                <span class="font-bold text-amber-900">$20.545 &ndash; $26.360</span>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+            <h4 class="text-lg font-bold text-slate-700 mb-1"><i class="fa-solid fa-building-columns mr-2"></i>Stato Patrimoniale 2025</h4>
+            <p class="text-xs text-slate-500 mb-4">Dove sono bloccati i soldi &mdash; un attivo "pesante" e drammaticamente illiquido.</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h5 class="text-xs font-bold uppercase text-slate-500 mb-2 text-center">Attivo (&euro;1.087k)</h5>
+                    <div class="chart-wrapper h-44">
+                        <canvas id="assetChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold uppercase text-slate-500 mb-2 text-center">Passivo + PN</h5>
+                    <div class="chart-wrapper h-44">
+                        <canvas id="liabChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="bg-rose-50 p-2 rounded"><span class="block text-rose-500">Rimanenze Fashion</span><span class="font-bold">&euro;201.1k</span></div>
+                <div class="bg-amber-50 p-2 rounded"><span class="block text-amber-600">Perdite Cumulate</span><span class="font-bold text-rose-600">-&euro;471.5k</span></div>
+                <div class="bg-slate-50 p-2 rounded"><span class="block text-slate-500">Debiti Totali</span><span class="font-bold">&euro;271.6k</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Scenari 2026 (full width) -->
+    <div class="mt-8 bg-white p-6 rounded-lg shadow border border-slate-200">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h4 class="text-lg font-bold text-rose-700"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Proiezioni 2026: I Tagli Non Bastano</h4>
+                <p class="text-xs text-slate-500">Anche lo scenario "Hard" (tagli &euro;302.7k) non porta al break-even. Servono nuovi ricavi con margine vero.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="chart-wrapper h-56 md:col-span-2">
+                <canvas id="scenarioChart"></canvas>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-rose-50 p-3 rounded border border-rose-200">
+                    <span class="text-[10px] uppercase font-bold text-rose-500">Scenario Hard</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;302.7k</p>
+                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;106.9k</span>
+                </div>
+                <div class="bg-rose-50 p-3 rounded border border-rose-200">
+                    <span class="text-[10px] uppercase font-bold text-rose-400">Scenario Medio</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;190.4k</p>
+                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;219.3k</span>
+                </div>
+                <div class="bg-rose-50 p-3 rounded border border-rose-200">
+                    <span class="text-[10px] uppercase font-bold text-rose-300">Scenario Soft</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;170.0k</p>
+                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;239.6k</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SECTION 2: IL MERCATO ===================== -->
+<section id="market" class="py-12 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 border-l-4 border-amber-500 pl-4">
+            <h3 class="text-2xl font-bold text-slate-900 uppercase">2. Il Mercato: Opportunit&agrave; e Vincoli</h3>
+            <p class="mt-2 text-slate-600">
+                L'aftermarket "plug and play" cresce a doppia cifra mentre il custom artigianale muore. La normativa Euro 5+ chiude le porte alle modifiche strutturali. La manifattura additiva abbatte i costi delle piccole serie.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Aftermarket Growth -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-teal-700 mb-1"><i class="fa-solid fa-chart-line mr-2"></i>Crescita Aftermarket &amp; Accessori</h4>
+                <p class="text-xs text-slate-500 mb-4">Tasso di crescita annuo composto (CAGR) dei segmenti target.</p>
+                <div class="chart-wrapper h-64">
+                    <canvas id="aftermarketChart"></canvas>
+                </div>
+                <p class="mt-3 text-xs text-slate-500 italic">E-bike Conversion Kits a +10,24% CAGR (<a href="https://www.mordorintelligence.com/industry-reports/e-bike-conversion-kit-market" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">Mordor Intelligence</a>). Mercato modifiche moto a +8,46% (<a href="https://www.credenceresearch.com/report/motorcycle-accessories-market" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">studi di settore</a>). L'impossibilit&agrave; di comprare il nuovo spinge i proprietari ad aggiornare l'esistente.</p>
+            </div>
+
+            <!-- Regulatory Context -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-slate-700 mb-4"><i class="fa-solid fa-gavel mr-2"></i>Il Pantano Normativo (Euro 5+)</h4>
+                <div class="space-y-4">
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-3">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-ban mr-1"></i>Euro 5+ (dal 2025)</p>
+                        <p class="text-xs text-slate-600 mt-1">OBD II obbligatorio. Impossibile sostituire scarichi o rimappare centraline. L'ecosistema elettronico &egrave; chiuso. (<a href="https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32022R0542" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">Reg. UE 2022/542</a>)</p>
+                    </div>
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-3">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-scissors mr-1"></i>Codice della Strada (Italia)</p>
+                        <p class="text-xs text-slate-600 mt-1">Taglio telaietto posteriore illegale se non ri-omologato. Costi omologazione: &euro;850-&euro;1.480 con tempi fino a 60 gg lavorativi. (<a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:1992-04-30;152" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 underline">Codice della Strada, d.lgs. 152/1992</a>)</p>
+                    </div>
+                    <div class="bg-teal-50 border-l-4 border-teal-500 p-3">
+                        <p class="font-bold text-sm text-teal-800"><i class="fa-solid fa-check mr-1"></i>La Via d'Uscita</p>
+                        <p class="text-xs text-slate-600 mt-1">Kit reversibili che usano attacchi originali (modello Unit Garage). Nessuna alterazione strutturale = nessuna ri-omologazione. Retrofit elettrico con kit pre-certificati.</p>
+                    </div>
+                </div>
+                <div class="mt-4 bg-slate-50 p-3 rounded border border-slate-200">
+                    <p class="text-xs text-slate-700"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i><strong>Conclusione:</strong> Il business basato su modifiche strutturali &egrave; morto. Il futuro &egrave; nel "plug-and-play" e nella productizzazione.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Manufacturing Comparison + SWOT -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            <!-- Manufacturing Comparison -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-slate-700 mb-4"><i class="fa-solid fa-print mr-2"></i>Confronto Manifattura: Artigianale vs Additiva</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="p-2 font-bold text-slate-700">Tecnologia</th>
+                                <th class="p-2 font-bold text-slate-700">Costo/Pezzo</th>
+                                <th class="p-2 font-bold text-slate-700">Tempo</th>
+                                <th class="p-2 font-bold text-slate-700">Flessibilit&agrave;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-100 bg-rose-50">
+                                <td class="p-2 font-semibold">Lavorazione Manuale</td>
+                                <td class="p-2 text-rose-700 font-bold">&euro;1.500</td>
+                                <td class="p-2">24-48 ore</td>
+                                <td class="p-2">Bassa</td>
+                            </tr>
+                            <tr class="border-b border-slate-100">
+                                <td class="p-2 font-semibold">Fresatura CNC</td>
+                                <td class="p-2">&euro;250-1.000</td>
+                                <td class="p-2">2-3 settimane</td>
+                                <td class="p-2">Media</td>
+                            </tr>
+                            <tr class="border-b border-slate-100 bg-teal-50">
+                                <td class="p-2 font-semibold">Stampa 3D (Polimeri)</td>
+                                <td class="p-2 text-teal-700 font-bold">&euro;6-25</td>
+                                <td class="p-2">5-8 ore</td>
+                                <td class="p-2">Elevatissima</td>
+                            </tr>
+                            <tr class="bg-teal-50">
+                                <td class="p-2 font-semibold">Stampa 3D (Carbonio)</td>
+                                <td class="p-2 text-teal-700 font-bold">&euro;23-55</td>
+                                <td class="p-2">8-12 ore</td>
+                                <td class="p-2">Elevatissima</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-3 text-xs text-slate-500 italic">La manifattura additiva abbatte i costi delle piccole serie del 96-99%. L'investimento iniziale &egrave; minimo rispetto al CNC in-house.</p>
+            </div>
+
+            <!-- Strengths vs Weaknesses -->
+            <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                <h4 class="text-lg font-bold text-slate-700 mb-4"><i class="fa-solid fa-scale-balanced mr-2"></i>Punti di Forza vs Criticit&agrave;</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h5 class="text-xs font-bold uppercase text-teal-600 mb-2"><i class="fa-solid fa-shield-halved mr-1"></i>Forza</h5>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Officina = 61% dei ricavi, domanda reale</li>
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Brand/Community convertibili in funnel prodotti</li>
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Base parts/tech gi&agrave; esistente (&euro;26.1k magazzino + &euro;77.7k WIP)</li>
+                            <li class="flex items-start"><i class="fa-solid fa-plus text-teal-500 mt-0.5 mr-2 text-[10px]"></i>Know-how ingegneristico monetizzabile</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-xs font-bold uppercase text-rose-600 mb-2"><i class="fa-solid fa-skull-crossbones mr-1"></i>Criticit&agrave;</h5>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>EBITDA -&euro;351k: brucia, non "fatica"</li>
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>Personale &euro;218k + Sedi &euro;88k = macigni</li>
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>Fashion: stock &euro;201k, rotazione 3.5x</li>
+                            <li class="flex items-start"><i class="fa-solid fa-minus text-rose-500 mt-0.5 mr-2 text-[10px]"></i>Consulenze &euro;87k: overhead, non investimento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SECTION 3: BENCHMARKS ===================== -->
+<section id="benchmarks" class="py-12 bg-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 border-l-4 border-teal-600 pl-4">
+            <h3 class="text-2xl font-bold text-slate-900 uppercase">3. La Strategia: Cosa Rubare ai Migliori</h3>
+            <p class="mt-2 text-slate-600">
+                I customizer che prosperano hanno smesso di dipendere dal margine illusorio del lavoro 1-a-1. Vendono prodotti, membership ed esperienze. 6 casi studio di chi ce la sta facendo.
+            </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="flex border-b border-slate-200 overflow-x-auto">
+                <button class="px-4 py-4 text-sm font-medium active-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('revival', this)"><i class="fa-solid fa-warehouse mr-1"></i>Revival Cycles</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('rsd', this)"><i class="fa-solid fa-gear mr-1"></i>Roland Sands</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('unit', this)"><i class="fa-solid fa-box-open mr-1"></i>Unit Garage</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('bikeshed', this)"><i class="fa-solid fa-users mr-1"></i>The Bike Shed</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('deus', this)"><i class="fa-solid fa-store mr-1"></i>Deus Ex Machina</button>
+                <button class="px-4 py-4 text-sm font-medium inactive-tab focus:outline-none flex-shrink-0" onclick="switchBenchmark('vibrazioni', this)"><i class="fa-solid fa-palette mr-1"></i>Vibrazioni Art</button>
+            </div>
+            <div class="p-6 md:p-8" id="benchmarkContent"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SECTION 4: THE 6 ACTIONS ===================== -->
+<section id="actions" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 border-l-4 border-amber-500 pl-4">
+        <h3 class="text-2xl font-bold text-slate-900 uppercase">4. Il Piano Operativo: 6 Azioni Sinergiche</h3>
+        <p class="mt-2 text-slate-600">
+            Non opzioni alternative, ma passaggi obbligati. La somma di queste azioni inverte matematicamente il P&amp;L trasformando costi fissi in asset e propriet&agrave; intellettuale in prodotti.
+        </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="actionsGrid"></div>
+    <div id="actionDetailPanel" class="hidden mt-8 bg-slate-50 border border-slate-200 rounded-lg p-6 shadow-inner transition-all duration-500">
+        <div class="flex justify-between items-start">
+            <div>
+                <h4 id="detailTitle" class="text-xl font-bold text-slate-800 mb-2"></h4>
+                <span id="detailTag" class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full uppercase font-bold mb-4"></span>
+            </div>
+            <button onclick="closeDetail()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times text-xl"></i></button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <p id="detailDesc" class="text-slate-600 mb-4"></p>
+                <h5 class="font-bold text-sm uppercase text-slate-500 mb-2">Implementazione Pratica:</h5>
+                <ul id="detailSteps" class="list-disc list-inside text-sm text-slate-700 space-y-1"></ul>
+            </div>
+            <div class="bg-white p-4 rounded border border-slate-200">
+                <h5 class="font-bold text-sm uppercase text-teal-700 mb-2"><i class="fa-solid fa-chart-line mr-2"></i>Impatto Finanziario</h5>
+                <p id="detailImpact" class="text-2xl font-bold text-slate-800"></p>
+                <p id="detailSubImpact" class="text-xs text-slate-500 mt-1"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SIMULATORI FOCUS ===================== -->
+<div id="simulators"></div>
+
+<!-- ===== FOCUS 1: GESTIONE INVENTARIO FASHION ===== -->
+<section class="py-12 bg-emerald-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="inline-block bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 1: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Gestione Inventario <span class="text-emerald-400">Fashion</span></h3>
+                <p class="text-emerald-200 mb-6">Stock Fashion a bilancio: <strong>&euro;201.100</strong>. Quattro scenari a confronto per trasformare un magazzino morto in ossigeno per l'azienda.</p>
+                <div class="space-y-4">
+                    <div class="bg-emerald-800/60 border border-emerald-700 rounded p-4">
+                        <p class="font-bold text-sm"><i class="fa-solid fa-1 mr-2 text-emerald-400"></i>Stocchista / Buyout (Cash Immediato)</p>
+                        <p class="text-xs text-emerald-300 mt-1">Vendita in blocco al 15% del valore. Genera <strong>~&euro;30k</strong> di cassa a zero costi. Opzione "fast cash" che chiude subito il problema.</p>
+                    </div>
+                    <div class="bg-emerald-800/60 border border-emerald-700 rounded p-4">
+                        <p class="font-bold text-sm"><i class="fa-solid fa-2 mr-2 text-emerald-400"></i>Performance Fee (20%)</p>
+                        <p class="text-xs text-emerald-300 mt-1">Sulla carta la pi&ugrave; redditizia (<strong>+&euro;72k</strong> netti), ma rendimento troppo basso per chi lavora. Il Presidente la scarta.</p>
+                    </div>
+                    <div class="bg-emerald-800/60 border border-emerald-700 rounded p-4">
+                        <p class="font-bold text-sm"><i class="fa-solid fa-3 mr-2 text-emerald-400"></i>Risorsa Dedicata (Assunzione)</p>
+                        <p class="text-xs text-emerald-300 mt-1">La pi&ugrave; rischiosa: aggiunge costo fisso quando dobbiamo toglierlo. Impatto: <strong>-&euro;39k</strong>.</p>
+                    </div>
+                    <div class="bg-emerald-800/60 border border-emerald-700 rounded p-4">
+                        <p class="font-bold text-sm"><i class="fa-solid fa-4 mr-2 text-emerald-400"></i>Partita IVA (&euro;1.750/mese)</p>
+                        <p class="text-xs text-emerald-300 mt-1">Opzione "pragmatica": costo controllato, flessibilit&agrave;, responsabilit&agrave; chiara. Impatto netto <strong>+&euro;48k</strong> su 3 anni.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-emerald-800 p-6 rounded-lg border border-emerald-700 shadow-xl">
+                <h4 class="text-xl font-bold mb-4 border-b border-emerald-700 pb-2">Confronto 4 Scenari</h4>
+                <div class="chart-wrapper h-48 mb-4">
+                    <canvas id="fashionChart"></canvas>
+                </div>
+                <p class="text-xs font-bold uppercase text-emerald-400 mb-2">Seleziona Scenario per il Piano Finanziario:</p>
+                <div class="space-y-2 mb-4">
+                    <label class="flex items-center p-2 bg-emerald-900/60 rounded border border-emerald-700 cursor-pointer hover:bg-emerald-900/80">
+                        <input type="radio" name="fashionScenario" value="stocchista" class="mr-2 accent-emerald-400" onchange="recalcFinancialPlan()">
+                        <span class="text-sm flex-1">Stocchista (+&euro;30k immediato)</span>
+                    </label>
+                    <label class="flex items-center p-2 bg-emerald-900/60 rounded border border-emerald-700 cursor-pointer hover:bg-emerald-900/80">
+                        <input type="radio" name="fashionScenario" value="piva" class="mr-2 accent-emerald-400" onchange="recalcFinancialPlan()">
+                        <span class="text-sm flex-1">P.IVA &euro;1.750/mese (+&euro;48k su 3 anni)</span>
+                    </label>
+                    <label class="flex items-center p-2 bg-emerald-900/60 rounded border border-emerald-700 cursor-pointer hover:bg-emerald-900/80">
+                        <input type="radio" name="fashionScenario" value="combo" checked class="mr-2 accent-emerald-400" onchange="recalcFinancialPlan()">
+                        <span class="text-sm flex-1">Combo: Stocchista + P.IVA residuo (raccomandato)</span>
+                    </label>
+                    <label class="flex items-center p-2 bg-emerald-900/60 rounded border border-emerald-700 cursor-pointer hover:bg-emerald-900/80 opacity-60">
+                        <input type="radio" name="fashionScenario" value="nulla" class="mr-2 accent-emerald-400" onchange="recalcFinancialPlan()">
+                        <span class="text-sm flex-1">Non fare nulla (status quo)</span>
+                    </label>
+                </div>
+                <div class="text-[11px] text-emerald-400 bg-emerald-900/50 rounded p-2">
+                    <i class="fa-solid fa-lightbulb mr-1"></i> <strong>Raccomandazione:</strong> Combo &mdash; Stocchista per cash immediato (&euro;30k), poi P.IVA per il residuo (+&euro;48k su 3 anni).
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOCUS 2: DOWNSIZING & SERVICE ===== -->
+<section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="inline-block bg-rose-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 2: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4 text-slate-900">Downsizing <span class="text-rose-600">&amp; Service</span></h3>
+                <p class="text-slate-600 mb-6">Costo totale sedi attuale: <strong>&euro;87.700/anno</strong>. Cessione delle sedi non strategiche per concentrare le risorse sull'officina.</p>
+                <div class="space-y-4">
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-building mr-2"></i>Via Pinciana, 41 (Emporium)</p>
+                        <p class="text-xs text-slate-600 mt-1">Showroom/Fashion. Affitto stimato <strong>&euro;42.000/anno</strong>. Con lo stock liquidato, non ha pi&ugrave; ragion d'essere.</p>
+                    </div>
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-warehouse mr-2"></i>Via Adige (Officina)</p>
+                        <p class="text-xs text-slate-600 mt-1">Officina principale. Affitto stimato <strong>&euro;33.700/anno</strong>. Obiettivo: trovare sede pi&ugrave; economica o rinegoziare.</p>
+                    </div>
+                    <div class="bg-slate-50 border-l-4 border-slate-400 p-4 rounded-r">
+                        <p class="font-bold text-sm text-slate-800"><i class="fa-solid fa-file-invoice-dollar mr-2"></i>Overhead Residuo</p>
+                        <p class="text-xs text-slate-600 mt-1">Utenze, assicurazioni, spese condominiali: <strong>&euro;12.000/anno</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 shadow-xl">
+                <h4 class="text-xl font-bold text-slate-800 mb-4 border-b border-slate-200 pb-2">Simulatore Risparmio Sedi</h4>
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between p-3 bg-white rounded border border-slate-200">
+                        <div>
+                            <p class="font-bold text-sm text-slate-700">Via Pinciana, 41</p>
+                            <p class="text-xs text-slate-500">&euro;42.000/anno</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="togPinciana" checked class="sr-only peer" onchange="updateDownsizing()">
+                            <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                            <span class="ml-2 text-xs font-bold" id="lblPinciana">CESSIONE</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white rounded border border-slate-200">
+                        <div>
+                            <p class="font-bold text-sm text-slate-700">Via Adige (Officina)</p>
+                            <p class="text-xs text-slate-500">&euro;33.700/anno</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="togAdige" checked class="sr-only peer" onchange="updateDownsizing()">
+                            <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                            <span class="ml-2 text-xs font-bold" id="lblAdige">CESSIONE</span>
+                        </label>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-slate-600">Nuova sede (affitto stimato)</span>
+                            <span class="font-bold text-slate-800" id="newRentDisplay">&euro;18.000</span>
+                        </div>
+                        <input type="range" min="0" max="40000" step="500" value="18000" id="newRentSlider" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-rose-500" oninput="updateDownsizing()">
+                        <div class="flex justify-between text-[10px] text-slate-400 mt-0.5"><span>&euro;0</span><span>&euro;40.000</span></div>
+                    </div>
+                    <div class="chart-wrapper h-48">
+                        <canvas id="downsizingChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-white p-3 rounded border border-slate-200">
+                            <span class="block text-[10px] text-slate-500 uppercase">Costo Attuale</span>
+                            <span class="block text-lg font-bold text-rose-600" id="dsCurrentDisplay">&euro;87.700</span>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-slate-200">
+                            <span class="block text-[10px] text-slate-500 uppercase">Costo Nuovo</span>
+                            <span class="block text-lg font-bold text-slate-800" id="dsNewDisplay">&euro;30.000</span>
+                        </div>
+                        <div class="bg-teal-50 p-3 rounded border border-teal-200">
+                            <span class="block text-[10px] text-teal-600 uppercase">Risparmio/Anno</span>
+                            <span class="block text-lg font-bold text-teal-700" id="dsSavingDisplay">&euro;57.700</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOCUS 3: SHARING RISORSE OFFICINA ===== -->
+<section class="py-12 bg-blue-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="inline-block bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 3: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Sharing Risorse <span class="text-blue-400">Officina</span></h3>
+                <p class="text-blue-200 mb-6">Due tecnici in officina con costo azienda di <strong>&euro;54.000 ciascuno</strong> (&euro;108.000 totali). Nei periodi di bassa domanda, le ore passive diventano fatturato attivo prestando risorse a officine partner.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-800 flex items-center justify-center border border-blue-500"><i class="fa-solid fa-wrench text-blue-400"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Officine 42</h4>
+                            <p class="text-sm text-blue-300">Officina partner a Roma. Richiede supporto tecnico su manutenzione custom e restauri.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-800 flex items-center justify-center border border-blue-500"><i class="fa-solid fa-gear text-blue-400"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Officina Nardi</h4>
+                            <p class="text-sm text-blue-300">Meccanica specializzata. Domanda costante di manodopera qualificata per picchi stagionali.</p>
+                        </div>
+                    </div>
+                    <div class="bg-blue-800/50 border border-blue-700 rounded p-3 mt-4">
+                        <p class="text-xs text-blue-300"><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i><strong>Logica:</strong> Ottodrom paga i tecnici comunque (&euro;108k/anno). Ogni ora "prestata" genera ricavo puro, trasformando costo fisso in ricavo attivo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-blue-800 p-6 rounded-lg border border-blue-700 shadow-xl">
+                <h4 class="text-xl font-bold mb-4 border-b border-blue-700 pb-2">Simulatore Sharing</h4>
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-blue-300"><i class="fa-solid fa-wrench mr-1"></i>% Tempo &rarr; Officine 42</span>
+                            <span class="font-bold text-blue-400" id="sh42Display">20%</span>
+                        </div>
+                        <input type="range" min="0" max="50" value="20" id="sh42Slider" class="w-full h-2 bg-blue-700 rounded-lg appearance-none cursor-pointer accent-blue-400" oninput="updateSharing()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-blue-300"><i class="fa-solid fa-gear mr-1"></i>% Tempo &rarr; Nardi</span>
+                            <span class="font-bold text-blue-400" id="shNardiDisplay">15%</span>
+                        </div>
+                        <input type="range" min="0" max="50" value="15" id="shNardiSlider" class="w-full h-2 bg-blue-700 rounded-lg appearance-none cursor-pointer accent-blue-400" oninput="updateSharing()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-blue-300">Markup Sharing (ricarico su costo)</span>
+                            <span class="font-bold text-amber-400" id="shMarkupDisplay">30%</span>
+                        </div>
+                        <input type="range" min="10" max="60" value="30" id="shMarkupSlider" class="w-full h-2 bg-blue-700 rounded-lg appearance-none cursor-pointer accent-amber-400" oninput="updateSharing()">
+                    </div>
+                    <div class="chart-wrapper h-48">
+                        <canvas id="sharingChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-blue-900 p-3 rounded border border-blue-700">
+                            <span class="block text-[10px] text-blue-400 uppercase">Costo Fisso Personale</span>
+                            <span class="block text-lg font-bold text-white">&euro;108.000</span>
+                        </div>
+                        <div class="bg-blue-900 p-3 rounded border border-blue-700">
+                            <span class="block text-[10px] text-blue-400 uppercase">Ricavo Sharing</span>
+                            <span class="block text-lg font-bold text-blue-300" id="shRevenueDisplay">&euro;49.140</span>
+                        </div>
+                        <div class="bg-blue-900/50 p-3 rounded border border-teal-600">
+                            <span class="block text-[10px] text-teal-400 uppercase">Costo Netto Effettivo</span>
+                            <span class="block text-lg font-bold text-teal-400" id="shNetDisplay">&euro;58.860</span>
+                        </div>
+                    </div>
+                    <div class="text-[11px] text-blue-400 bg-blue-900/50 rounded p-2">
+                        <span class="text-blue-300 font-semibold">Formula:</span>
+                        Ricavo = (% Sharing Totale) &times; &euro;108k &times; (1 + Markup%) &nbsp;|&nbsp;
+                        <span class="text-blue-300">Costo Netto</span> = &euro;108k &minus; Ricavo Sharing
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOCUS 4: PROJECT GREEN (ICONIC MOBILITY LAB) ===== -->
+<section class="py-12 bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="inline-block bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 4: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Iconic Mobility Lab: <span class="text-teal-400">Project Green</span></h3>
+                <p class="text-slate-300 mb-4 text-sm">
+                    Pilot: <strong>BMW Serie R "Airhead"</strong> (TAM EU ~60k, SAM ~37.5k).
+                    3 canali: Kit Retail (installato), Kit Wholesale (B2B officine), Moto chiavi-in-mano.
+                    Seleziona fino a <strong>3 piattaforme aggiuntive</strong> per espandere il business.
+                </p>
+                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 mb-4">
+                    <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>BMW R2V Airhead &mdash; Pilot (Lancio 2026)</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-slate-300">Volume Target a Regime (Anno 3+)</span>
+                                <span class="font-bold text-teal-400" id="volDisplay">375</span>
+                            </div>
+                            <input type="range" min="50" max="800" value="375" id="volSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-500">
+                            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5"><span>50</span><span>800</span></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-slate-300">Prezzo Kit Retail (ASP)</span>
+                                <span class="font-bold text-amber-400" id="aspDisplay">&euro;3.900</span>
+                            </div>
+                            <input type="range" min="3000" max="7000" step="100" value="3900" id="aspSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5"><span>&euro;3.000</span><span>&euro;7.000</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 rounded p-2 space-y-0.5">
+                        <div class="flex justify-between"><span>Kit Wholesale (80% Retail)</span><span class="text-white font-bold" id="wsPriceDisplay">&euro;3.120</span></div>
+                        <div class="flex justify-between"><span>Moto chiavi-in-mano</span><span class="text-white font-bold">&euro;23.000</span></div>
+                        <div class="flex justify-between"><span>BOM Kit (Anno 1 &rarr; -5%/yr learning)</span><span class="text-rose-300 font-bold">&euro;2.300</span></div>
+                        <div class="flex justify-between"><span>BOM Moto (base+kit+ricambi)</span><span class="text-rose-300 font-bold">&euro;15.717</span></div>
+                        <div class="flex justify-between"><span>MdO Install Retail (Anno 3+)</span><span class="text-rose-300 font-bold">&euro;400</span></div>
+                        <div class="flex justify-between"><span>Omologa + Logistica + CAC</span><span class="text-rose-300 font-bold">&euro;800/kit</span></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center mt-3">
+                        <div class="bg-slate-900 p-2 rounded border border-slate-700">
+                            <span class="block text-[9px] text-slate-500 uppercase">Revenue (2028)</span>
+                            <span class="block text-sm font-bold text-white" id="revenueDisplay">-</span>
+                        </div>
+                        <div class="bg-slate-900 p-2 rounded border border-slate-700">
+                            <span class="block text-[9px] text-slate-500 uppercase">Gross Profit</span>
+                            <span class="block text-sm font-bold text-amber-400" id="gpDisplay">-</span>
+                        </div>
+                        <div class="bg-teal-900/30 p-2 rounded border border-teal-700">
+                            <span class="block text-[9px] text-teal-400 uppercase">EBITDA Green</span>
+                            <span class="block text-sm font-bold text-teal-400" id="greenEbitdaDisplay">-</span>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-2">
+                        Ramp: 2% (2026) &rarr; 35% (2027) &rarr; 100% (2028+) | Mix 2028+: 30% Ret, 60% WS, 10% Moto |
+                        <span class="text-amber-400 font-bold" id="grossMarginDisplay">GM ~41%</span>
+                    </div>
+                </div>
+                <p class="text-xs font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-plus-circle mr-1"></i>Piattaforme Aggiuntive (max 3)</p>
+                <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1" id="platformList"></div>
+                <p class="text-[10px] text-slate-500 mt-2" id="platformCount">0/3 selezionate</p>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-xl">
+                <h4 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Roadmap Revenue &amp; EBITDA 2026&ndash;2036</h4>
+                <div class="chart-wrapper h-64 mb-4">
+                    <canvas id="greenChart"></canvas>
+                </div>
+                <div id="platformSummary" class="space-y-2"></div>
+                <div class="grid grid-cols-3 gap-3 text-center mt-4">
+                    <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                        <span class="block text-[10px] text-slate-500 uppercase">Revenue Totale (regime)</span>
+                        <span class="block text-lg font-bold text-white" id="greenTotalRevenue">-</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                        <span class="block text-[10px] text-slate-500 uppercase">Unit Totali/Anno</span>
+                        <span class="block text-lg font-bold text-amber-400" id="greenTotalKits">-</span>
+                    </div>
+                    <div class="bg-teal-900/30 p-3 rounded border border-teal-700">
+                        <span class="block text-[10px] text-teal-400 uppercase">EBITDA Green (regime)</span>
+                        <span class="block text-lg font-bold text-teal-400" id="greenTotalMargin">-</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-[10px] text-left">
+                        <thead id="greenPLHead"></thead>
+                        <tbody id="greenPLBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOCUS 5: PRODUTTIVIZZAZIONE COMPONENTI ===== -->
+<section class="py-12 bg-amber-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="inline-block bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 5: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4 text-slate-900">Produttivizzazione <span class="text-amber-600">Componenti</span></h3>
+                <p class="text-slate-600 mb-6">Stop ai pezzi unici. Componenti gi&agrave; sviluppati (selle, cupolini, telaietti, fari) inseriti a catalogo e venduti a prezzo premium. Stampa 3D e CNC abbattono i costi del 96-99%.</p>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center border border-amber-400"><i class="fa-solid fa-cube text-amber-600"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold text-slate-800">Da Artigianale a Catalogo</h4>
+                            <p class="text-sm text-slate-500">Standardizzazione CAD &rarr; Produzione piccola serie &rarr; E-commerce globale + file CAD per DIY.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center border border-amber-400"><i class="fa-solid fa-print text-amber-600"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold text-slate-800">Costi Ridotti del 96%</h4>
+                            <p class="text-sm text-slate-500">Da &euro;1.500/pezzo (manuale) a &euro;6-55/pezzo (Stampa 3D). Margine enorme sulla piccola serie.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg border border-amber-200 shadow-xl">
+                <h4 class="text-xl font-bold text-slate-800 mb-4 border-b border-amber-200 pb-2">Catalogo Componenti &amp; Proiezioni</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left" id="productsTable">
+                        <thead class="bg-amber-100">
+                            <tr>
+                                <th class="p-2 font-bold text-slate-700">Componente</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Prezzo &euro;</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 1</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 2</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 3</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody"></tbody>
+                        <tfoot class="bg-amber-50 font-bold">
+                            <tr>
+                                <td class="p-2 text-slate-700">TOTALE RICAVI</td>
+                                <td class="p-2 text-center">&mdash;</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot1">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot2">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot3">&euro;0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="chart-wrapper h-48 mt-4">
+                    <canvas id="productsChart"></canvas>
+                </div>
+                <div class="text-[11px] text-slate-500 bg-amber-50 rounded p-2 mt-3">
+                    <i class="fa-solid fa-pen mr-1"></i> Modifica quantit&agrave; e prezzi nella tabella per simulare scenari diversi. I costi di produzione sono stimati al 25% del prezzo di vendita (Stampa 3D).
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOCUS 6: MOTO-CONCIERGE (STASH) ===== -->
+<section class="py-12 bg-purple-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="inline-block bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 6: FOCUS</div>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Moto-Concierge: <span class="text-purple-400">The Stash</span></h3>
+                <p class="text-purple-200 mb-6">Rimessaggio d'&eacute;lite per collezionisti a Roma (modello Revival Stash). Quota mensile fissa con servizi modulari. Il cliente sceglie il pacchetto, Ottodrom incassa MRR.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-800 flex items-center justify-center border border-purple-500"><i class="fa-solid fa-shield-halved text-purple-400"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Lock-in Totale</h4>
+                            <p class="text-sm text-purple-300">Chi custodisce la moto, la mantiene. Tutta la manutenzione del parco custodito passa da Ottodrom.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-800 flex items-center justify-center border border-purple-500"><i class="fa-solid fa-file-contract text-purple-400"></i></div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold">Obbligo Assicurativo (DL 184/2023)</h4>
+                            <p class="text-sm text-purple-300">Anche veicoli fermi devono essere assicurati. Servizio chiavi in mano per il collezionista.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-purple-800 p-6 rounded-lg border border-purple-700 shadow-xl">
+                <h4 class="text-xl font-bold mb-4 border-b border-purple-700 pb-2">Simulatore Moto-Concierge</h4>
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-purple-300">Numero Moto Gestite</span>
+                            <span class="font-bold text-purple-400" id="mcMotoDisplay">15</span>
+                        </div>
+                        <input type="range" min="5" max="50" value="15" id="mcMotoSlider" class="w-full h-2 bg-purple-700 rounded-lg appearance-none cursor-pointer accent-purple-400" oninput="updateConcierge()">
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-xs font-bold uppercase text-purple-400 mb-1">Servizi Inclusi (costo mensile/moto)</p>
+                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
+                            <div class="flex items-center">
+                                <input type="checkbox" checked class="mc-service mr-2 accent-purple-400" data-cost="120" onchange="updateConcierge()">
+                                <span class="text-sm">Custodia &amp; Carica Batteria</span>
+                            </div>
+                            <span class="text-xs font-bold text-purple-300">&euro;120/mese</span>
+                        </label>
+                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
+                            <div class="flex items-center">
+                                <input type="checkbox" checked class="mc-service mr-2 accent-purple-400" data-cost="85" onchange="updateConcierge()">
+                                <span class="text-sm">Assicurazione RC (gestione)</span>
+                            </div>
+                            <span class="text-xs font-bold text-purple-300">&euro;85/mese</span>
+                        </label>
+                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="mc-service mr-2 accent-purple-400" data-cost="150" onchange="updateConcierge()">
+                                <span class="text-sm">Detailing Mensile</span>
+                            </div>
+                            <span class="text-xs font-bold text-purple-300">&euro;150/mese</span>
+                        </label>
+                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="mc-service mr-2 accent-purple-400" data-cost="200" onchange="updateConcierge()">
+                                <span class="text-sm">Manutenzione Programmata</span>
+                            </div>
+                            <span class="text-xs font-bold text-purple-300">&euro;200/mese</span>
+                        </label>
+                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="mc-service mr-2 accent-purple-400" data-cost="350" onchange="updateConcierge()">
+                                <span class="text-sm">Restauro / Interventi Speciali</span>
+                            </div>
+                            <span class="text-xs font-bold text-purple-300">&euro;350/mese</span>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-purple-900 p-3 rounded border border-purple-700">
+                            <span class="block text-[10px] text-purple-400 uppercase">Canone/Moto/Mese</span>
+                            <span class="block text-lg font-bold text-white" id="mcPerMotoDisplay">&euro;205</span>
+                        </div>
+                        <div class="bg-purple-900 p-3 rounded border border-purple-700">
+                            <span class="block text-[10px] text-purple-400 uppercase">MRR (Mensile)</span>
+                            <span class="block text-lg font-bold text-purple-300" id="mcMrrDisplay">&euro;3.075</span>
+                        </div>
+                        <div class="bg-purple-900/50 p-3 rounded border border-teal-600">
+                            <span class="block text-[10px] text-teal-400 uppercase">ARR (Annuale)</span>
+                            <span class="block text-lg font-bold text-teal-400" id="mcArrDisplay">&euro;36.900</span>
+                        </div>
+                    </div>
+                    <div class="text-[11px] text-purple-400 bg-purple-900/50 rounded p-2">
+                        <span class="text-purple-300 font-semibold">Margine stimato:</span> 60-70% (costi operativi bassi: spazio gi&agrave; disponibile, manodopera condivisa con officina).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== PIANO FINANZIARIO DINAMICO ===================== -->
+<section id="financial-plan" class="py-12 bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 border-l-4 border-amber-500 pl-4">
+            <h3 class="text-2xl font-bold uppercase">5. Piano Finanziario Dinamico</h3>
+            <p class="mt-2 text-slate-400">Conto Economico proiettato su 10 anni (2026&ndash;2036). Si aggiorna automaticamente in base a tutte le scelte fatte nei simulatori sopra.</p>
+        </div>
+
+        <div class="mb-8">
+            <div class="chart-wrapper h-80">
+                <canvas id="ebitdaChart"></canvas>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8" id="ebitdaCards"></div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead id="ceTableHead"></thead>
+                <tbody id="ceTableBody"></tbody>
+            </table>
+        </div>
+        <div class="text-[11px] text-slate-500 bg-slate-800 rounded p-3 mt-4">
+            <i class="fa-solid fa-info-circle mr-1"></i> I valori 2025 provengono dal CE Analitico consuntivo. Le proiezioni 2026&ndash;2036 si aggiornano in tempo reale in base ai parametri selezionati in ogni simulatore.
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-200 mt-12 py-8">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-slate-500 text-sm">&copy; 2026 Ottodrom Business Plan | Analisi Strategica &amp; Ristrutturazione</p>
+        <p class="text-xs text-slate-400 mt-2">Dati basati su P&amp;L interno 2025; dati di mercato da ANCMA, MIC, ACEM e report di settore citati in pagina.</p>
+    </div>
+</footer>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+    const fmt = v => '\u20ac' + Math.round(v).toLocaleString('it-IT');
+
+    // --- BENCHMARKS DATA ---
+    const benchmarks = {
+        revival: {
+            name: "Revival Cycles (Texas)", url: "https://revivalcycles.com",
+            quote: "\"Non vogliamo essere un brand che paga persone per legittimarsi. Vogliamo costruire cose incredibili e offrire prodotti accessibili.\"",
+            author: "Alan Stulberg, Founder", strategy: "Halo Builds + Ecosistema",
+            points: [
+                "<strong>Halo Effect:</strong> Moto da $250k (es. \"Revival Fuse\" Ducati) usate solo come PR globali per spingere traffico sul sito.",
+                "<strong>Revival Stash:</strong> Storage premium per collezionisti in centro ad Austin. Mantenitori di carica, accensioni mensili, assicurazione dedicata = MRR solido.",
+                "<strong>E-commerce:</strong> Oltre $1M di vendite online (Parts & Gear) grazie al posizionamento estremo.",
+                "<strong>Eventi:</strong> Handbuilt Show (durante MotoGP): 25.000+ spettatori, $65/pass. Sponsor: BMW Motorrad, Indian, Red Bull."
+            ], icon: "fa-warehouse", color: "border-teal-600"
+        },
+        rsd: {
+            name: "Roland Sands Design (California)", url: "https://rolandsands.com",
+            quote: "\"Non cerco attivamente di vendere motociclette. Costruiamo moto solo per sviluppare linee di prodotto.\"",
+            author: "Roland Sands, Ex Campione AMA 250GP", strategy: "Brand + Products",
+            points: [
+                "<strong>Modello Industriale:</strong> La moto \u00e8 il budget R&D, non il prodotto finale. Ogni special lancia una linea di componenti.",
+                "<strong>Catalogo Bolt-on:</strong> Coperture motore, leve, cerchi in lega, scarichi e supporti strumentazione a catalogo globale.",
+                "<strong>Global Reach:</strong> Fatturati milionari vendendo componenti a motociclisti che replicano il look della BMW R18 Dragster o Indian FTR nel proprio box.",
+                "<strong>Margine:</strong> Il fatturato vero viene dalla vendita di cerchi, selle, giacche e marmitte, non dalle moto custom."
+            ], icon: "fa-gear", color: "border-amber-500"
+        },
+        unit: {
+            name: "Unit Garage (Italia)", url: "https://www.unitgarage.com",
+            quote: "\"Dal taglio dei telai al Plug & Play. Il cliente riceve un pacco e si monta la moto da solo.\"",
+            author: "Fabio Marcaccini, Ex Pilota Parigi-Dakar", strategy: "Productizzazione Kit",
+            points: [
+                "<strong>Il Problema:</strong> Costruivano special complete (BMW R120 G/S, Scrambler). Limiti di tempo, costo e omologazioni per esemplari unici.",
+                "<strong>La Svolta:</strong> Con Michiel Verstockt (designer industriale), hanno smesso di tagliare telai e creato kit completi (serbatoi, selle, fianchetti) sugli attacchi originali.",
+                "<strong>Scalabilit\u00e0:</strong> Spedizione globale. Il cliente monta da solo o dal meccanico. Volumi industriali, margini artigianali.",
+                "<strong>La traiettoria esatta che Ottodrom deve perseguire.</strong>"
+            ], icon: "fa-box-open", color: "border-blue-500"
+        },
+        bikeshed: {
+            name: "The Bike Shed (Londra/LA)", url: "https://thebikeshedmc.com",
+            quote: "\"Siamo un'azienda basata sulla propriet\u00e0 intellettuale, non un ristorante. Puntiamo tutto sulla community e sull'esperienza.\"",
+            author: "Dutch van Someren, Founder", strategy: "Membership Economy",
+            points: [
+                "<strong>Membership LA:</strong> Limitata a 1.000 persone, $1.000/anno. Genera liquidit\u00e0 senza vendere una singola moto.",
+                "<strong>Membership Londra:</strong> \u00a3250-350/anno. Sconti 20% retail, 15% ristorazione, accesso prioritario a eventi.",
+                "<strong>Footfall:</strong> 2.000 visitatori/settimana a Londra. Volano perfetto per vendita abbigliamento, caschi e accessori ad alto margine.",
+                "<strong>Il modello Community-first genera lock-in totale sulla clientela altospendente.</strong>"
+            ], icon: "fa-users", color: "border-purple-600"
+        },
+        deus: {
+            name: "Deus Ex Machina (Australia)", url: "https://www.deuscustoms.com",
+            quote: "\"The Emporium of Post Modern Activities.\"",
+            author: "Deus Ex Machina, Sydney", strategy: "Lifestyle Brand Empire",
+            points: [
+                "<strong>Modello Emporium:</strong> Officine a Bali, Los Angeles, Milano come validatori di autenticit\u00e0. Le moto (su base Kawasaki/Honda) generano PR, non margine.",
+                "<strong>Fashion Empire:</strong> Giacche a $279, t-shirt a $49, berretti. Il funnel: ammiri la moto su Instagram \u2192 compri il lifestyle nel caff\u00e8 Deus.",
+                "<strong>Partnership Extra-Settore:</strong> Collaborazioni remunerative con Breitling e MINI. L'heritage motociclistico vende \"ribellione\" su scala mondiale.",
+                "<strong>L'esempio estremo di come il custom pu\u00f2 diventare un brand globale svincolato dal fatturato officina.</strong>"
+            ], icon: "fa-store", color: "border-orange-500"
+        },
+        vibrazioni: {
+            name: "Vibrazioni Art Design (Italia)", url: "https://www.vibrazioniartdesign.com",
+            quote: "\"Dal fusto petrolchimico al mobile d'arredo d'autore.\"",
+            author: "Alberto Dassasso & Riccardo Zanobini", strategy: "Cross-Sector Diversification",
+            points: [
+                "<strong>Stile Brutalista:</strong> Carenature e lamiere per moto (Ducati 749 \"Raticosa\", BMW K100) battute a mano da vecchi fusti industriali (Texaco, Agip, Shell).",
+                "<strong>Il Pivot:</strong> Le stesse lamiere tagliate al plasma creano sedie, armadietti e lampade di altissimo design.",
+                "<strong>Clientela:</strong> Architetti, collezionisti d'arte, designer d'interni. Zero limitazioni del Codice della Strada, cliente che non bada a spese.",
+                "<strong>Genialit\u00e0 italiana: aggirare la crisi del due ruote intercettando il mercato dell'arredo di lusso.</strong>"
+            ], icon: "fa-palette", color: "border-red-500"
+        }
+    };
+
+    // --- ACTIONS DATA (6 Azioni) ---
+    const actions = [
+        { id: 1, title: "Gestione Inventario Fashion", icon: "fa-boxes-stacked", color: "text-emerald-600", tag: "Strategia Stock",
+          desc: "Stock Fashion a bilancio: \u20ac201k. Quattro scenari a confronto: Stocchista (cash immediato), Performance Fee, Risorsa Dedicata e Partita IVA.",
+          steps: ["Stocchista: +\u20ac30k cassa immediata a zero costi.", "P.IVA \u20ac1.750/mese: +\u20ac48k netti su 3 anni, opzione pragmatica.", "Performance fee (+\u20ac72k) scartata dal Presidente. Risorsa dedicata (-\u20ac39k) aggiunge fisso."],
+          impact: "+\u20ac30k / +\u20ac48k", subImpact: "Stocchista (immediato) o P.IVA (3 anni)" },
+        { id: 2, title: "Downsizing & Service", icon: "fa-scissors", color: "text-rose-600", tag: "Taglio Costi",
+          desc: "Cessione sedi Via Pinciana, 41 e Via Adige. Consolidamento in una sede unica pi\u00f9 economica. Il Service deve coprire il 100% dei costi fissi residui.",
+          steps: ["Cessione Via Pinciana (\u20ac42k/anno).", "Cessione/rinegoziazione Via Adige (\u20ac33.7k/anno).", "Nuova sede unica con affitto ridotto."],
+          impact: "Fino a -\u20ac57.7k", subImpact: "Risparmio Annuo Sedi" },
+        { id: 3, title: "Sharing Risorse Officina", icon: "fa-handshake", color: "text-blue-600", tag: "Efficienza 100%",
+          desc: "2 tecnici (costo azienda \u20ac54k l'uno = \u20ac108k). Sharing con Officine 42 e Nardi nei periodi di bassa domanda. Le ore passive diventano fatturato.",
+          steps: ["% del tempo condiviso con Officine 42.", "% del tempo condiviso con Nardi.", "Markup sul costo orario per generare margine."],
+          impact: "Fino a \u20ac49k", subImpact: "Ricavo da Sharing Annuo" },
+        { id: 4, title: "Iconic Mobility Lab", icon: "fa-bolt", color: "text-teal-600", tag: "Core Pivot",
+          desc: "Transizione a 'Project Green': Kit Retrofit Ibrido + Elettrificazione urbana. Le special create diventano puro Marketing Asset.",
+          steps: ["Pilot: BMW R2V Airhead (Q4 2027). ASP \u20ac5.400.", "Espansione: Royal Enfield, H-D Sportster, Yamaha MT-07.", "Include Urban Electrification (Vespe, e-bike conversion)."],
+          impact: "41% Margine", subImpact: "\u20ac2.200 Gross Margin per Unit" },
+        { id: 5, title: "Produttivizzazione Componenti", icon: "fa-industry", color: "text-amber-600", tag: "Intellectual Property",
+          desc: "Stop ai pezzi unici. Componenti iconici gi\u00e0 sviluppati (selle, cupolini, telaietti, fari) inseriti a catalogo e venduti a prezzo premium.",
+          steps: ["Standardizzazione disegni CAD.", "Produzione piccola serie (Stampa 3D: da \u20ac1.500 a \u20ac6-55/pezzo).", "Vendita E-commerce globale + file CAD su Patreon."],
+          impact: "Alto", subImpact: "Scalabilit\u00e0 senza manodopera" },
+        { id: 6, title: "Moto-Concierge (Stash)", icon: "fa-key", color: "text-purple-600", tag: "Recurring Revenue",
+          desc: "Rimessaggio d'\u00e9lite per collezionisti a Roma. Servizi modulari: custodia, assicurazione, detailing, manutenzione, restauro.",
+          steps: ["Custodia e mantenimento carica costante.", "Assicurazione obbligatoria (DL 184/2023).", "Lock-in: manutenzione completa del parco custodito."],
+          impact: "MRR", subImpact: "Flusso Cassa Fisso Mensile" }
+    ];
+
+    // --- STATIC CHARTS (Sections 1-3) ---
+
+    new Chart(document.getElementById('macroChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (ACEM)', 'Cruiser Usato Q2'],
+            datasets: [{ label: 'Variazione %', data: [-19.2, -9.2, -7.8, -13.0], backgroundColor: ['#be123c','#e11d48','#fb7185','#fda4af'], borderRadius: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw+'%' } } }, scales: { y: { max: 0, min: -25, grid: { color: '#e2e8f0' } } } }
+    });
+
+    let finChart = new Chart(document.getElementById('financialChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['Officina','Fashion','Altro','C.Variabili','Personale','Sedi','IT/Servizi'],
+            datasets: [{ label: 'P&L 2025 (\u20ack)', data: [116.2,57.4,17.0,-205.7,-218.4,-87.7,-27.4], backgroundColor: ctx => ctx.raw >= 0 ? '#94a3b8':'#be123c', borderRadius: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Ricavi vs Costi Dettagliati (\u20ack)', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => '\u20ac '+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
+    });
+
+    function toggleFinancialView() {
+        const lbl = finChart.data.datasets[0].label;
+        if (lbl.includes('P&L')) {
+            finChart.data.labels = ['Ricavi','C.Variabili','C.Fissi','EBITDA'];
+            finChart.data.datasets[0].data = [190.6,-205.7,-335.8,-350.9];
+            finChart.data.datasets[0].backgroundColor = ['#94a3b8','#fb7185','#be123c','#881337'];
+            finChart.data.datasets[0].label = 'Sintesi (\u20ack)';
+            finChart.options.plugins.title.text = 'Il "Buco" Operativo: EBITDA -\u20ac350.9k';
+        } else {
+            finChart.data.labels = ['Officina','Fashion','Altro','C.Variabili','Personale','Sedi','IT/Servizi'];
+            finChart.data.datasets[0].data = [116.2,57.4,17.0,-205.7,-218.4,-87.7,-27.4];
+            finChart.data.datasets[0].backgroundColor = finChart.data.datasets[0].data.map(v => v >= 0 ? '#94a3b8':'#be123c');
+            finChart.data.datasets[0].label = 'P&L 2025 (\u20ack)';
+            finChart.options.plugins.title.text = 'Ricavi vs Costi Dettagliati (\u20ack)';
+        }
+        finChart.update();
+    }
+
+    new Chart(document.getElementById('tcoChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['Prezzo Acquisto Moto','Finanziamento (Anticipo)','Assicurazione RC','Abbigliamento Tecnico','Manutenzione/Stoccaggio'],
+            datasets: [
+                { label: 'Minimo ($)', data: [15000,3000,145,1000,1400], backgroundColor: '#f59e0b', borderRadius: 4 },
+                { label: 'Massimo ($)', data: [0,2000,215,2000,1600], backgroundColor: '#fcd34d', borderRadius: 4 }
+            ] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label+': $'+ctx.raw.toLocaleString() } } }, scales: { x: { stacked: true, grid: { color: '#e2e8f0' } }, y: { stacked: true } } }
+    });
+
+    new Chart(document.getElementById('assetChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Immobilizzazioni + Crediti','Rimanenze Fashion','Rim. Officina + WIP','Cassa'],
+            datasets: [{ data: [769.6,201.1,103.8,12.5], backgroundColor: ['#94a3b8','#be123c','#f59e0b','#2dd4bf'], borderWidth: 1 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
+    });
+
+    new Chart(document.getElementById('liabChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Patrimonio Netto','Debiti','Perdite Cumulate'],
+            datasets: [{ data: [618.8,271.6,471.5], backgroundColor: ['#0f766e','#94a3b8','#be123c'], borderWidth: 1 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
+    });
+
+    new Chart(document.getElementById('scenarioChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['Scenario Hard','Scenario Medio','Scenario Soft'],
+            datasets: [
+                { label: 'Tagli Applicati (\u20ack)', data: [302.7,190.4,170.0], backgroundColor: '#94a3b8', borderRadius: 4 },
+                { label: 'EBITDA Risultante (\u20ack)', data: [-106.9,-219.3,-239.6], backgroundColor: '#be123c', borderRadius: 4 }
+            ] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Anche i tagli massimi non bastano: servono nuovi ricavi', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
+    });
+
+    new Chart(document.getElementById('aftermarketChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['E-bike Conversion\nKits','Modifiche Moto\nPlug&Play','Accessori\nEuropa','Accessori\nPilota','Aftermarket\nGlobale 2R'],
+            datasets: [{ label: 'CAGR %', data: [10.24,8.46,4.8,4.6,2.91], backgroundColor: ['#0f766e','#14b8a6','#2dd4bf','#5eead4','#99f6e4'], borderRadius: 4 }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'CAGR: '+ctx.raw+'%' } } }, scales: { x: { max: 12, grid: { color: '#e2e8f0' } } } }
+    });
+
+    // --- FASHION CHART ---
+    new Chart(document.getElementById('fashionChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Stocchista\n(immediato)', 'Performance Fee\n(scartata)', 'Risorsa Dedicata\n(rischiosa)', 'P.IVA\n(3 anni)'],
+            datasets: [{
+                label: 'Impatto Netto \u20ac',
+                data: [30000, 72000, -39000, 48000],
+                backgroundColor: ['#059669', '#94a3b8', '#be123c', '#10b981'],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmt(ctx.raw) } } },
+            scales: { x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#a7f3d0', callback: v => fmt(v) } }, y: { ticks: { color: '#a7f3d0', font: { size: 10 } } } }
+        }
+    });
+
+    // --- DOWNSIZING SIMULATOR ---
+    let downsizingChart = new Chart(document.getElementById('downsizingChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Costo Attuale', 'Costo Nuovo', 'Risparmio'],
+            datasets: [{ data: [87700, 30000, 57700], backgroundColor: ['#be123c', '#94a3b8', '#0f766e'], borderRadius: 4 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmt(ctx.raw) } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
+    });
+
+    function updateDownsizing() {
+        const cutP = document.getElementById('togPinciana').checked ? 42000 : 0;
+        const cutA = document.getElementById('togAdige').checked ? 33700 : 0;
+        const newRent = parseInt(document.getElementById('newRentSlider').value);
+        const overhead = 12000;
+        const currentTotal = 87700;
+        const newTotal = (87700 - cutP - cutA) + newRent;
+        const saving = currentTotal - newTotal;
+
+        document.getElementById('newRentDisplay').innerText = fmt(newRent);
+        document.getElementById('dsCurrentDisplay').innerText = fmt(currentTotal);
+        document.getElementById('dsNewDisplay').innerText = fmt(newTotal);
+        document.getElementById('dsSavingDisplay').innerText = fmt(saving);
+        document.getElementById('lblPinciana').innerText = document.getElementById('togPinciana').checked ? 'CESSIONE' : 'MANTENERE';
+        document.getElementById('lblAdige').innerText = document.getElementById('togAdige').checked ? 'CESSIONE' : 'MANTENERE';
+
+        downsizingChart.data.datasets[0].data = [currentTotal, newTotal, saving];
+        downsizingChart.data.datasets[0].backgroundColor = ['#be123c', '#94a3b8', saving > 0 ? '#0f766e' : '#be123c'];
+        downsizingChart.update();
+        recalcFinancialPlan();
+    }
+
+    // --- SHARING SIMULATOR ---
+    let sharingChart = new Chart(document.getElementById('sharingChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Uso Interno Ottodrom', 'Sharing Officine 42', 'Sharing Nardi'],
+            datasets: [{ data: [65, 20, 15], backgroundColor: ['#1e3a5f', '#3b82f6', '#60a5fa'], borderWidth: 2, borderColor: '#1e3a8a' }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 }, padding: 8 } }, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } } } }
+    });
+
+    function updateSharing() {
+        const sh42 = parseInt(document.getElementById('sh42Slider').value);
+        const shNardi = parseInt(document.getElementById('shNardiSlider').value);
+        const markup = parseInt(document.getElementById('shMarkupSlider').value);
+        const totalCost = 108000;
+        const totalShPct = Math.min(sh42 + shNardi, 80);
+        const costShared = totalCost * (totalShPct / 100);
+        const revenue = costShared * (1 + markup / 100);
+        const netCost = totalCost - revenue;
+
+        document.getElementById('sh42Display').innerText = sh42 + '%';
+        document.getElementById('shNardiDisplay').innerText = shNardi + '%';
+        document.getElementById('shMarkupDisplay').innerText = markup + '%';
+        document.getElementById('shRevenueDisplay').innerText = fmt(revenue);
+        document.getElementById('shNetDisplay').innerText = fmt(Math.max(netCost, 0));
+
+        const interno = 100 - sh42 - shNardi;
+        sharingChart.data.datasets[0].data = [Math.max(interno, 0), sh42, shNardi];
+        sharingChart.update();
+        recalcFinancialPlan();
+    }
+
+    // --- PLATFORMS DATA (bom = BOM materiali, asp = prezzo retail kit) ---
+    const platforms = [
+        { id:'hd_sportster', name:'Harley-Davidson Sportster', prod:'1M+', asp:5200, bom:2500, vol:80, launch:2029 },
+        { id:'ducati_monster', name:'Ducati Monster 600-1200', prod:'300k', asp:4800, bom:2400, vol:60, launch:2029 },
+        { id:'yamaha_mt07', name:'Yamaha MT-07 (CP2)', prod:'200k+', asp:4200, bom:2200, vol:90, launch:2029 },
+        { id:'royal_enfield_mono', name:'Royal Enfield Mono (Bullet/Classic/Himalayan)', prod:'6-8M', asp:3600, bom:2000, vol:120, launch:2028 },
+        { id:'suzuki_sv650', name:'Suzuki SV650', prod:'300-500k', asp:4000, bom:2200, vol:70, launch:2029 },
+        { id:'honda_500', name:'Honda 500 Twins (CB/CMX/CL)', prod:'300-500k', asp:3800, bom:2100, vol:85, launch:2029 },
+        { id:'triumph_bonnie', name:'Triumph Bonneville (aria)', prod:'150k+', asp:4800, bom:2400, vol:50, launch:2030 },
+        { id:'ducati_desmo2v', name:'Ducati Desmodue 2V aria', prod:'500k+', asp:4600, bom:2300, vol:65, launch:2029 },
+        { id:'moto_guzzi_v7', name:'Moto Guzzi Small-Block (V7/V9)', prod:'40-50k', asp:4600, bom:2400, vol:35, launch:2030 },
+        { id:'bmw_k_brick', name:'BMW K-Series "Flying Brick"', prod:'300-350k', asp:5000, bom:2600, vol:45, launch:2030 },
+        { id:'re_650', name:'Royal Enfield 650 Twins', prod:'250-350k', asp:3800, bom:2100, vol:75, launch:2029 },
+        { id:'honda_transalp', name:'Honda Transalp XL600/650V', prod:'200-300k', asp:4200, bom:2300, vol:55, launch:2029 },
+        { id:'yamaha_xs650', name:'Yamaha XS650', prod:'200-250k', asp:4400, bom:2200, vol:40, launch:2031 },
+        { id:'honda_cb_four', name:'Honda CB Four SOHC (500-750)', prod:'700-850k', asp:4800, bom:2500, vol:45, launch:2030 },
+        { id:'suzuki_bandit', name:'Suzuki Bandit GSF', prod:'500-800k', asp:3800, bom:2100, vol:65, launch:2029 },
+        { id:'yamaha_sr', name:'Yamaha SR400/500', prod:'150-250k', asp:4000, bom:2100, vol:40, launch:2031 },
+        { id:'kawasaki_z70s', name:'Kawasaki Z 70s (Z1/Z900/Z1000)', prod:'200-250k', asp:5000, bom:2600, vol:35, launch:2031 },
+        { id:'honda_africa', name:'Honda Africa Twin XRV650/750', prod:'70-100k', asp:4600, bom:2400, vol:30, launch:2031 }
+    ];
+
+    function renderPlatforms() {
+        document.getElementById('platformList').innerHTML = platforms.map(p => `
+            <label class="flex items-center p-2 bg-slate-800/60 rounded border border-slate-700 cursor-pointer hover:bg-slate-700/60 text-xs">
+                <input type="checkbox" class="platform-cb mr-2 accent-teal-400" data-id="${p.id}" onchange="onPlatformChange()">
+                <span class="flex-1">${p.name} <span class="text-slate-500">(${p.prod})</span></span>
+                <span class="text-teal-400 font-bold ml-1">${p.launch}</span>
+            </label>`).join('');
+    }
+
+    function onPlatformChange() {
+        const cbs = document.querySelectorAll('.platform-cb');
+        const checked = [...cbs].filter(c => c.checked);
+        if (checked.length > 3) { checked[checked.length-1].checked = false; return; }
+        cbs.forEach(cb => { if (!cb.checked && checked.length >= 3) cb.closest('label').classList.add('opacity-40'); else cb.closest('label').classList.remove('opacity-40'); });
+        document.getElementById('platformCount').innerText = checked.length + '/3 selezionate';
+        updateGreenSim();
+        recalcFinancialPlan();
+    }
+
+    function getSelectedPlatforms() {
+        return [...document.querySelectorAll('.platform-cb:checked')].map(cb => platforms.find(p => p.id === cb.dataset.id));
+    }
+
+    // --- PROJECT GREEN P&L ENGINE (aligned to High Level BP Feb 2026 GC) ---
+    const GREEN_BMW_LAUNCH = 2026;
+    const GREEN_MOTO_PRICE = 23000;
+    const GREEN_MOTO_BOM = 15717;
+
+    function calcPlatformPL(yr, launchYear, volRegime, retailASP, bomBase) {
+        const d = yr - launchYear;
+        if (d < 0) return { rev:0, cogs:0, varOpex:0, units:0 };
+
+        const ramp = d === 0 ? 0.02 : d === 1 ? 0.35 : Math.pow(1.03, Math.max(0, d - 2));
+        const units = volRegime * ramp;
+
+        let retPct, wsPct, motPct;
+        if (d === 0) { retPct=1; wsPct=0; motPct=0; }
+        else if (d === 1) { retPct=0.5; wsPct=0.4; motPct=0.1; }
+        else { retPct=0.3; wsPct=0.6; motPct=0.1; }
+
+        const retU = units * retPct, wsU = units * wsPct, motU = units * motPct;
+        const pEsc = d <= 0 ? 1 : 1.10 * Math.pow(1.05, Math.max(0, d - 1));
+        const pRet = retailASP * pEsc;
+        const pWS = pRet * 0.80;
+        const rev = retU * pRet + wsU * pWS + motU * GREEN_MOTO_PRICE;
+
+        const bom = Math.max(1800, bomBase * Math.pow(0.95, Math.min(d, 10)));
+        const cogs = (retU + wsU) * bom + motU * GREEN_MOTO_BOM;
+
+        const labor = d === 0 ? 2500 : d === 1 ? 700 : 400;
+        const logist = d === 0 ? 1250 : d === 1 ? 300 : 150;
+        const varOpex = retU * (labor + 500) + units * (logist + 150) + rev * 0.01;
+
+        return { rev, cogs, varOpex, units };
+    }
+
+    function calcGreenPL(yr, bmwVolRegime, retailASP, selectedPlats) {
+        const bmw = calcPlatformPL(yr, GREEN_BMW_LAUNCH, bmwVolRegime, retailASP, 2300);
+
+        let platRev=0, platCOGS=0, platVar=0, platUnits=0;
+        selectedPlats.forEach(p => {
+            const r = calcPlatformPL(yr, p.launch, p.vol, p.asp, p.bom);
+            platRev += r.rev; platCOGS += r.cogs; platVar += r.varOpex; platUnits += r.units;
+        });
+
+        const numActive = 1 + selectedPlats.filter(p => yr >= p.launch).length;
+        const fScale = 1 + (numActive - 1) * 0.3;
+        const yIdx = yr - GREEN_BMW_LAUNCH;
+
+        let payroll, mktg, cert, fac, it, ga;
+        if (yIdx <= 0) { payroll=230000; mktg=43875; cert=40000; fac=30000; it=10000; ga=14569; }
+        else if (yIdx === 1) { payroll=340000; mktg=85000; cert=40000; fac=50000; it=15000; ga=38425; }
+        else {
+            const e = Math.pow(1.03, yIdx - 2);
+            payroll=380000*e; mktg=115000*e; cert=30000+5000*(numActive-1); fac=80000*e; it=19000*e; ga=34275;
+        }
+        const fixedOpex = (payroll + mktg + cert + fac + it + ga) * fScale;
+
+        let da;
+        if (yIdx <= 0) da = 75000;
+        else if (yIdx === 1) da = 91000;
+        else da = 110000 * Math.pow(1.03, Math.max(0, yIdx - 2)) + 15000 * (numActive - 1);
+
+        const rev = bmw.rev + platRev;
+        const cogs = bmw.cogs + platCOGS;
+        const varOpex = bmw.varOpex + platVar;
+        const gp = rev - cogs;
+        const ebitda = gp - varOpex - fixedOpex;
+        const ebit = ebitda - da;
+
+        return {
+            revenue: rev, cogs, varOpex, fixedOpex, da,
+            grossProfit: gp,
+            grossMarginPct: rev > 0 ? gp / rev * 100 : 0,
+            ebitda, ebit,
+            totalUnits: bmw.units + platUnits,
+            bmwUnits: bmw.units, platUnits,
+            bmwRev: bmw.rev, platRev
+        };
+    }
+
+    // --- PROJECT GREEN SIMULATOR ---
+    let greenChart;
+    const volSlider = document.getElementById('volSlider');
+    const aspSlider = document.getElementById('aspSlider');
+
+    function updateGreenSim() {
+        const vol = parseInt(volSlider.value);
+        const asp = parseInt(aspSlider.value);
+        document.getElementById('volDisplay').innerText = vol;
+        document.getElementById('aspDisplay').innerText = fmt(asp);
+        document.getElementById('wsPriceDisplay').innerText = fmt(Math.round(asp * 0.8));
+
+        const selected = getSelectedPlatforms();
+
+        const regimeGreen = calcGreenPL(2028, vol, asp, selected);
+        document.getElementById('revenueDisplay').innerText = fmt(regimeGreen.revenue);
+        document.getElementById('gpDisplay').innerText = fmt(regimeGreen.grossProfit);
+        const ebitdaEl = document.getElementById('greenEbitdaDisplay');
+        ebitdaEl.innerText = fmt(regimeGreen.ebitda);
+        ebitdaEl.className = 'block text-sm font-bold ' + (regimeGreen.ebitda >= 0 ? 'text-teal-400' : 'text-rose-400');
+        document.getElementById('grossMarginDisplay').innerText = 'GM ' + regimeGreen.grossMarginPct.toFixed(1) + '%';
+
+        const allPlats = [{ name:'BMW R2V Airhead', vol, asp, launch:GREEN_BMW_LAUNCH }, ...selected.map(p => ({name:p.name, vol:p.vol, asp:p.asp, launch:p.launch}))];
+        document.getElementById('platformSummary').innerHTML = allPlats.map((p, i) => {
+            const c = i === 0 ? 'text-teal-400' : 'text-amber-400';
+            return `<div class="flex justify-between items-center text-xs p-2 bg-slate-900/60 rounded border border-slate-700">
+                <span class="${c} font-bold">${p.name}</span>
+                <span class="text-slate-400">${p.vol} u/yr &times; ${fmt(p.asp)} | ${p.launch}</span>
+            </div>`;
+        }).join('');
+
+        const maxLaunch = Math.max(...allPlats.map(p => p.launch));
+        const regimeYear = Math.max(2028, maxLaunch + 2);
+        const fullRegime = calcGreenPL(regimeYear, vol, asp, selected);
+        document.getElementById('greenTotalRevenue').innerText = fmt(fullRegime.revenue);
+        document.getElementById('greenTotalKits').innerText = Math.round(fullRegime.totalUnits);
+        document.getElementById('greenTotalMargin').innerText = fmt(fullRegime.ebitda);
+        const totalMarginEl = document.getElementById('greenTotalMargin');
+        totalMarginEl.className = 'block text-lg font-bold ' + (fullRegime.ebitda >= 0 ? 'text-teal-400' : 'text-rose-400');
+
+        const years10 = [];
+        for (let yr = 2026; yr <= 2036; yr++) {
+            const gpl = calcGreenPL(yr, vol, asp, selected);
+            years10.push({ yr, rev: gpl.revenue, ebitda: gpl.ebitda });
+        }
+
+        if (greenChart) greenChart.destroy();
+        greenChart = new Chart(document.getElementById('greenChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: years10.map(y => y.yr.toString()),
+                datasets: [
+                    { label: 'Revenue', data: years10.map(y => y.rev), backgroundColor: '#0f766e', borderRadius: 4, order: 2 },
+                    { label: 'EBITDA Green', data: years10.map(y => y.ebitda), type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', pointBackgroundColor: years10.map(y => y.ebitda >= 0 ? '#10b981' : '#f43f5e'), pointRadius: 4, borderWidth: 2, fill: true, tension: 0.3, order: 1 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } } },
+                scales: { y: { grid: { color: 'rgba(148,163,184,0.1)' }, ticks: { color: '#94a3b8', callback: v => fmt(v), font: { size: 10 } } }, x: { ticks: { color: '#94a3b8', font: { size: 10 } } } }
+            }
+        });
+
+        renderGreenPLTable(vol, asp, selected);
+    }
+
+    function renderGreenPLTable(vol, asp, sel) {
+        const yrs = [2026, 2027, 2028, 2030, 2033, 2036];
+        const data = yrs.map(yr => calcGreenPL(yr, vol, asp, sel));
+        document.getElementById('greenPLHead').innerHTML = `<tr class="border-b border-slate-700 text-slate-500 uppercase text-[9px]">
+            <th class="p-1.5 text-left">Green P&L</th>${yrs.map(yr => `<th class="p-1.5 text-right">${yr}</th>`).join('')}</tr>`;
+        const rows = [
+            { l:'Revenue', v:data.map(d=>d.revenue), b:true },
+            { l:'(-) COGS', v:data.map(d=>-d.cogs), neg:true },
+            { l:'Gross Profit', v:data.map(d=>d.grossProfit), b:true, gp:true },
+            { l:'  GM%', v:data.map(d=>d.grossMarginPct.toFixed(1)+'%'), pct:true },
+            { l:'(-) Var Opex', v:data.map(d=>-d.varOpex), neg:true },
+            { l:'(-) Fixed Opex', v:data.map(d=>-d.fixedOpex), neg:true },
+            { l:'EBITDA', v:data.map(d=>d.ebitda), b:true, ebitda:true },
+            { l:'Units', v:data.map(d=>Math.round(d.totalUnits)), units:true }
+        ];
+        document.getElementById('greenPLBody').innerHTML = rows.map(r => `
+            <tr class="border-b border-slate-800/40 ${r.b ? 'font-bold' : ''}">
+                <td class="p-1.5 text-[9px] ${r.ebitda ? 'text-teal-400' : r.gp ? 'text-amber-400' : 'text-slate-400'}">${r.l}</td>
+                ${r.v.map(v => {
+                    if (r.pct) return `<td class="p-1.5 text-right text-[9px] text-amber-400 tabular-nums">${v}</td>`;
+                    if (r.units) return `<td class="p-1.5 text-right text-[9px] text-slate-300 tabular-nums">${v}</td>`;
+                    let c = 'text-slate-300';
+                    if (r.ebitda) c = v >= 0 ? 'text-teal-400' : 'text-rose-400';
+                    else if (r.neg) c = 'text-rose-300';
+                    else if (r.gp) c = 'text-amber-400';
+                    return `<td class="p-1.5 text-right text-[9px] ${c} tabular-nums">${fmt(v)}</td>`;
+                }).join('')}
+            </tr>`).join('');
+    }
+
+    volSlider.addEventListener('input', () => { updateGreenSim(); recalcFinancialPlan(); });
+    aspSlider.addEventListener('input', () => { updateGreenSim(); recalcFinancialPlan(); });
+
+    // --- PRODUCTS SIMULATOR ---
+    const productsCatalog = [
+        { name: 'Sella Custom', price: 450, q1: 30, q2: 50, q3: 80 },
+        { name: 'Cupolino', price: 380, q1: 20, q2: 40, q3: 65 },
+        { name: 'Telaietto Posteriore', price: 520, q1: 15, q2: 30, q3: 50 },
+        { name: 'Faro LED Custom', price: 280, q1: 40, q2: 70, q3: 100 },
+        { name: 'Coprimotore', price: 320, q1: 25, q2: 45, q3: 70 },
+        { name: 'Staffa Strumentazione', price: 180, q1: 35, q2: 60, q3: 90 },
+        { name: 'File CAD (Patreon)', price: 45, q1: 100, q2: 200, q3: 350 }
+    ];
+
+    let productsChart;
+
+    function renderProducts() {
+        const tbody = document.getElementById('productsBody');
+        tbody.innerHTML = productsCatalog.map((p, i) => `
+            <tr class="border-b border-slate-100 ${i % 2 ? 'bg-slate-50' : ''}">
+                <td class="p-2 font-semibold text-slate-700">${p.name}</td>
+                <td class="p-2 text-center"><input type="number" class="w-16 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.price}" data-row="${i}" data-col="price" onchange="updateProducts()"></td>
+                <td class="p-2 text-center"><input type="number" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.q1}" data-row="${i}" data-col="q1" onchange="updateProducts()"></td>
+                <td class="p-2 text-center"><input type="number" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.q2}" data-row="${i}" data-col="q2" onchange="updateProducts()"></td>
+                <td class="p-2 text-center"><input type="number" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.q3}" data-row="${i}" data-col="q3" onchange="updateProducts()"></td>
+            </tr>`).join('');
+        updateProducts();
+    }
+
+    function updateProducts() {
+        const inputs = document.querySelectorAll('#productsBody input');
+        inputs.forEach(inp => {
+            const r = parseInt(inp.dataset.row);
+            const c = inp.dataset.col;
+            productsCatalog[r][c] = parseFloat(inp.value) || 0;
+        });
+
+        let t1 = 0, t2 = 0, t3 = 0;
+        productsCatalog.forEach(p => {
+            t1 += p.price * p.q1;
+            t2 += p.price * p.q2;
+            t3 += p.price * p.q3;
+        });
+
+        document.getElementById('prodTot1').innerText = fmt(t1);
+        document.getElementById('prodTot2').innerText = fmt(t2);
+        document.getElementById('prodTot3').innerText = fmt(t3);
+
+        recalcFinancialPlan();
+        if (productsChart) productsChart.destroy();
+        productsChart = new Chart(document.getElementById('productsChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Anno 1', 'Anno 2', 'Anno 3'],
+                datasets: [
+                    { label: 'Ricavi', data: [t1, t2, t3], backgroundColor: '#f59e0b', borderRadius: 4 },
+                    { label: 'Margine (75%)', data: [t1*0.75, t2*0.75, t3*0.75], backgroundColor: '#0f766e', borderRadius: 4 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
+        });
+    }
+
+    // --- CONCIERGE SIMULATOR ---
+    function updateConcierge() {
+        const numMoto = parseInt(document.getElementById('mcMotoSlider').value);
+        let perMoto = 0;
+        document.querySelectorAll('.mc-service').forEach(cb => {
+            if (cb.checked) perMoto += parseInt(cb.dataset.cost);
+        });
+        const mrr = numMoto * perMoto;
+        const arr = mrr * 12;
+
+        document.getElementById('mcMotoDisplay').innerText = numMoto;
+        document.getElementById('mcPerMotoDisplay').innerText = fmt(perMoto);
+        document.getElementById('mcMrrDisplay').innerText = fmt(mrr);
+        document.getElementById('mcArrDisplay').innerText = fmt(arr);
+        recalcFinancialPlan();
+    }
+
+    // --- BENCHMARK SWITCHER ---
+    function switchBenchmark(key, btnElement) {
+        document.querySelectorAll('#benchmarks button').forEach(t => { t.classList.remove('active-tab'); t.classList.add('inactive-tab'); });
+        btnElement.classList.remove('inactive-tab'); btnElement.classList.add('active-tab');
+        const d = benchmarks[key];
+        const pts = d.points.map(p => `<li class="flex items-start mb-2"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-slate-600">${p}</span></li>`).join('');
+        document.getElementById('benchmarkContent').innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mr-4 border-2 ${d.color}"><i class="fa-solid ${d.icon} text-slate-700 text-xl"></i></div>
+                        <div>
+                            <h4 class="text-2xl font-bold text-slate-800 font-oswald">${d.name}</h4>
+                            <a href="${d.url}" target="_blank" rel="noopener noreferrer" class="text-sm text-teal-600 hover:text-teal-800 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square text-xs mr-1"></i>${d.url}</a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 border-l-4 ${d.color} p-4 mb-4">
+                        <p class="italic text-slate-700 font-serif text-lg">${d.quote}</p>
+                        <p class="text-xs text-slate-500 font-bold mt-2 uppercase">\u2014 ${d.author}</p>
+                    </div>
+                    <div class="inline-block bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mb-2">Modello: ${d.strategy}</div>
+                </div>
+                <div>
+                    <h5 class="font-bold text-slate-900 uppercase mb-3 border-b border-slate-200 pb-1">Punti Chiave & Numeri</h5>
+                    <ul class="space-y-2">${pts}</ul>
+                    <div class="mt-6 bg-teal-50 p-3 rounded border border-teal-100">
+                        <p class="text-xs text-teal-800 font-bold uppercase"><i class="fa-solid fa-lightbulb mr-1"></i>Key Takeaway per Ottodrom</p>
+                        <p class="text-sm text-teal-900 mt-1">Non vendere tempo. Vendi prodotti scalabili (Unit/RSD) o accesso esclusivo (Bike Shed/Revival).</p>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    // --- ACTIONS GRID ---
+    function renderActions() {
+        document.getElementById('actionsGrid').innerHTML = actions.map(a => `
+            <div class="action-card bg-white p-5 rounded-lg border border-slate-200 cursor-pointer group" onclick="showActionDetail(${a.id})">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="h-10 w-10 rounded bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors"><i class="fa-solid ${a.icon} ${a.color} text-lg"></i></div>
+                    <span class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Azione ${a.id}</span>
+                </div>
+                <h4 class="font-bold text-slate-800 text-lg leading-tight mb-2">${a.title}</h4>
+                <p class="text-xs text-slate-500 line-clamp-2">${a.desc}</p>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">${a.tag}</span>
+                    <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-teal-500 transition-colors text-sm"></i>
+                </div>
+            </div>`).join('');
+    }
+
+    function showActionDetail(id) {
+        const act = actions.find(a => a.id === id);
+        const panel = document.getElementById('actionDetailPanel');
+        document.getElementById('detailTitle').innerHTML = `<span class="text-slate-400 font-normal mr-2">Azione ${act.id}:</span> ${act.title}`;
+        document.getElementById('detailTag').innerText = act.tag;
+        document.getElementById('detailDesc').innerText = act.desc;
+        document.getElementById('detailImpact').innerText = act.impact;
+        document.getElementById('detailSubImpact').innerText = act.subImpact;
+        document.getElementById('detailSteps').innerHTML = act.steps.map(s => `<li>${s}</li>`).join('');
+        panel.classList.remove('hidden');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function closeDetail() { document.getElementById('actionDetailPanel').classList.add('hidden'); }
+
+    // --- FINANCIAL PLAN ENGINE ---
+    const BASE = {
+        ricavi_officina: 116171, ricavi_fashion: 57400, ricavi_altro: 17034,
+        cv_operativi: 119026, cv_commerciali: 86651,
+        cf_locali: 87737,
+        cf_locali_pinciana41_aff: 26741, cf_locali_pinciana41_ut: 1103,
+        cf_locali_adige_aff: 17448, cf_locali_adige_ut: 2876,
+        cf_personale: 218447,
+        cf_ga_altro: 29637,
+        da: 79705, proventi_oneri: 14342,
+        costi_fashion_prod: 24537, costi_fashion_emporio: 16792,
+        costi_marketing: 31241, costi_it: 27439
+    };
+    BASE.totale_ricavi = BASE.ricavi_officina + BASE.ricavi_fashion + BASE.ricavi_altro;
+    BASE.totale_cv = BASE.cv_operativi + BASE.cv_commerciali;
+    BASE.totale_cf = BASE.cf_locali + BASE.cf_personale + BASE.cf_ga_altro;
+    BASE.ebitda = BASE.totale_ricavi - BASE.totale_cv - BASE.totale_cf;
+
+    let ebitdaChart;
+
+    function recalcFinancialPlan() {
+        const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
+        const fashionChoice = fashionRadio ? fashionRadio.value : 'combo';
+
+        const cutP41 = document.getElementById('togPinciana').checked;
+        const cutAdige = document.getElementById('togAdige').checked;
+        const newRent = parseInt(document.getElementById('newRentSlider').value) || 0;
+
+        const sh42pct = (parseInt(document.getElementById('sh42Slider').value) || 0) / 100;
+        const shNardipct = (parseInt(document.getElementById('shNardiSlider').value) || 0) / 100;
+        const shMarkup = (parseInt(document.getElementById('shMarkupSlider').value) || 0) / 100;
+
+        const greenVol = parseInt(document.getElementById('volSlider').value) || 0;
+        const greenAsp = parseInt(document.getElementById('aspSlider').value) || 0;
+        const selectedPlats = getSelectedPlatforms();
+
+        let pY1=0,pY2=0,pY3=0;
+        productsCatalog.forEach(p => { pY1+=p.price*p.q1; pY2+=p.price*p.q2; pY3+=p.price*p.q3; });
+
+        const mcMoto = parseInt(document.getElementById('mcMotoSlider').value) || 0;
+        let mcPerMoto = 0;
+        document.querySelectorAll('.mc-service').forEach(cb => { if(cb.checked) mcPerMoto += parseInt(cb.dataset.cost); });
+        const mcArr = mcMoto * mcPerMoto * 12;
+
+        const years = [];
+        for (let y = 0; y < 11; y++) {
+            const yr = 2026 + y;
+            const label = yr.toString();
+            const rampConc = y === 0 ? 0.5 : y === 1 ? 0.85 : 1.0;
+            const serviceGrowth = 1 + 0.03 * Math.min(y + 1, 5);
+
+            let fashRev = 0, fashCostSaved = 0;
+            if (fashionChoice === 'stocchista') {
+                fashRev = y === 0 ? 30000 : 0;
+                fashCostSaved = BASE.costi_fashion_prod + BASE.costi_fashion_emporio;
+            } else if (fashionChoice === 'piva') {
+                fashRev = y === 0 ? 25000 : y === 1 ? 18000 : y === 2 ? 10000 : 5000;
+                fashCostSaved = BASE.costi_fashion_prod + BASE.costi_fashion_emporio - 21000;
+            } else if (fashionChoice === 'combo') {
+                fashRev = y === 0 ? 42000 : y === 1 ? 14000 : y === 2 ? 6000 : 3000;
+                fashCostSaved = BASE.costi_fashion_prod + BASE.costi_fashion_emporio - (y === 0 ? 10500 : 21000);
+            } else {
+                fashRev = BASE.ricavi_fashion * Math.max(0.2, 1 - 0.2 * (y + 1));
+                fashCostSaved = 0;
+            }
+
+            const localiSaved = (cutP41 ? BASE.cf_locali_pinciana41_aff + BASE.cf_locali_pinciana41_ut : 0)
+                              + (cutAdige ? BASE.cf_locali_adige_aff + BASE.cf_locali_adige_ut : 0);
+            const localiNew = BASE.cf_locali - localiSaved + newRent;
+
+            const totalShPct = Math.min(sh42pct + shNardipct, 0.8);
+            const sharingRev = 108000 * totalShPct * (1 + shMarkup);
+
+            const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
+
+            const prodRev = y === 0 ? pY1 : y === 1 ? pY2 : pY3;
+            const prodCV = prodRev * 0.25;
+
+            const concRev = mcArr * rampConc;
+            const concCV = concRev * 0.35;
+
+            const ricavi_officina = BASE.ricavi_officina * serviceGrowth;
+            const ricavi_fashion = fashRev;
+            const ricavi_componenti = prodRev;
+            const ricavi_kit = gpl.revenue;
+            const ricavi_sharing = sharingRev;
+            const ricavi_concierge = concRev;
+            const ricavi_altro = BASE.ricavi_altro;
+            const totale_ricavi = ricavi_officina + ricavi_fashion + ricavi_componenti + ricavi_kit + ricavi_sharing + ricavi_concierge + ricavi_altro;
+
+            const cv_operativi = (BASE.cv_operativi - BASE.costi_fashion_prod + (fashionChoice === 'nulla' ? BASE.costi_fashion_prod : 0)) * serviceGrowth + gpl.cogs + gpl.varOpex + prodCV + concCV;
+            const cv_commerciali = BASE.cv_commerciali - fashCostSaved - (y === 0 ? BASE.costi_marketing * 0.5 : BASE.costi_marketing * 0.3) - (y === 0 ? BASE.costi_it * 0.3 : BASE.costi_it * 0.2);
+            const totale_cv = Math.max(cv_operativi, 0) + Math.max(cv_commerciali, 0);
+
+            const mdc = totale_ricavi - totale_cv;
+
+            const cf_locali = localiNew;
+            const cf_personale = BASE.cf_personale;
+            const cf_ga = BASE.cf_ga_altro * (y === 0 ? 0.85 : 0.80);
+            const cf_green = gpl.fixedOpex;
+            const totale_cf = cf_locali + cf_personale + cf_ga + cf_green;
+
+            const ebitda = mdc - totale_cf;
+            const da = BASE.da + gpl.da;
+            const ebit = ebitda - da;
+
+            years.push({
+                label, ricavi_officina, ricavi_fashion, ricavi_componenti, ricavi_kit,
+                ricavi_sharing, ricavi_concierge, ricavi_altro, totale_ricavi,
+                cv_operativi: Math.max(cv_operativi,0), cv_commerciali: Math.max(cv_commerciali,0), totale_cv,
+                mdc, cf_locali, cf_personale, cf_ga, cf_green, totale_cf, ebitda, da, ebit,
+                green_ebitda: gpl.ebitda, green_units: gpl.totalUnits
+            });
+        }
+
+        renderCETable(years);
+        renderEbitdaChart(years);
+        renderEbitdaCards(years);
+    }
+
+    function renderEbitdaCards(years) {
+        const container = document.getElementById('ebitdaCards');
+        const milestones = [0, 1, 2, 4, 7, 10];
+        container.innerHTML = milestones.map(i => {
+            const yr = years[i];
+            if (!yr) return '';
+            const color = yr.ebitda >= 0 ? 'border-teal-600 text-teal-400' : 'border-rose-700 text-rose-400';
+            return `<div class="bg-slate-800 border ${color} rounded p-3 text-center">
+                <span class="block text-xs uppercase font-bold ${color}">EBITDA ${yr.label}</span>
+                <span class="block text-xl font-bold ${yr.ebitda >= 0 ? 'text-teal-400' : 'text-rose-400'}">${fmt(yr.ebitda)}</span>
+            </div>`;
+        }).join('');
+    }
+
+    function renderCETable(years) {
+        const nCols = 1 + years.length;
+        const head = document.getElementById('ceTableHead');
+        head.innerHTML = `<tr class="border-b border-slate-700 text-slate-400 uppercase text-xs">
+            <th class="p-2 sticky left-0 bg-slate-900 z-10 min-w-[180px]">Voce CE</th>
+            <th class="p-2 text-right min-w-[90px]">2025</th>
+            ${years.map(y => `<th class="p-2 text-right min-w-[90px]">${y.label}</th>`).join('')}
+        </tr>`;
+
+        const rows = [
+            { label: 'RICAVI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_ricavi, ...years.map(y=>y.totale_ricavi)] },
+            { label: '  Officina & Service', vals: [BASE.ricavi_officina, ...years.map(y=>y.ricavi_officina)] },
+            { label: '  Fashion', vals: [BASE.ricavi_fashion, ...years.map(y=>y.ricavi_fashion)] },
+            { label: '  Componenti (Az.5)', vals: [0, ...years.map(y=>y.ricavi_componenti)], accent: true },
+            { label: '  Kit Retrofit (Az.4)', vals: [0, ...years.map(y=>y.ricavi_kit)], accent: true },
+            { label: '  Sharing (Az.3)', vals: [0, ...years.map(y=>y.ricavi_sharing)], accent: true },
+            { label: '  Moto-Concierge (Az.6)', vals: [0, ...years.map(y=>y.ricavi_concierge)], accent: true },
+            { label: '  Altro', vals: [BASE.ricavi_altro, ...years.map(y=>y.ricavi_altro)] },
+            { sep: true },
+            { label: 'COSTI VARIABILI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_cv, ...years.map(y=>y.totale_cv)], neg: true },
+            { label: '  Operativi', vals: [BASE.cv_operativi, ...years.map(y=>y.cv_operativi)], neg: true },
+            { label: '  Commerciali & Consulenze', vals: [BASE.cv_commerciali, ...years.map(y=>y.cv_commerciali)], neg: true },
+            { sep: true },
+            { label: 'MARGINE DI CONTRIBUZIONE', bold: true, cls: 'text-amber-400 bg-slate-800/50', vals: [BASE.totale_ricavi - BASE.totale_cv, ...years.map(y=>y.mdc)] },
+            { sep: true },
+            { label: 'COSTI FISSI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_cf, ...years.map(y=>y.totale_cf)], neg: true },
+            { label: '  Locali (Affitti + Utenze)', vals: [BASE.cf_locali, ...years.map(y=>y.cf_locali)], neg: true },
+            { label: '  Personale', vals: [BASE.cf_personale, ...years.map(y=>y.cf_personale)], neg: true },
+            { label: '  G&A e Altro', vals: [BASE.cf_ga_altro, ...years.map(y=>y.cf_ga)], neg: true },
+            { sep: true },
+            { label: 'EBITDA', bold: true, cls: 'text-lg', vals: [BASE.ebitda, ...years.map(y=>y.ebitda)], ebitda: true },
+            { label: '  D&A', vals: [BASE.da, ...years.map(()=>BASE.da)], neg: true },
+            { label: 'EBIT', bold: true, vals: [BASE.ebitda - BASE.da, ...years.map(y=>y.ebit)], ebitda: true }
+        ];
+
+        const colSpan = 2 + years.length;
+        const tbody = document.getElementById('ceTableBody');
+        tbody.innerHTML = rows.map(r => {
+            if (r.sep) return `<tr><td colspan="${colSpan}" class="py-1 border-b border-slate-700"></td></tr>`;
+            const cls = r.cls || '';
+            const bld = r.bold ? 'font-bold' : '';
+            return `<tr class="${cls} ${bld} border-b border-slate-800/50">
+                <td class="p-2 sticky left-0 bg-slate-900 ${r.accent ? 'text-teal-400' : 'text-slate-300'} whitespace-nowrap">${r.label}</td>
+                ${r.vals.map((v, i) => {
+                    let color = 'text-slate-300';
+                    if (r.ebitda) color = v >= 0 ? 'text-teal-400' : 'text-rose-400';
+                    else if (r.neg) color = 'text-rose-300';
+                    else if (r.accent && i > 0 && v > 0) color = 'text-teal-400';
+                    return `<td class="p-2 text-right ${color} tabular-nums whitespace-nowrap">${fmt(v)}</td>`;
+                }).join('')}
+            </tr>`;
+        }).join('');
+    }
+
+    function renderEbitdaChart(years) {
+        const labels = ['2025', ...years.map(y => y.label)];
+        const ebitdaData = [BASE.ebitda, ...years.map(y => y.ebitda)];
+        const ebitData = [BASE.ebitda - BASE.da, ...years.map(y => y.ebit)];
+        const data = {
+            labels,
+            datasets: [{
+                label: 'EBITDA',
+                data: ebitdaData,
+                backgroundColor: ebitdaData.map(v => v >= 0 ? '#0f766e' : '#be123c'),
+                borderRadius: 4
+            }, {
+                label: 'EBIT',
+                data: ebitData,
+                backgroundColor: 'rgba(148,163,184,0.35)',
+                borderRadius: 4
+            }]
+        };
+        if (ebitdaChart) ebitdaChart.destroy();
+        ebitdaChart = new Chart(document.getElementById('ebitdaChart').getContext('2d'), {
+            type: 'bar', data,
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Evoluzione EBITDA & EBIT (2025 → 2036)', color: '#94a3b8', font: { size: 13 } },
+                    legend: { labels: { color: '#94a3b8' } },
+                    tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } }
+                },
+                scales: {
+                    y: { grid: { color: 'rgba(148,163,184,0.15)' }, ticks: { color: '#94a3b8', callback: v => fmt(v) } },
+                    x: { ticks: { color: '#94a3b8', maxRotation: 45 } }
+                }
+            }
+        });
+    }
+
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded', () => {
+        switchBenchmark('revival', document.querySelector('#benchmarks button'));
+        renderActions();
+        renderPlatforms();
+        renderProducts();
+        updateDownsizing();
+        updateSharing();
+        updateConcierge();
+        updateGreenSim();
+        recalcFinancialPlan();
+    });
+</script>
+</body>
+</html>
