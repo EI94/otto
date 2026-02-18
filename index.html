@@ -290,7 +290,7 @@
                 </div>
 
                 <!-- Controls -->
-                <div class="space-y-6">
+                <div class="space-y-5">
                     <div>
                         <div class="flex justify-between text-sm mb-1">
                             <span class="text-slate-300">Volume Vendite (Kit/Anno)</span>
@@ -299,15 +299,38 @@
                         <input type="range" min="20" max="300" value="100" id="volSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-500">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-slate-300">Prezzo Medio Kit (ASP)</span>
+                            <span class="font-bold text-amber-400" id="aspDisplay">€5.400</span>
+                        </div>
+                        <input type="range" min="3500" max="9000" step="100" value="5400" id="aspSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+                            <span>€3.500</span>
+                            <span>€9.000</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 text-center">
                         <div class="bg-slate-900 p-3 rounded border border-slate-700">
-                            <span class="block text-xs text-slate-500 uppercase">Prezzo Medio (ASP)</span>
-                            <span class="block text-lg font-bold text-white">€5.400</span>
+                            <span class="block text-[10px] text-slate-500 uppercase">Ricavi Totali</span>
+                            <span class="block text-lg font-bold text-white" id="revenueDisplay">€540.000</span>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                            <span class="block text-[10px] text-slate-500 uppercase">Costi Totali</span>
+                            <span class="block text-lg font-bold text-rose-400" id="costDisplay">€320.000</span>
                         </div>
                         <div class="bg-teal-900/30 p-3 rounded border border-teal-700">
-                            <span class="block text-xs text-teal-400 uppercase">Margine Totale</span>
-                            <span class="block text-xl font-bold text-teal-400" id="marginDisplay">€220.000</span>
+                            <span class="block text-[10px] text-teal-400 uppercase">Margine Totale</span>
+                            <span class="block text-lg font-bold text-teal-400" id="marginDisplay">€220.000</span>
                         </div>
+                    </div>
+
+                    <div class="text-[11px] text-slate-500 bg-slate-900/50 rounded p-2">
+                        <span class="text-slate-400 font-semibold">Formula:</span>
+                        Margine = Volume &times; (ASP &minus; Costo Unitario) &nbsp;|&nbsp;
+                        <span class="text-slate-400">Costo BOM+Ops:</span> <span class="font-bold text-slate-300">€3.200/kit</span> &nbsp;|&nbsp;
+                        <span class="text-slate-400">Margine %:</span> <span class="font-bold text-teal-400" id="marginPctDisplay">40.7%</span>
                     </div>
                 </div>
             </div>
@@ -342,6 +365,7 @@
     const benchmarks = {
         revival: {
             name: "Revival Cycles (Texas)",
+            url: "https://revivalcycles.com",
             quote: "\"Non vogliamo essere un brand che paga persone per legittimarsi. Vogliamo costruire cose incredibili e offrire prodotti accessibili.\"",
             author: "Alan Stulberg, Founder",
             strategy: "Halo Builds + Ecosistema",
@@ -356,6 +380,7 @@
         },
         rsd: {
             name: "Roland Sands Design (California)",
+            url: "https://rolandsands.com",
             quote: "\"Non cerco attivamente di vendere motociclette. Costruiamo moto solo per sviluppare linee di prodotto.\"",
             author: "Roland Sands",
             strategy: "Brand + Products",
@@ -369,6 +394,7 @@
         },
         unit: {
             name: "Unit Garage (Italia)",
+            url: "https://www.unitgarage.com",
             quote: "Dal taglio dei telai al 'Plug & Play'.",
             author: "Fabio Marcaccini",
             strategy: "Productization",
@@ -382,6 +408,7 @@
         },
         bikeshed: {
             name: "The Bike Shed (Londra/LA)",
+            url: "https://thebikeshedmc.com",
             quote: "\"Siamo un'azienda basata sulla proprietà intellettuale e la community.\"",
             author: "Dutch van Someren",
             strategy: "Membership Economy",
@@ -650,7 +677,10 @@
                         <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mr-4 border-2 ${data.color}">
                             <i class="fa-solid ${data.icon} text-slate-700 text-xl"></i>
                         </div>
-                        <h4 class="text-2xl font-bold text-slate-800 font-oswald">${data.name}</h4>
+                        <div>
+                            <h4 class="text-2xl font-bold text-slate-800 font-oswald">${data.name}</h4>
+                            <a href="${data.url}" target="_blank" rel="noopener noreferrer" class="text-sm text-teal-600 hover:text-teal-800 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square text-xs mr-1"></i>${data.url}</a>
+                        </div>
                     </div>
                     <div class="bg-slate-50 border-l-4 ${data.color} p-4 mb-4">
                         <p class="italic text-slate-700 font-serif text-lg">${data.quote}</p>
@@ -718,16 +748,31 @@
 
     // Project Green Calculator
     const volSlider = document.getElementById('volSlider');
-    const volDisplay = document.getElementById('volDisplay');
-    const marginDisplay = document.getElementById('marginDisplay');
-    const grossMarginPerUnit = 2200;
+    const aspSlider = document.getElementById('aspSlider');
+    const costPerUnit = 3200;
 
-    volSlider.addEventListener('input', function(e) {
-        const vol = e.target.value;
-        volDisplay.innerText = vol;
-        const totalMargin = vol * grossMarginPerUnit;
-        marginDisplay.innerText = '€ ' + totalMargin.toLocaleString();
-    });
+    function updateSimulator() {
+        const vol = parseInt(volSlider.value);
+        const asp = parseInt(aspSlider.value);
+        const marginPerUnit = asp - costPerUnit;
+        const totalRevenue = vol * asp;
+        const totalCost = vol * costPerUnit;
+        const totalMargin = vol * marginPerUnit;
+        const marginPct = ((marginPerUnit / asp) * 100).toFixed(1);
+
+        document.getElementById('volDisplay').innerText = vol;
+        document.getElementById('aspDisplay').innerText = '€' + asp.toLocaleString('it-IT');
+        document.getElementById('revenueDisplay').innerText = '€' + totalRevenue.toLocaleString('it-IT');
+        document.getElementById('costDisplay').innerText = '€' + totalCost.toLocaleString('it-IT');
+        document.getElementById('marginDisplay').innerText = '€' + totalMargin.toLocaleString('it-IT');
+        document.getElementById('marginPctDisplay').innerText = marginPct + '%';
+
+        greenChart.data.datasets[0].data = [asp, costPerUnit, marginPerUnit];
+        greenChart.update();
+    }
+
+    volSlider.addEventListener('input', updateSimulator);
+    aspSlider.addEventListener('input', updateSimulator);
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
