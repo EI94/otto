@@ -2396,7 +2396,25 @@
             ['Altro base (€)', BASE.ricavi_altro],
             ['Componenti base Anno 1 (€)', pY0]
         ];
-        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16 };
+        const plat1 = greenParams.platforms[0] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0 };
+        const plat2 = greenParams.platforms[1] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0 };
+        assumpRows.push(
+            ['Plat A1: Anno lancio', plat1.launchYear],
+            ['Plat A1: Vol Anno 1', plat1.volYear1],
+            ['Plat A1: Vol Anno 2', plat1.volYear2],
+            ['Plat A1: Vol a regime', plat1.volRegime],
+            ['Plat A1: ASP Retail', plat1.retailASP],
+            ['Plat A1: ASP Wholesale', plat1.wholesaleASP],
+            ['Plat A1: Prezzo Moto', plat1.motoPrice],
+            ['Plat A2: Anno lancio', plat2.launchYear],
+            ['Plat A2: Vol Anno 1', plat2.volYear1],
+            ['Plat A2: Vol Anno 2', plat2.volYear2],
+            ['Plat A2: Vol a regime', plat2.volRegime],
+            ['Plat A2: ASP Retail', plat2.retailASP],
+            ['Plat A2: ASP Wholesale', plat2.wholesaleASP],
+            ['Plat A2: Prezzo Moto', plat2.motoPrice]
+        );
+        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, p1Launch: ASSUM_START+17, p1Vy1: ASSUM_START+18, p1Vy2: ASSUM_START+19, p1Reg: ASSUM_START+20, p1Asp: ASSUM_START+21, p1AspWs: ASSUM_START+22, p1Moto: ASSUM_START+23, p2Launch: ASSUM_START+24, p2Vy1: ASSUM_START+25, p2Vy2: ASSUM_START+26, p2Reg: ASSUM_START+27, p2Asp: ASSUM_START+28, p2AspWs: ASSUM_START+29, p2Moto: ASSUM_START+30 };
         const yearCols = ['2025', ...years.map(y => y.label)];
         const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
         const numCols = hdr.length;
@@ -2422,7 +2440,7 @@
             ws1.getCell(6, col).numFmt = '"€"#,##0';
             ws1.getCell(7, col).value = { formula: `'Topline Componenti'!${colLetter}3` };
             ws1.getCell(7, col).numFmt = '"€"#,##0';
-            ws1.getCell(8, col).value = { formula: `'Project Green P&L'!${colLetter}13` };
+            ws1.getCell(8, col).value = { formula: `'Project Green P&L'!${colLetter}18` };
             ws1.getCell(8, col).numFmt = '"€"#,##0';
             ws1.getCell(9, col).value = { formula: `'Topline Sharing'!${colLetter}3` };
             ws1.getCell(9, col).numFmt = '"€"#,##0';
@@ -2599,84 +2617,111 @@
         ws2.addRow(greenHdr);
         ws2.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; if (colNumber > 1 && typeof c.value === 'number') c.numFmt = '0'; });
         const Rg = R;
+        function platUnitsForm(yr, launchYear, vy1Row, vy2Row, regRow) {
+            const d = yr - launchYear;
+            if (d < 0) return '0';
+            if (d === 0) return `Assumptions!$B$${vy1Row}`;
+            if (d === 1) return `Assumptions!$B$${vy2Row}`;
+            return `Assumptions!$B$${regRow}*1.03^${d - 2}`;
+        }
+        function platRevForm(colLetter, unitsRow, d, aspR, aspWs, moto) {
+            if (d < 0) return '0';
+            const u = `${colLetter}${unitsRow}`;
+            if (d === 0) return `${u}*Assumptions!$B$${aspR}`;
+            if (d === 1) return `${u}*0.5*Assumptions!$B$${aspR}*1.1+${u}*0.4*Assumptions!$B$${aspWs}*1.1+${u}*0.1*Assumptions!$B$${moto}`;
+            const esc = (1.1 * Math.pow(1.05, d - 1)).toFixed(4);
+            return `${u}*0.3*Assumptions!$B$${aspR}*${esc}+${u}*0.6*Assumptions!$B$${aspWs}*${esc}+${u}*0.1*Assumptions!$B$${moto}`;
+        }
         for (let col = 2; col <= greenNumCols; col++) {
             const yr = greenHdr[col - 1];
             const d = yr - 2026;
             const colLetter = excelColLetter(col - 1);
             if (yr < 2026) {
-                ws2.getCell(5, col).value = 0;
-                ws2.getCell(6, col).value = 0;
-                ws2.getCell(7, col).value = 0;
-                ws2.getCell(8, col).value = 0;
-                ws2.getCell(10, col).value = 0;
-                ws2.getCell(11, col).value = 0;
-                ws2.getCell(12, col).value = 0;
-                ws2.getCell(13, col).value = 0;
+                [5,6,7,9,10,11,13,14,15,16,17].forEach(r => { ws2.getCell(r, col).value = 0; });
+                ws2.getCell(8, col).value = { formula: `=${colLetter}5+${colLetter}6+${colLetter}7` };
+                ws2.getCell(18, col).value = { formula: `=SUM(${colLetter}13:${colLetter}17)` };
             } else {
-                const unitsForm = d === 0 ? `Assumptions!$B$${Rg.greenVol2026}` : d === 1 ? `Assumptions!$B$${Rg.greenVol2027}` : d >= 2 ? `Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}` : '0';
-                ws2.getCell(5, col).value = d < 0 ? 0 : { formula: `=${unitsForm}` };
+                const unitsBmw = d === 0 ? `Assumptions!$B$${Rg.greenVol2026}` : d === 1 ? `Assumptions!$B$${Rg.greenVol2027}` : `Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}`;
+                ws2.getCell(5, col).value = d < 0 ? 0 : { formula: `=${unitsBmw}` };
+                const u1 = platUnitsForm(yr, plat1.launchYear, Rg.p1Vy1, Rg.p1Vy2, Rg.p1Reg);
+                const u2 = platUnitsForm(yr, plat2.launchYear, Rg.p2Vy1, Rg.p2Vy2, Rg.p2Reg);
+                ws2.getCell(6, col).value = yr < plat1.launchYear ? 0 : { formula: `=${u1}` };
+                ws2.getCell(7, col).value = yr < plat2.launchYear ? 0 : { formula: `=${u2}` };
+                ws2.getCell(8, col).value = { formula: `=${colLetter}5+${colLetter}6+${colLetter}7` };
                 if (d === 0) {
-                    ws2.getCell(6, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}` };
-                    ws2.getCell(7, col).value = 0;
-                    ws2.getCell(8, col).value = 0;
-                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}*Assumptions!$B$${Rg.greenAsp}` };
+                    ws2.getCell(9, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}` };
+                    ws2.getCell(10, col).value = 0;
                     ws2.getCell(11, col).value = 0;
-                    ws2.getCell(12, col).value = 0;
+                    ws2.getCell(13, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}*Assumptions!$B$${Rg.greenAsp}` };
+                    ws2.getCell(14, col).value = 0;
+                    ws2.getCell(15, col).value = 0;
                 } else if (d === 1) {
-                    ws2.getCell(6, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5` };
-                    ws2.getCell(7, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4` };
-                    ws2.getCell(8, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1` };
-                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5*Assumptions!$B$${Rg.greenAsp}*1.1` };
-                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4*Assumptions!$B$${Rg.greenAspWs}*1.1` };
-                    ws2.getCell(12, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                    ws2.getCell(9, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5` };
+                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4` };
+                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1` };
+                    ws2.getCell(13, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5*Assumptions!$B$${Rg.greenAsp}*1.1` };
+                    ws2.getCell(14, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4*Assumptions!$B$${Rg.greenAspWs}*1.1` };
+                    ws2.getCell(15, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1*Assumptions!$B$${Rg.greenMoto}` };
                 } else {
-                    ws2.getCell(6, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3` };
-                    ws2.getCell(7, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6` };
-                    ws2.getCell(8, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1` };
+                    ws2.getCell(9, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3` };
+                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6` };
+                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1` };
                     const esc = (1.1 * Math.pow(1.05, d - 1)).toFixed(4);
-                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3*Assumptions!$B$${Rg.greenAsp}*${esc}` };
-                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6*Assumptions!$B$${Rg.greenAspWs}*${esc}` };
-                    ws2.getCell(12, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                    ws2.getCell(13, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3*Assumptions!$B$${Rg.greenAsp}*${esc}` };
+                    ws2.getCell(14, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6*Assumptions!$B$${Rg.greenAspWs}*${esc}` };
+                    ws2.getCell(15, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1*Assumptions!$B$${Rg.greenMoto}` };
                 }
-                ws2.getCell(13, col).value = { formula: `=SUM(${colLetter}10:${colLetter}12)` };
+                const d1 = yr - plat1.launchYear;
+                const d2 = yr - plat2.launchYear;
+                const rev1Form = yr >= plat1.launchYear ? platRevForm(colLetter, 6, d1, Rg.p1Asp, Rg.p1AspWs, Rg.p1Moto) : '0';
+                const rev2Form = yr >= plat2.launchYear ? platRevForm(colLetter, 7, d2, Rg.p2Asp, Rg.p2AspWs, Rg.p2Moto) : '0';
+                ws2.getCell(16, col).value = rev1Form !== '0' ? { formula: `=${rev1Form}` } : 0;
+                ws2.getCell(17, col).value = rev2Form !== '0' ? { formula: `=${rev2Form}` } : 0;
+                ws2.getCell(18, col).value = { formula: `=SUM(${colLetter}13:${colLetter}17)` };
             }
-            ws2.getCell(5, col).numFmt = '#,##0';
-            ws2.getCell(6, col).numFmt = '#,##0';
-            ws2.getCell(7, col).numFmt = '#,##0';
-            ws2.getCell(8, col).numFmt = '#,##0';
-            ws2.getCell(10, col).numFmt = '"€"#,##0';
-            ws2.getCell(11, col).numFmt = '"€"#,##0';
-            ws2.getCell(12, col).numFmt = '"€"#,##0';
-            ws2.getCell(13, col).numFmt = '"€"#,##0';
+            [5,6,7,8,9,10,11].forEach(r => { ws2.getCell(r, col).numFmt = '#,##0'; });
+            [13,14,15,16,17,18].forEach(r => { ws2.getCell(r, col).numFmt = '"€"#,##0'; });
         }
-        ws2.getCell(5, 1).value = 'Unità totali';
+        ws2.getCell(5, 1).value = 'Unità BMW';
         ws2.getCell(5, 1).font = { bold: true };
-        ws2.getCell(6, 1).value = '  di cui Retail';
+        ws2.getCell(6, 1).value = 'Unità Piattaforma A1';
         ws2.getCell(6, 1).font = { bold: true };
-        ws2.getCell(7, 1).value = '  di cui Wholesale';
+        ws2.getCell(7, 1).value = 'Unità Piattaforma A2';
         ws2.getCell(7, 1).font = { bold: true };
-        ws2.getCell(8, 1).value = '  di cui Moto';
+        ws2.getCell(8, 1).value = 'Unità totali';
         ws2.getCell(8, 1).font = { bold: true };
-        ws2.getCell(10, 1).value = 'Revenue Retail (€)';
+        ws2.getCell(8, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
+        ws2.getCell(9, 1).value = '  di cui Retail (BMW)';
+        ws2.getCell(9, 1).font = { bold: true };
+        ws2.getCell(10, 1).value = '  di cui Wholesale (BMW)';
         ws2.getCell(10, 1).font = { bold: true };
-        ws2.getCell(11, 1).value = 'Revenue Wholesale (€)';
+        ws2.getCell(11, 1).value = '  di cui Moto (BMW)';
         ws2.getCell(11, 1).font = { bold: true };
-        ws2.getCell(12, 1).value = 'Revenue Moto (€)';
-        ws2.getCell(12, 1).font = { bold: true };
-        ws2.getCell(13, 1).value = 'Revenue totale (€)';
-        ws2.getCell(13, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
-        ws2.getCell(13, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        ws2.getCell(13, 1).value = 'Revenue Retail BMW (€)';
+        ws2.getCell(13, 1).font = { bold: true };
+        ws2.getCell(14, 1).value = 'Revenue Wholesale BMW (€)';
+        ws2.getCell(14, 1).font = { bold: true };
+        ws2.getCell(15, 1).value = 'Revenue Moto BMW (€)';
+        ws2.getCell(15, 1).font = { bold: true };
+        ws2.getCell(16, 1).value = 'Revenue Piattaforma A1 (€)';
+        ws2.getCell(16, 1).font = { bold: true };
+        ws2.getCell(17, 1).value = 'Revenue Piattaforma A2 (€)';
+        ws2.getCell(17, 1).font = { bold: true };
+        ws2.getCell(18, 1).value = 'Revenue totale (€)';
+        ws2.getCell(18, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
+        ws2.getCell(18, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
         ws2.addRow([]);
         ws2.addRow(['P&L (€)']);
-        ws2.getCell(15, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.getCell(20, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
         ws2.addRow(['Revenue', ...Array(greenNumCols - 1).fill(0)]);
         for (let col = 2; col <= greenNumCols; col++) {
             const colLetter = excelColLetter(col - 1);
-            ws2.getCell(16, col).value = { formula: `=${colLetter}13` };
-            ws2.getCell(16, col).numFmt = '"€"#,##0';
+            ws2.getCell(21, col).value = { formula: `=${colLetter}18` };
+            ws2.getCell(21, col).numFmt = '"€"#,##0';
         }
-        ws2.getCell(16, 1).value = 'Revenue';
-        ws2.getCell(16, 1).font = { bold: true };
+        ws2.getCell(21, 1).value = 'Revenue';
+        ws2.getCell(21, 1).font = { bold: true };
+        let plRow = 21;
         const greenPLRows = [
             ['(-) COGS', 0, ...greenYears.map(g=>-g.cogs)],
             ['Gross Profit', 0, ...greenYears.map(g=>g.grossProfit)],
@@ -2691,7 +2736,6 @@
             ['  BMW R2V Units', 0, ...greenYears.map(g=>Math.round(g.bmwUnits))],
             ['  Piattaforme Aggiuntive Units', 0, ...greenYears.map(g=>Math.round(g.platUnits))]
         ];
-        let plRow = 16;
         greenPLRows.forEach((row) => {
             plRow++;
             const r = ws2.addRow(row);
