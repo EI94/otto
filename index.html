@@ -1426,8 +1426,13 @@
         const platformsParams = selected.map(p => {
             const card = document.querySelector(`[data-green-plat-id="${p.id}"]`);
             const defVol = p.vol || 80, defAsp = p.asp || 5200;
+            const defVy1 = Math.max(1, Math.round(defVol * 0.02));
+            const defVy2 = Math.max(1, Math.round(defVol * 0.35));
             return {
-                id: p.id, name: p.name, launchYear: p.launch,
+                id: p.id, name: p.name,
+                launchYear: card ? parseInt(card.querySelector('[data-green-launch]')?.value) || p.launch : p.launch,
+                volYear1: card ? parseInt(card.querySelector('[data-green-vy1]')?.value) || defVy1 : defVy1,
+                volYear2: card ? parseInt(card.querySelector('[data-green-vy2]')?.value) || defVy2 : defVy2,
                 volRegime: card ? parseInt(card.querySelector('[data-green-vol]')?.value) || defVol : defVol,
                 retailASP: card ? parseInt(card.querySelector('[data-green-asp]')?.value) || defAsp : defAsp,
                 wholesaleASP: card ? parseInt(card.querySelector('[data-green-ws]')?.value) || Math.round(defAsp * 0.8) : Math.round(defAsp * 0.8),
@@ -1445,17 +1450,35 @@
         const container = document.getElementById('platformConfigs');
         const selected = getSelectedPlatforms();
         container.innerHTML = selected.map(p => {
+            const existing = container.querySelector(`[data-green-plat-id="${p.id}"]`);
             const defWs = Math.round((p.asp || 5200) * 0.8);
+            const defVol = p.vol || 80;
+            const defVy1 = Math.max(1, Math.round(defVol * 0.02));
+            const defVy2 = Math.max(1, Math.round(defVol * 0.35));
+            const launch = existing ? (parseInt(existing.querySelector('[data-green-launch]')?.value) || p.launch) : p.launch;
+            const vy1 = existing ? (parseInt(existing.querySelector('[data-green-vy1]')?.value) ?? defVy1) : defVy1;
+            const vy2 = existing ? (parseInt(existing.querySelector('[data-green-vy2]')?.value) ?? defVy2) : defVy2;
+            const vol = existing ? (parseInt(existing.querySelector('[data-green-vol]')?.value) ?? defVol) : defVol;
+            const asp = existing ? (parseInt(existing.querySelector('[data-green-asp]')?.value) ?? p.asp) : p.asp;
+            const ws = existing ? (parseInt(existing.querySelector('[data-green-ws]')?.value) ?? defWs) : defWs;
+            const moto = existing ? (parseInt(existing.querySelector('[data-green-moto]')?.value) ?? 23000) : 23000;
+            const bomkit = existing ? (parseInt(existing.querySelector('[data-green-bomkit]')?.value) ?? p.bom) : p.bom;
+            const bommoto = existing ? (parseInt(existing.querySelector('[data-green-bommoto]')?.value) ?? 15717) : 15717;
             return `<div class="bg-slate-800 p-4 rounded-lg border border-slate-700" data-green-plat-id="${p.id}">
-                <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>${p.name} (Lancio ${p.launch})</h4>
-                <p class="text-[10px] text-slate-500 mb-2">Suggerimento TAM: ~${p.vol} u/yr. Imposta volume a regime e prezzi.</p>
+                <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>${p.name}</h4>
+                <p class="text-[10px] text-slate-500 mb-2">Suggerimento TAM: ~${defVol} u/yr. Imposta anno di lancio, volumi (Anno 1, Anno 2, dal 3&deg;) e prezzi.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] mb-2">
+                    <div><label class="text-slate-400 block mb-0.5">Anno di lancio</label><input type="number" min="2026" max="2035" value="${launch}" data-green-launch class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Volume Anno 1 (primo anno)</label><input type="number" min="0" max="500" value="${vy1}" data-green-vy1 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Volume Anno 2 (secondo anno)</label><input type="number" min="0" max="500" value="${vy2}" data-green-vy2 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Volume a Regime (dal 3&deg; anno)</label><input type="number" min="1" max="500" value="${vol}" data-green-vol class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
-                    <div><label class="text-slate-400 block mb-0.5">Volume a Regime (Anno 3+)</label><input type="number" min="1" max="500" value="${p.vol}" data-green-vol class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-400 block mb-0.5">Kit Retail ASP (&euro;)</label><input type="number" min="2000" max="8000" value="${p.asp}" data-green-asp class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-400 block mb-0.5">Kit Wholesale ASP (&euro;)</label><input type="number" min="1500" max="6000" value="${defWs}" data-green-ws class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-400 block mb-0.5">Moto chiavi-in-mano (&euro;)</label><input type="number" min="15000" max="35000" value="23000" data-green-moto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-400 block mb-0.5">BOM Kit (&euro;)</label><input type="number" min="1500" max="4000" value="${p.bom}" data-green-bomkit class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-400 block mb-0.5">BOM Moto (&euro;)</label><input type="number" min="10000" max="25000" value="15717" data-green-bommoto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Kit Retail ASP (&euro;)</label><input type="number" min="2000" max="8000" value="${asp}" data-green-asp class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Kit Wholesale ASP (&euro;)</label><input type="number" min="1500" max="6000" value="${ws}" data-green-ws class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Moto chiavi-in-mano (&euro;)</label><input type="number" min="15000" max="35000" value="${moto}" data-green-moto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">BOM Kit (&euro;)</label><input type="number" min="1500" max="4000" value="${bomkit}" data-green-bomkit class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">BOM Moto (&euro;)</label><input type="number" min="10000" max="25000" value="${bommoto}" data-green-bommoto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                 </div>
             </div>`;
         }).join('');
@@ -1475,8 +1498,9 @@
             else if (yr === 2027) units = params.vol2027 || 0;
             else units = (params.volRegime || 0) * Math.pow(1.03, Math.max(0, yr - 2028));
         } else {
-            const ramp = d === 0 ? 0.02 : d === 1 ? 0.35 : Math.pow(1.03, Math.max(0, d - 2));
-            units = (params.volRegime || 0) * ramp;
+            if (d === 0) units = params.volYear1 ?? 0;
+            else if (d === 1) units = params.volYear2 ?? 0;
+            else units = (params.volRegime || 0) * Math.pow(1.03, Math.max(0, d - 2));
         }
 
         let retPct, wsPct, motPct;
@@ -2342,7 +2366,10 @@
             ['Green BMW: Omologa+Log+CAC', greenParams.bmw.omologaCac],
             ['Green: Piattaforme Aggiuntive', greenParams.platforms.map(p => p.name).join(', ') || 'Nessuna'],
             ...greenParams.platforms.flatMap((p, i) => [
-                ['Green Plat ' + (i+1) + ' ' + p.name + ' Vol Regime', p.volRegime],
+                ['Green Plat ' + (i+1) + ' ' + p.name + ' Anno lancio', p.launchYear],
+                ['Green Plat ' + (i+1) + ' Volume Anno 1', p.volYear1],
+                ['Green Plat ' + (i+1) + ' Volume Anno 2', p.volYear2],
+                ['Green Plat ' + (i+1) + ' Volume a Regime', p.volRegime],
                 ['Green Plat ' + (i+1) + ' Retail ASP', p.retailASP],
                 ['Green Plat ' + (i+1) + ' Wholesale ASP', p.wholesaleASP],
                 ['Green Plat ' + (i+1) + ' Moto Price', p.motoPrice],
@@ -2355,7 +2382,7 @@
             ...productsCatalog.map(p => [p.name || '', p.price, (p.margin !== undefined ? p.margin : 75), p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
             ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
-            ['Nota', 'Green: ramp 2%/35%/100%, mix Retail 30% WS 60% Moto 10% a regime.'],
+            ['Nota', 'Green: BMW vol 2026/2027/regime impostati; altre piattaforme: Anno lancio + Vol Anno 1, Anno 2, Regime. Mix Retail 30% WS 60% Moto 10% a regime.'],
             ['Nota', 'Green Fixed Opex: da High Level BP Feb 2026 (Payroll, Mktg, Cert, Facilities, IT, G&A).'],
             ['Nota', 'Service Ottodrom: crescita 3%/anno (cap +15%).'],
             ['Generato il', new Date().toLocaleString('it-IT')]
