@@ -794,6 +794,7 @@
                             <tr>
                                 <th class="p-2 font-bold text-slate-700">Componente</th>
                                 <th class="p-2 font-bold text-slate-700 text-center">Prezzo &euro;</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Margine %</th>
                                 <th class="p-2 font-bold text-slate-700 text-center">Anno 1</th>
                                 <th class="p-2 font-bold text-slate-700 text-center">Anno 2</th>
                                 <th class="p-2 font-bold text-slate-700 text-center">Anno 3</th>
@@ -811,6 +812,7 @@
                         <tfoot class="bg-amber-50 font-bold">
                             <tr>
                                 <td class="p-2 text-slate-700">TOTALE RICAVI</td>
+                                <td class="p-2 text-center">&mdash;</td>
                                 <td class="p-2 text-center">&mdash;</td>
                                 <td class="p-2 text-center text-amber-700" id="prodTot1">&euro;0</td>
                                 <td class="p-2 text-center text-amber-700" id="prodTot2">&euro;0</td>
@@ -831,7 +833,7 @@
                     <canvas id="productsChart"></canvas>
                 </div>
                 <div class="text-[11px] text-slate-500 bg-amber-50 rounded p-2 mt-3">
-                    <i class="fa-solid fa-pen mr-1"></i> Modifica le quantit&agrave; e prezzi nella tabella per simulare scenari diversi. I costi di produzione sono stimati al 25% del prezzo di vendita.
+                    <i class="fa-solid fa-pen mr-1"></i> Modifica nome, prezzo, <strong>margine %</strong> (per componente) e quantit&agrave; per anno. Il costo di produzione &egrave; (100 &minus; Margine %) % del prezzo. I ricavi e i costi componenti confluiscono nel P&amp;L e nel file .xlsx.
                 </div>
             </div>
         </div>
@@ -1509,7 +1511,7 @@
 
     // --- PRODUCTS SIMULATOR ---
     function emptyProduct() {
-        return { name: '', price: 0, q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0, q7: 0, q8: 0, q9: 0, q10: 0 };
+        return { name: '', price: 0, margin: 75, q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0, q7: 0, q8: 0, q9: 0, q10: 0 };
     }
     const productsCatalog = [];
 
@@ -1527,18 +1529,19 @@
 
     function renderProducts() {
         const tbody = document.getElementById('productsBody');
-        const cols = ['price', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
+        const cols = ['price', 'margin', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
         tbody.innerHTML = productsCatalog.map((p, i) => `
             <tr class="border-b border-slate-100 ${i % 2 ? 'bg-slate-50' : ''}">
                 <td class="p-2">
                     <input type="text" class="w-full max-w-[140px] border border-slate-300 rounded px-2 py-0.5 text-xs" value="${String(p.name || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" placeholder="Nome componente" data-row="${i}" data-col="name" onchange="updateProducts()">
                 </td>
                 <td class="p-2 text-center"><input type="number" min="0" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.price}" data-row="${i}" data-col="price" onchange="updateProducts()"></td>
-                ${cols.slice(1).map((c, k) => `<td class="p-2 text-center"><input type="number" min="0" class="w-12 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p[c]}" data-row="${i}" data-col="${c}" onchange="updateProducts()"></td>`).join('')}
+                <td class="p-2 text-center"><input type="number" min="0" max="100" step="1" class="w-12 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.margin !== undefined ? p.margin : 75}" data-row="${i}" data-col="margin" onchange="updateProducts()" title="Margine %"></td>
+                ${cols.slice(2).map((c) => `<td class="p-2 text-center"><input type="number" min="0" class="w-12 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p[c]}" data-row="${i}" data-col="${c}" onchange="updateProducts()"></td>`).join('')}
                 <td class="p-2 text-center"><button type="button" class="text-rose-500 hover:text-rose-700 text-xs" onclick="removeProductRow(${i})" title="Rimuovi"><i class="fa-solid fa-trash-can"></i></button></td>
             </tr>`).join('') + `
             <tr class="border-b border-amber-200 bg-amber-50/50">
-                <td colspan="13" class="p-2">
+                <td colspan="14" class="p-2">
                     <button type="button" class="text-amber-700 hover:text-amber-900 font-semibold text-xs flex items-center gap-1" onclick="addProductRow()"><i class="fa-solid fa-plus"></i> Aggiungi componente</button>
                 </td>
             </tr>`;
@@ -1552,13 +1555,20 @@
             const c = inp.dataset.col;
             if (productsCatalog[r]) {
                 if (c === 'name') productsCatalog[r].name = (inp.value || '').trim();
+                else if (c === 'margin') productsCatalog[r].margin = Math.min(100, Math.max(0, parseFloat(inp.value) || 0));
                 else productsCatalog[r][c] = parseFloat(inp.value) || 0;
             }
         });
 
         const totals = [0,0,0,0,0,0,0,0,0,0];
+        const margins = [0,0,0,0,0,0,0,0,0,0];
         productsCatalog.forEach(p => {
-            for (let y = 0; y < 10; y++) totals[y] += p.price * (p['q' + (y + 1)] || 0);
+            const m = (p.margin !== undefined ? p.margin : 75) / 100;
+            for (let y = 0; y < 10; y++) {
+                const rev = p.price * (p['q' + (y + 1)] || 0);
+                totals[y] += rev;
+                margins[y] += rev * m;
+            }
         });
 
         for (let y = 0; y < 10; y++) document.getElementById('prodTot' + (y + 1)).innerText = fmt(totals[y]);
@@ -1571,7 +1581,7 @@
                 labels: ['Anno 1', 'Anno 2', 'Anno 3', 'Anno 4', 'Anno 5', 'Anno 6', 'Anno 7', 'Anno 8', 'Anno 9', 'Anno 10'],
                 datasets: [
                     { label: 'Ricavi', data: totals, backgroundColor: '#f59e0b', borderRadius: 4 },
-                    { label: 'Margine (75%)', data: totals.map(t => t * 0.75), backgroundColor: '#0f766e', borderRadius: 4 }
+                    { label: 'Margine (\u20ac)', data: margins, backgroundColor: '#0f766e', borderRadius: 4 }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
@@ -1755,7 +1765,15 @@
         const selectedPlats = getSelectedPlatforms();
 
         const pY = [0,0,0,0,0,0,0,0,0,0];
-        productsCatalog.forEach(p => { for (let i = 0; i < 10; i++) pY[i] += p.price * (p['q' + (i + 1)] || 0); });
+        const pYCost = [0,0,0,0,0,0,0,0,0,0];
+        productsCatalog.forEach(p => {
+            const costPct = 1 - ((p.margin !== undefined ? p.margin : 75) / 100);
+            for (let i = 0; i < 10; i++) {
+                const rev = p.price * (p['q' + (i + 1)] || 0);
+                pY[i] += rev;
+                pYCost[i] += rev * costPct;
+            }
+        });
 
         syncConciergeFromDOM();
         const mcMoto = parseInt(document.getElementById('mcMotoSlider').value) || 0;
@@ -1790,9 +1808,10 @@
             const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
 
             const prodBase = pY[Math.min(y, 9)] || 0;
+            const prodCostBase = pYCost[Math.min(y, 9)] || 0;
             const prodGrowth = y > 2 ? Math.pow(1.05, y - 2) : 1;
             const prodRev = prodBase * prodGrowth;
-            const prodCV = prodRev * 0.25;
+            const prodCV = prodCostBase * prodGrowth;
 
             const concGrowth = y > 2 ? Math.pow(1.05, y - 2) : 1;
             const concRev = mcArr * rampConc * concGrowth;
@@ -2100,8 +2119,8 @@
             ['Green: Piattaforme Aggiuntive', selPlats.map(p => p.name).join(', ') || 'Nessuna'],
             ['Ottodrom Care: Moto Gestite', parseInt(document.getElementById('mcMotoSlider').value) || 0],
             [],
-            ['Componenti (Catalogo)', 'Prezzo', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3', 'Q Anno 4', 'Q Anno 5', 'Q Anno 6', 'Q Anno 7', 'Q Anno 8', 'Q Anno 9', 'Q Anno 10'],
-            ...productsCatalog.map(p => [p.name || '', p.price, p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
+            ['Componenti (Catalogo)', 'Prezzo', 'Margine %', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3', 'Q Anno 4', 'Q Anno 5', 'Q Anno 6', 'Q Anno 7', 'Q Anno 8', 'Q Anno 9', 'Q Anno 10'],
+            ...productsCatalog.map(p => [p.name || '', p.price, (p.margin !== undefined ? p.margin : 75), p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
             ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
             ['Nota', 'Green: ramp 2%/35%/100%, mix Retail 30% WS 60% Moto 10% a regime.'],
