@@ -2351,6 +2351,8 @@
         cell.font = { color: { argb: 'FF475569' } };
     }
 
+    function excelColLetter(n) { let s = ''; for (let x = n; x >= 0; x = Math.floor(x / 26) - 1) s = String.fromCharCode(65 + (x % 26)) + s; return s; }
+
     async function downloadExcel() {
         if (!lastYearsData.length) { alert('Calcola prima il piano finanziario.'); return; }
         const years = lastYearsData;
@@ -2360,24 +2362,83 @@
         wb.creator = 'Ottodrom Piano Industriale';
         wb.created = new Date();
 
-        const ws1 = wb.addWorksheet('BP Ottodrom 2026-2036', { views: [{ state: 'frozen', ySplit: 1 }] });
+        syncConciergeFromDOM();
+        const greenParams = getGreenParams();
+        const mcMoto = parseInt(document.getElementById('mcMotoSlider').value) || 0;
+        const mcPerMoto = conciergeServices.reduce((sum, s) => sum + (s.cost || 0), 0);
+        const op1_42 = (parseInt(document.getElementById('shOp1_42').value) || 0) / 100;
+        const op1_Nardi = (parseInt(document.getElementById('shOp1_Nardi').value) || 0) / 100;
+        const op2_42 = (parseInt(document.getElementById('shOp2_42').value) || 0) / 100;
+        const op2_Nardi = (parseInt(document.getElementById('shOp2_Nardi').value) || 0) / 100;
+        const shMarkup = (parseInt(document.getElementById('shMarkupSlider').value) || 0) / 100;
+        const costShared = 54000 * (op1_42 + op1_Nardi + op2_42 + op2_Nardi);
+        const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
+        const fashionChoice = fashionRadio ? fashionRadio.value : 'combo';
+        const pY0 = productsCatalog.reduce((s, p) => s + (p.price || 0) * (p.q1 || 0), 0);
+
+        const ASSUM_START = 4;
+        const assumpRows = [
+            ['Green Vol 2026', greenParams.bmw.vol2026],
+            ['Green Vol 2027', greenParams.bmw.vol2027],
+            ['Green Vol Regime', greenParams.bmw.volRegime],
+            ['Green ASP Retail', greenParams.bmw.retailASP],
+            ['Green ASP WS', greenParams.bmw.wholesaleASP],
+            ['Green Moto Price', greenParams.bmw.motoPrice],
+            ['Green Overhead 2026', greenParams.overheadY1],
+            ['Green Overhead 2027', greenParams.overheadY2],
+            ['Green Overhead dal 2028', greenParams.overheadFrom2028],
+            ['Care Moto gestite', mcMoto],
+            ['Care Prezzo medio/mese', mcPerMoto],
+            ['Sharing base (€)', costShared],
+            ['Sharing Markup %', Math.round(shMarkup * 100)],
+            ['Officina base (€)', BASE.ricavi_officina],
+            ['Fashion scenario', fashionChoice],
+            ['Altro base (€)', BASE.ricavi_altro],
+            ['Componenti base Anno 1 (€)', pY0]
+        ];
+        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16 };
+        const yearCols = ['2025', ...years.map(y => y.label)];
         const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
+        const numCols = hdr.length;
+        const colForYear = (yr) => 2 + years.findIndex(y => y.label === String(yr));
+        const yearForCol = (col) => col <= 2 ? 2025 : parseInt(yearCols[col - 1]);
+
+        const ws1 = wb.addWorksheet('BP Ottodrom 2026-2036', { views: [{ state: 'frozen', ySplit: 3 }] });
         ws1.addRow(['Piano industriale Ottodrom – Conto economico (€)']);
-        ws1.mergeCells(1, 1, 1, hdr.length);
+        ws1.mergeCells(1, 1, 1, numCols);
         ws1.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         ws1.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
         ws1.getCell(1, 1).alignment = { horizontal: 'center' };
         ws1.addRow([]);
-        const ceData = [
-            hdr,
-            ['RICAVI', BASE.totale_ricavi, ...years.map(y=>y.totale_ricavi)],
-            ['  Officina & Service', BASE.ricavi_officina, ...years.map(y=>y.ricavi_officina)],
-            ['  Fashion', BASE.ricavi_fashion, ...years.map(y=>y.ricavi_fashion)],
-            ['  Componenti (Az.5)', 0, ...years.map(y=>y.ricavi_componenti)],
-            ['  Kit & Moto Retrofit (Az.4)', 0, ...years.map(y=>y.ricavi_kit)],
-            ['  Sharing (Az.3)', 0, ...years.map(y=>y.ricavi_sharing)],
-            ['  Ottodrom Care (Az.6)', 0, ...years.map(y=>y.ricavi_concierge)],
-            ['  Altro', BASE.ricavi_altro, ...years.map(y=>y.ricavi_altro)],
+        ws1.addRow(hdr);
+        ws1.getRow(3).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+        for (let col = 2; col <= numCols; col++) {
+            const colLetter = excelColLetter(col - 1);
+            ws1.getCell(4, col).value = { formula: `SUM(${colLetter}5:${colLetter}11)` };
+            ws1.getCell(4, col).numFmt = '"€"#,##0';
+            ws1.getCell(5, col).value = { formula: `'Topline Officina'!${colLetter}3` };
+            ws1.getCell(5, col).numFmt = '"€"#,##0';
+            ws1.getCell(6, col).value = { formula: `'Topline Fashion'!${colLetter}3` };
+            ws1.getCell(6, col).numFmt = '"€"#,##0';
+            ws1.getCell(7, col).value = { formula: `'Topline Componenti'!${colLetter}3` };
+            ws1.getCell(7, col).numFmt = '"€"#,##0';
+            ws1.getCell(8, col).value = { formula: `'Project Green P&L'!${colLetter}13` };
+            ws1.getCell(8, col).numFmt = '"€"#,##0';
+            ws1.getCell(9, col).value = { formula: `'Topline Sharing'!${colLetter}3` };
+            ws1.getCell(9, col).numFmt = '"€"#,##0';
+            ws1.getCell(10, col).value = { formula: `'Topline Ottodrom Care'!${colLetter}3` };
+            ws1.getCell(10, col).numFmt = '"€"#,##0';
+            ws1.getCell(11, col).value = { formula: `'Topline Altro'!${colLetter}3` };
+            ws1.getCell(11, col).numFmt = '"€"#,##0';
+        }
+        ws1.getCell(4, 1).value = 'RICAVI';
+        ws1.getCell(4, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
+        ws1.getCell(4, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        ['  Officina & Service', '  Fashion', '  Componenti (Az.5)', '  Kit & Moto Retrofit (Az.4)', '  Sharing (Az.3)', '  Ottodrom Care (Az.6)', '  Altro'].forEach((label, i) => {
+            ws1.getCell(5 + i, 1).value = label;
+            ws1.getCell(5 + i, 1).font = { bold: true };
+        });
+        const ceRest = [
             [],
             ['COSTI VARIABILI', BASE.totale_cv, ...years.map(y=>y.totale_cv)],
             ['  Operativi + Green COGS & Var', BASE.cv_operativi, ...years.map(y=>y.cv_operativi)],
@@ -2398,33 +2459,225 @@
             ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
             ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
         ];
-        const sectionRows = { RICAVI: 1, 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, EBITDA: 1, EBIT: 1 };
+        let bpRow = 12;
+        const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, EBITDA: 1, EBIT: 1 };
         const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, EBITDA: 1, EBIT: 1 };
-        ceData.forEach((row, i) => {
+        ceRest.forEach((row) => {
+            bpRow++;
             const r = ws1.addRow(row);
             const firstLabel = row[0];
-            if (i === 0) { r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); return; }
             if (sectionRows[firstLabel]) { r.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } }; r.getCell(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }; }
             else if (firstLabel && firstLabel.startsWith('  ')) r.getCell(1).font = { bold: true };
             if (resultRows[firstLabel]) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
             else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
         ws1.getColumn(1).width = 34;
-        for (let c = 2; c <= hdr.length; c++) ws1.getColumn(c).width = 14;
+        for (let c = 2; c <= numCols; c++) ws1.getColumn(c).width = 14;
 
-        const greenParams = getGreenParams();
+        const wsAss = wb.addWorksheet('Assumptions', { views: [{ state: 'frozen', ySplit: 3 }] });
+        wsAss.addRow(['Assunzioni – Piano Industriale Ottodrom']);
+        wsAss.mergeCells(1, 1, 1, 2);
+        wsAss.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+        wsAss.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
+        wsAss.addRow([]);
+        wsAss.addRow(['Inputs per formule (modificabili – topline e BP dipendono da questi)', '']);
+        wsAss.getRow(3).font = { bold: true };
+        assumpRows.forEach((row, i) => {
+            const r = wsAss.addRow(row);
+            applyAssumptionParamStyle(r.getCell(1));
+            r.getCell(2).numFmt = row[0].indexOf('%') >= 0 || row[0].indexOf('€') >= 0 ? '"€"#,##0' : '#,##0';
+        });
+        wsAss.addRow([]);
+        wsAss.addRow(['Altri parametri', '']);
+        const otherAss = [
+            ['Downsizing P41', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
+            ['Downsizing P44', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
+            ['Downsizing Adige', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
+            ['Riduzione % P41', parseInt(document.getElementById('redP41').value) || 0],
+            ['Riduzione % P44', parseInt(document.getElementById('redP44').value) || 0],
+            ['Riduzione % Adige', parseInt(document.getElementById('redAdige').value) || 0],
+            ['Nuovo Affitto (€)', parseInt(document.getElementById('newRentSlider').value) || 0],
+            ['Green: Cina da anno', greenParams.chinaYear <= 2036 ? greenParams.chinaYear : ''],
+            ['Green: Cina riduzione %', greenParams.chinaPct * 100],
+            ['Generato il', new Date().toLocaleString('it-IT')]
+        ];
+        otherAss.forEach(row => { const r = wsAss.addRow(row); applyAssumptionParamStyle(r.getCell(1)); });
+        wsAss.getColumn(1).width = 32;
+        wsAss.getColumn(2).width = 18;
+
+        function addToplineSheet(name, title) {
+            const ws = wb.addWorksheet(name, { views: [{ state: 'frozen', ySplit: 2 }] });
+            ws.addRow([title]);
+            ws.mergeCells(1, 1, 1, yearCols.length);
+            ws.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+            ws.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
+            ws.addRow(['Anno', ...yearCols]);
+            ws.getRow(2).eachCell(c => { applyHeaderStyle(c, SLATE); if (c.col > 1) c.alignment = { horizontal: 'right' }; });
+            ws.getColumn(1).width = 22;
+            for (let c = 2; c <= yearCols.length; c++) ws.getColumn(c).width = 12;
+            return ws;
+        }
+
+        const wsCare = addToplineSheet('Topline Ottodrom Care', 'Ottodrom Care – Revenue (€)');
+        wsCare.getCell(3, 1).value = 'Revenue (€)';
+        wsCare.getCell(3, 1).font = { bold: true };
+        wsCare.getCell(3, 2).value = 0;
+        for (let c = 3; c <= yearCols.length + 1; c++) {
+            const yr = yearForCol(c);
+            const ramp = yr === 2026 ? 0.5 : yr === 2027 ? 0.85 : 1;
+            const growth = yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
+            wsCare.getCell(3, c).value = { formula: `=Assumptions!$B$${R.careMoto}*Assumptions!$B$${R.carePrezzo}*12*${ramp}*${growth}` };
+            wsCare.getCell(3, c).numFmt = '"€"#,##0';
+        }
+
+        const wsShare = addToplineSheet('Topline Sharing', 'Sharing (Az.3) – Revenue (€)');
+        wsShare.getCell(3, 1).value = 'Revenue (€)';
+        wsShare.getCell(3, 1).font = { bold: true };
+        for (let c = 2; c <= yearCols.length + 1; c++) {
+            wsShare.getCell(3, c).value = c === 2 ? 0 : { formula: `=Assumptions!$B$${R.shareBase}*(1+Assumptions!$B$${R.shareMark}/100)` };
+            wsShare.getCell(3, c).numFmt = '"€"#,##0';
+        }
+
+        const wsOff = addToplineSheet('Topline Officina', 'Officina & Service – Revenue (€)');
+        wsOff.getCell(3, 1).value = 'Revenue (€)';
+        wsOff.getCell(3, 1).font = { bold: true };
+        wsOff.getCell(3, 2).value = { formula: `=Assumptions!$B$${R.offBase}` };
+        for (let c = 3; c <= yearCols.length + 1; c++) {
+            wsOff.getCell(3, c).value = { formula: `=Assumptions!$B$${R.offBase}*(1+0.03*MIN(COLUMN()-2,5))` };
+            wsOff.getCell(3, c).numFmt = '"€"#,##0';
+        }
+
+        const wsAltro = addToplineSheet('Topline Altro', 'Altro – Revenue (€)');
+        wsAltro.getCell(3, 1).value = 'Revenue (€)';
+        wsAltro.getCell(3, 1).font = { bold: true };
+        for (let c = 2; c <= yearCols.length + 1; c++) {
+            wsAltro.getCell(3, c).value = { formula: `=Assumptions!$B$${R.altro}` };
+            wsAltro.getCell(3, c).numFmt = '"€"#,##0';
+        }
+
+        const wsFash = addToplineSheet('Topline Fashion', 'Fashion – Revenue (€)');
+        wsFash.getCell(3, 1).value = 'Revenue (€)';
+        wsFash.getCell(3, 1).font = { bold: true };
+        const fashVals = { combo: [42000,14000,6000,3000], piva: [25000,18000,10000,5000], stocchista: [30000,0,0,0], nulla: [Math.round(BASE.ricavi_fashion*0.8),0,0,0] };
+        for (let c = 2; c <= yearCols.length + 1; c++) {
+            const idx = Math.min(c - 2, 9);
+            const vCombo = [42000,14000,6000,3000,3000,3000,3000,3000,3000,3000][idx];
+            const vPiva = [25000,18000,10000,5000,5000,5000,5000,5000,5000,5000][idx];
+            const vStoc = idx === 0 ? 30000 : 0;
+            const vNulla = idx === 0 ? Math.round(BASE.ricavi_fashion*0.8) : 0;
+            wsFash.getCell(3, c).value = { formula: `=IF(Assumptions!$B$${R.fashion}="combo",${vCombo},IF(Assumptions!$B$${R.fashion}="piva",${vPiva},IF(Assumptions!$B$${R.fashion}="stocchista",${vStoc},${vNulla})))` };
+            wsFash.getCell(3, c).numFmt = '"€"#,##0';
+        }
+
+        const wsComp = addToplineSheet('Topline Componenti', 'Componenti (Az.5) – Revenue (€)');
+        wsComp.getCell(3, 1).value = 'Revenue (€)';
+        wsComp.getCell(3, 1).font = { bold: true };
+        const compBases = years.map((y, i) => productsCatalog.reduce((s, p) => s + (p.price||0)*(p['q'+(i+1)]||0), 0));
+        const compGrowth = (yr) => yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
+        for (let c = 2; c <= yearCols.length + 1; c++) {
+            const yr = yearForCol(c);
+            const idx = Math.min(c - 2, 9);
+            const base = compBases[idx] || 0;
+            const g = compGrowth(yr);
+            wsComp.getCell(3, c).value = c === 2 ? 0 : base * g;
+            wsComp.getCell(3, c).numFmt = '"€"#,##0';
+        }
+
         const greenYears = years.map(y => calcGreenPL(parseInt(y.label), greenParams));
-        const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 1 }] });
-        ws2.addRow(['Iconic Mobility Lab – Project Green – P&L (€)']);
+        const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 5 }] });
+        ws2.addRow(['Iconic Mobility Lab – Project Green']);
         ws2.mergeCells(1, 1, 1, years.length + 3);
         ws2.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         ws2.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
         ws2.getCell(1, 1).alignment = { horizontal: 'center' };
         ws2.addRow([]);
-        const greenHdr = ['Voce', '2025', ...years.map(y => y.label)];
-        const greenRows = [
-            greenHdr,
-            ['Revenue', 0, ...greenYears.map(g=>g.revenue)],
+        const greenHdr = ['Voce', 2025, ...years.map(y => parseInt(y.label))];
+        const greenNumCols = greenHdr.length;
+        ws2.addRow(['TOPLINE – Unità e Ricavi (formule da Assumptions)']);
+        ws2.mergeCells(3, 1, 3, greenNumCols);
+        ws2.getCell(3, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.addRow(greenHdr);
+        ws2.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; if (colNumber > 1 && typeof c.value === 'number') c.numFmt = '0'; });
+        const Rg = R;
+        for (let col = 2; col <= greenNumCols; col++) {
+            const yr = greenHdr[col - 1];
+            const d = yr - 2026;
+            const colLetter = excelColLetter(col - 1);
+            if (yr < 2026) {
+                ws2.getCell(5, col).value = 0;
+                ws2.getCell(6, col).value = 0;
+                ws2.getCell(7, col).value = 0;
+                ws2.getCell(8, col).value = 0;
+                ws2.getCell(10, col).value = 0;
+                ws2.getCell(11, col).value = 0;
+                ws2.getCell(12, col).value = 0;
+                ws2.getCell(13, col).value = 0;
+            } else {
+                const unitsForm = d === 0 ? `Assumptions!$B$${Rg.greenVol2026}` : d === 1 ? `Assumptions!$B$${Rg.greenVol2027}` : d >= 2 ? `Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}` : '0';
+                ws2.getCell(5, col).value = d < 0 ? 0 : { formula: `=${unitsForm}` };
+                if (d === 0) {
+                    ws2.getCell(6, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}` };
+                    ws2.getCell(7, col).value = 0;
+                    ws2.getCell(8, col).value = 0;
+                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}*Assumptions!$B$${Rg.greenAsp}` };
+                    ws2.getCell(11, col).value = 0;
+                    ws2.getCell(12, col).value = 0;
+                } else if (d === 1) {
+                    ws2.getCell(6, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5` };
+                    ws2.getCell(7, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4` };
+                    ws2.getCell(8, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1` };
+                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5*Assumptions!$B$${Rg.greenAsp}*1.1` };
+                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4*Assumptions!$B$${Rg.greenAspWs}*1.1` };
+                    ws2.getCell(12, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                } else {
+                    ws2.getCell(6, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3` };
+                    ws2.getCell(7, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6` };
+                    ws2.getCell(8, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1` };
+                    const esc = (1.1 * Math.pow(1.05, d - 1)).toFixed(4);
+                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3*Assumptions!$B$${Rg.greenAsp}*${esc}` };
+                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6*Assumptions!$B$${Rg.greenAspWs}*${esc}` };
+                    ws2.getCell(12, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                }
+                ws2.getCell(13, col).value = { formula: `=SUM(${colLetter}10:${colLetter}12)` };
+            }
+            ws2.getCell(5, col).numFmt = '#,##0';
+            ws2.getCell(6, col).numFmt = '#,##0';
+            ws2.getCell(7, col).numFmt = '#,##0';
+            ws2.getCell(8, col).numFmt = '#,##0';
+            ws2.getCell(10, col).numFmt = '"€"#,##0';
+            ws2.getCell(11, col).numFmt = '"€"#,##0';
+            ws2.getCell(12, col).numFmt = '"€"#,##0';
+            ws2.getCell(13, col).numFmt = '"€"#,##0';
+        }
+        ws2.getCell(5, 1).value = 'Unità totali';
+        ws2.getCell(5, 1).font = { bold: true };
+        ws2.getCell(6, 1).value = '  di cui Retail';
+        ws2.getCell(6, 1).font = { bold: true };
+        ws2.getCell(7, 1).value = '  di cui Wholesale';
+        ws2.getCell(7, 1).font = { bold: true };
+        ws2.getCell(8, 1).value = '  di cui Moto';
+        ws2.getCell(8, 1).font = { bold: true };
+        ws2.getCell(10, 1).value = 'Revenue Retail (€)';
+        ws2.getCell(10, 1).font = { bold: true };
+        ws2.getCell(11, 1).value = 'Revenue Wholesale (€)';
+        ws2.getCell(11, 1).font = { bold: true };
+        ws2.getCell(12, 1).value = 'Revenue Moto (€)';
+        ws2.getCell(12, 1).font = { bold: true };
+        ws2.getCell(13, 1).value = 'Revenue totale (€)';
+        ws2.getCell(13, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
+        ws2.getCell(13, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        ws2.addRow([]);
+        ws2.addRow(['P&L (€)']);
+        ws2.getCell(15, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.addRow(['Revenue', ...Array(greenNumCols - 1).fill(0)]);
+        for (let col = 2; col <= greenNumCols; col++) {
+            const colLetter = excelColLetter(col - 1);
+            ws2.getCell(16, col).value = { formula: `=${colLetter}13` };
+            ws2.getCell(16, col).numFmt = '"€"#,##0';
+        }
+        ws2.getCell(16, 1).value = 'Revenue';
+        ws2.getCell(16, 1).font = { bold: true };
+        const greenPLRows = [
             ['(-) COGS', 0, ...greenYears.map(g=>-g.cogs)],
             ['Gross Profit', 0, ...greenYears.map(g=>g.grossProfit)],
             ['  Gross Margin %', '', ...greenYears.map(g=>g.grossMarginPct.toFixed(1)+'%')],
@@ -2438,14 +2691,15 @@
             ['  BMW R2V Units', 0, ...greenYears.map(g=>Math.round(g.bmwUnits))],
             ['  Piattaforme Aggiuntive Units', 0, ...greenYears.map(g=>Math.round(g.platUnits))]
         ];
-        greenRows.forEach((row, i) => {
+        let plRow = 16;
+        greenPLRows.forEach((row) => {
+            plRow++;
             const r = ws2.addRow(row);
-            if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
-            else if (row[0] === 'EBITDA' || row[0] === 'EBIT' || row[0] === 'Gross Profit') r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
+            if (row[0] === 'EBITDA' || row[0] === 'EBIT' || row[0] === 'Gross Profit') r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
             else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
-        ws2.getColumn(1).width = 30;
-        for (let c = 2; c <= greenHdr.length; c++) ws2.getColumn(c).width = 14;
+        ws2.getColumn(1).width = 28;
+        for (let c = 2; c <= greenNumCols; c++) ws2.getColumn(c).width = 14;
 
         const allNames = [];
         const seen = new Set();
@@ -2469,12 +2723,12 @@
         platUnitsRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); });
         wsPlat.getColumn(1).width = 28;
 
-        const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
-        const assRows = [
-            ['ASSUMPTIONS – Piano Industriale Ottodrom'],
-            [],
+        wsAss.addRow([]);
+        wsAss.addRow(['Dettaglio parametri (riferimento)', '']);
+        wsAss.getRow(wsAss.rowCount).getCell(1).font = { bold: true };
+        const assRowsDetail = [
             ['Parametro', 'Valore'],
-            ['Fashion Scenario', fashionRadio ? fashionRadio.value : 'combo'],
+            ['Fashion Scenario', fashionChoice],
             ['Downsizing Via Pinciana 41', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
             ['Downsizing Via Pinciana 44', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
             ['Downsizing Via Adige', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
@@ -2524,22 +2778,16 @@
             ['Nota', 'Service Ottodrom: crescita 3%/anno (cap +15%).'],
             ['Generato il', new Date().toLocaleString('it-IT')]
         ];
-        const ws3 = wb.addWorksheet('Assumptions');
-        ws3.addRow(['Assunzioni – Piano Industriale Ottodrom']);
-        ws3.mergeCells(1, 1, 1, 2);
-        ws3.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
-        ws3.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
-        ws3.addRow([]);
-        assRows.slice(2).forEach((row, i) => {
-            const r = ws3.addRow(row);
+        assRowsDetail.forEach((row, i) => {
+            const r = wsAss.addRow(row);
             if (row[0] === '' && row[1] === undefined) return;
             if (row[0] === 'Parametro' && row[1] === 'Valore') r.eachCell(c => applyHeaderStyle(c, SLATE));
             else if (String(row[0]).indexOf('Nota') === 0) { r.getCell(1).font = { italic: true, color: { argb: 'FF64748B' } }; r.getCell(2).font = { italic: true, color: { argb: 'FF64748B' } }; }
             else if (row[0] === 'Generato il') { r.getCell(1).font = { bold: true }; r.getCell(2).font = { color: { argb: 'FF64748B' } }; }
-            else { applyAssumptionParamStyle(r.getCell(1)); r.getCell(2).font = { bold: true }; }
+            else { applyAssumptionParamStyle(r.getCell(1)); if (row[1] !== undefined) r.getCell(2).font = { bold: true }; }
         });
-        ws3.getColumn(1).width = 38;
-        ws3.getColumn(2).width = 18;
+        wsAss.getColumn(1).width = 38;
+        wsAss.getColumn(2).width = 18;
 
         const wsMeta = wb.addWorksheet('Metodologia P&L Green');
         wsMeta.addRow(['Metodologia e assunzioni P&L Project Green (per CFO)']);
