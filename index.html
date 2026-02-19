@@ -725,6 +725,14 @@
                     <div class="mt-2 p-2 bg-teal-900/20 rounded border border-teal-700/50 text-[10px]">
                         <span class="text-teal-400 font-bold">Riduzione BOM Kit (Cina)</span>: da anno <input type="number" min="2026" max="2035" value="" placeholder="es. 2029" id="greenChinaYear" class="w-14 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white inline" onchange="updateGreenSim(); recalcFinancialPlan();"> riduzione <input type="number" min="0" max="50" value="0" id="greenChinaPct" class="w-10 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white inline" onchange="updateGreenSim(); recalcFinancialPlan();">%
                     </div>
+                    <div class="mt-2 p-2 bg-slate-800/80 rounded border border-slate-600 text-[10px]">
+                        <span class="text-teal-400 font-bold">Overheads (costi fissi Green)</span> – da BP analisi preliminare, modificabili:
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-1.5">
+                            <div><label class="text-slate-400 block mb-0.5">2026 (&euro;)</label><input type="number" min="0" max="500000" step="10000" value="200000" id="greenOverheadY1" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                            <div><label class="text-slate-400 block mb-0.5">2027 (&euro;)</label><input type="number" min="0" max="800000" step="10000" value="500000" id="greenOverheadY2" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                            <div><label class="text-slate-400 block mb-0.5">Dal 2028 (&euro;)</label><input type="number" min="0" max="1000000" step="10000" value="600000" id="greenOverheadFrom2028" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center mt-3">
                         <div class="bg-slate-900 p-2 rounded border border-slate-700">
                             <span class="block text-xs sm:text-[9px] text-slate-500 uppercase">Revenue (2028)</span>
@@ -743,6 +751,9 @@
                         Ramp: vol 2026/2027 impostati sopra &rarr; 100% (2028+) | Mix 2028+: 30% Ret, 60% WS, 10% Moto |
                         <span class="text-amber-400 font-bold" id="grossMarginDisplay">GM ~41%</span>
                     </div>
+                    <p class="text-[10px] text-teal-300/90 mt-2 bg-teal-900/20 rounded px-2 py-1 border border-teal-700/50">
+                        <strong>Overheads</strong> sopra sono quelli del BP analisi preliminare (modificabili). Senza produzione interna puoi ridurli; riducendo i fissi l&apos;EBITDA migliora anche a volumi minori.
+                    </p>
                 </div>
                 <p class="text-xs font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-plus-circle mr-1"></i>Piattaforme Aggiuntive (max 3)</p>
                 <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1" id="platformList"></div>
@@ -1444,6 +1455,9 @@
         };
         bmw.chinaYear = chinaYear || 9999;
         bmw.chinaPct = chinaPct;
+        const overheadY1 = Math.max(0, parseInt(document.getElementById('greenOverheadY1')?.value) || 200000);
+        const overheadY2 = Math.max(0, parseInt(document.getElementById('greenOverheadY2')?.value) || 500000);
+        const overheadFrom2028 = Math.max(0, parseInt(document.getElementById('greenOverheadFrom2028')?.value) || 600000);
         const selected = getSelectedPlatforms();
         const platformsParams = selected.map(p => {
             const card = document.querySelector(`[data-green-plat-id="${p.id}"]`);
@@ -1467,7 +1481,7 @@
                 chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct
             };
         });
-        return { bmw, platforms: platformsParams, chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct };
+        return { bmw, platforms: platformsParams, chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct, overheadY1, overheadY2, overheadFrom2028 };
     }
 
     function renderPlatformConfigs() {
@@ -1582,10 +1596,9 @@
         const numActive = 1 + params.platforms.filter(pp => yr >= pp.launchYear).length;
         const yIdx = yr - GREEN_BMW_LAUNCH;
         let baseOverhead;
-        if (yIdx <= 0) baseOverhead = 200000;
-        else if (yIdx === 1) baseOverhead = 500000;
-        else if (yIdx === 2) baseOverhead = 600000;
-        else baseOverhead = 600000 * Math.pow(1.03, yIdx - 2);
+        if (yIdx <= 0) baseOverhead = params.overheadY1 ?? 200000;
+        else if (yIdx === 1) baseOverhead = params.overheadY2 ?? 500000;
+        else baseOverhead = params.overheadFrom2028 ?? 600000;
         const fScale = 1 + (numActive - 1) * 0.2;
         const fixedOpex = baseOverhead * fScale;
 
@@ -1706,7 +1719,7 @@
             </ul>
             <p class="font-bold text-teal-400 uppercase mt-2">Costi fissi (Overheads)</p>
             <ul class="list-disc pl-4 space-y-0.5">
-                <li>Allineati all&apos;analisi preliminare: 2026 = &euro;200k, 2027 = &euro;500k, 2028 = &euro;600k. Da 2029: 600k &times; 1,03<sup>(anno-2028)</sup>. Con piattaforme aggiuntive: base &times; (1 + 20% per ogni piattaforma oltre la prima).</li>
+                <li>Valori <strong>modificabili</strong> dall&apos;utente (default da analisi preliminare): 2026, 2027, dal 2028. Con piattaforme aggiuntive: base &times; (1 + 20% per ogni piattaforma oltre la prima). Riducendo gli overhead l&apos;EBITDA migliora a parit&agrave; di volumi.</li>
             </ul>
             <p class="font-bold text-teal-400 uppercase mt-2">EBITDA e D&A</p>
             <ul class="list-disc pl-4 space-y-0.5">
@@ -2486,7 +2499,9 @@
             ['Green BMW: Omologa solo retail', greenParams.bmw.omologaRetail],
             ['Green BMW: Logistica WS Anno 1/2/3+', greenParams.bmw.logWsY1 + '/' + greenParams.bmw.logWsY2 + '/' + greenParams.bmw.logWsY3],
             ['Green: Cina da anno / riduzione %', (greenParams.chinaYear <= 2036 ? greenParams.chinaYear : '') + ' / ' + (greenParams.chinaPct * 100)],
-            ['Green: Overheads 2026/2027/2028', '200k / 500k / 600k'],
+            ['Green: Overheads 2026 (€)', greenParams.overheadY1],
+            ['Green: Overheads 2027 (€)', greenParams.overheadY2],
+            ['Green: Overheads dal 2028 (€)', greenParams.overheadFrom2028],
             ['Green: Piattaforme Aggiuntive', greenParams.platforms.map(p => p.name).join(', ') || 'Nessuna'],
             ...greenParams.platforms.flatMap((p, i) => [
                 ['Green Plat ' + (i+1) + ' ' + p.name + ' Anno lancio', p.launchYear],
@@ -2505,7 +2520,7 @@
             ...productsCatalog.map(p => [p.name || '', p.price, (p.margin !== undefined ? p.margin : 75), p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
             ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
-            ['Nota', 'Green: Overheads 200k/500k/600k (2026-2028) poi +3%/anno. Var Opex: MdO solo retail, Omologa solo retail, Logistica solo WS. Opzione Cina: riduzione % BOM Kit da anno.'],
+            ['Nota', 'Green: Overheads modificabili (default 200k/500k/600k). Var Opex: MdO solo retail, Omologa solo retail, Logistica solo WS. Opzione Cina: riduzione % BOM Kit da anno.'],
             ['Nota', 'Service Ottodrom: crescita 3%/anno (cap +15%).'],
             ['Generato il', new Date().toLocaleString('it-IT')]
         ];
@@ -2525,6 +2540,36 @@
         });
         ws3.getColumn(1).width = 38;
         ws3.getColumn(2).width = 18;
+
+        const wsMeta = wb.addWorksheet('Metodologia P&L Green');
+        wsMeta.addRow(['Metodologia e assunzioni P&L Project Green (per CFO)']);
+        wsMeta.mergeCells(1, 1, 1, 1);
+        wsMeta.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+        wsMeta.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
+        wsMeta.addRow([]);
+        const metodologia = [
+            ['Revenue'],
+            ['Kit = Unità Retail × Prezzo Kit Retail + Unità WS × Prezzo Kit WS. Escalation: +10% anno 1, +5%/anno da anno 2. Moto = Unità Moto × Prezzo Moto. Mix: Anno 1 → 100% Retail; Anno 2 → 50% Ret, 40% WS, 10% Moto; dal 3° → 30% Ret, 60% WS, 10% Moto.'],
+            [],
+            ['COGS'],
+            ['Kit = (Unità Retail + WS) × BOM Kit. BOM Kit con learning -5%/anno (max 10 anni), minimo €1.800. Opzione Cina: da anno X riduzione % su BOM Kit. Moto = Unità Moto × BOM Moto.'],
+            [],
+            ['Costi variabili (Var Opex)'],
+            ['MdO Retail = solo kit Retail: Anno 1/2/3+ €/kit (es. 2500, 700, 400). Omologa = solo kit Retail €/kit (es. 500). Logistica WS = solo kit Wholesale: Anno 1/2/3+ €/kit (es. 1250, 300, 150).'],
+            [],
+            ['Costi fissi (Overheads)'],
+            ['Valori modificabili dall\'utente (default da BP): 2026, 2027, dal 2028. Con piattaforme aggiuntive: base × (1 + 20% per piattaforma oltre la prima). Riducendo i fissi l\'EBITDA migliora a parità di volumi.'],
+            [],
+            ['EBITDA'],
+            ['Gross Profit = Revenue − COGS. EBITDA Green = Gross Profit − Var Opex − Overheads. D&A: 2026 €75k, 2027 €91k, da 2028 in crescita.']
+        ];
+        metodologia.forEach((row, i) => {
+            const r = wsMeta.addRow(row);
+            const isTitle = row[0] && row[0].length < 30 && !row[0].includes('=');
+            if (isTitle && row[0] !== '') { r.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } }; }
+            r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
+        });
+        wsMeta.getColumn(1).width = 90;
 
         try {
             const buffer = await wb.xlsx.writeBuffer();
