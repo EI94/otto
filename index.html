@@ -789,7 +789,7 @@
             <div class="bg-white p-6 rounded-lg border border-amber-200 shadow-xl">
                 <h4 class="text-xl font-bold text-slate-800 mb-4 border-b border-amber-200 pb-2">Catalogo Componenti &amp; Proiezioni</h4>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-xs text-left" id="productsTable">
+                    <table class="w-full text-xs text-left min-w-[640px]" id="productsTable">
                         <thead class="bg-amber-100">
                             <tr>
                                 <th class="p-2 font-bold text-slate-700">Componente</th>
@@ -797,6 +797,14 @@
                                 <th class="p-2 font-bold text-slate-700 text-center">Anno 1</th>
                                 <th class="p-2 font-bold text-slate-700 text-center">Anno 2</th>
                                 <th class="p-2 font-bold text-slate-700 text-center">Anno 3</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 4</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 5</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 6</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 7</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 8</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 9</th>
+                                <th class="p-2 font-bold text-slate-700 text-center">Anno 10</th>
+                                <th class="p-2 w-10"></th>
                             </tr>
                         </thead>
                         <tbody id="productsBody"></tbody>
@@ -807,6 +815,14 @@
                                 <td class="p-2 text-center text-amber-700" id="prodTot1">&euro;0</td>
                                 <td class="p-2 text-center text-amber-700" id="prodTot2">&euro;0</td>
                                 <td class="p-2 text-center text-amber-700" id="prodTot3">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot4">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot5">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot6">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot7">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot8">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot9">&euro;0</td>
+                                <td class="p-2 text-center text-amber-700" id="prodTot10">&euro;0</td>
+                                <td class="p-2"></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -815,20 +831,20 @@
                     <canvas id="productsChart"></canvas>
                 </div>
                 <div class="text-[11px] text-slate-500 bg-amber-50 rounded p-2 mt-3">
-                    <i class="fa-solid fa-pen mr-1"></i> Modifica quantit&agrave; e prezzi nella tabella per simulare scenari diversi. I costi di produzione sono stimati al 25% del prezzo di vendita (Stampa 3D).
+                    <i class="fa-solid fa-pen mr-1"></i> Modifica le quantit&agrave; e prezzi nella tabella per simulare scenari diversi. I costi di produzione sono stimati al 25% del prezzo di vendita.
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ===== FOCUS 6: MOTO-CONCIERGE (STASH) ===== -->
+<!-- ===== FOCUS 6: OTTODROM CARE ===== -->
 <section class="py-12 bg-purple-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
                 <div class="inline-block bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 6: FOCUS</div>
-                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Moto-Concierge: <span class="text-purple-400">The Stash</span></h3>
+                <h3 class="text-3xl font-bold uppercase font-oswald mb-4">Ottodrom Care <span class="text-purple-400">(The Stash)</span></h3>
                 <p class="text-purple-200 mb-6">Rimessaggio d'&eacute;lite per collezionisti a Roma (modello Revival Stash). Quota mensile fissa con servizi modulari. Il cliente sceglie il pacchetto, Ottodrom incassa MRR.</p>
                 <div class="space-y-4">
                     <div class="flex items-start">
@@ -848,7 +864,7 @@
                 </div>
             </div>
             <div class="bg-purple-800 p-6 rounded-lg border border-purple-700 shadow-xl">
-                <h4 class="text-xl font-bold mb-4 border-b border-purple-700 pb-2">Simulatore Moto-Concierge</h4>
+                <h4 class="text-xl font-bold mb-4 border-b border-purple-700 pb-2">Simulatore Ottodrom Care</h4>
                 <div class="space-y-5">
                     <div>
                         <div class="flex justify-between text-sm mb-1">
@@ -857,43 +873,10 @@
                         </div>
                         <input type="range" min="5" max="50" value="15" id="mcMotoSlider" class="w-full h-2 bg-purple-700 rounded-lg appearance-none cursor-pointer accent-purple-400" oninput="updateConcierge()">
                     </div>
-                    <div class="space-y-2">
-                        <p class="text-xs font-bold uppercase text-purple-400 mb-1">Servizi Inclusi (costo mensile/moto)</p>
-                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
-                            <div class="flex items-center">
-                                <input type="checkbox" checked class="mc-service mr-2 accent-purple-400" data-cost="120" onchange="updateConcierge()">
-                                <span class="text-sm">Custodia &amp; Carica Batteria</span>
-                            </div>
-                            <span class="text-xs font-bold text-purple-300">&euro;120/mese</span>
-                        </label>
-                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
-                            <div class="flex items-center">
-                                <input type="checkbox" checked class="mc-service mr-2 accent-purple-400" data-cost="85" onchange="updateConcierge()">
-                                <span class="text-sm">Assicurazione RC (gestione)</span>
-                            </div>
-                            <span class="text-xs font-bold text-purple-300">&euro;85/mese</span>
-                        </label>
-                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
-                            <div class="flex items-center">
-                                <input type="checkbox" class="mc-service mr-2 accent-purple-400" data-cost="150" onchange="updateConcierge()">
-                                <span class="text-sm">Detailing Mensile</span>
-                            </div>
-                            <span class="text-xs font-bold text-purple-300">&euro;150/mese</span>
-                        </label>
-                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
-                            <div class="flex items-center">
-                                <input type="checkbox" class="mc-service mr-2 accent-purple-400" data-cost="200" onchange="updateConcierge()">
-                                <span class="text-sm">Manutenzione Programmata</span>
-                            </div>
-                            <span class="text-xs font-bold text-purple-300">&euro;200/mese</span>
-                        </label>
-                        <label class="flex items-center justify-between p-2 bg-purple-900/50 rounded border border-purple-700 cursor-pointer">
-                            <div class="flex items-center">
-                                <input type="checkbox" class="mc-service mr-2 accent-purple-400" data-cost="350" onchange="updateConcierge()">
-                                <span class="text-sm">Restauro / Interventi Speciali</span>
-                            </div>
-                            <span class="text-xs font-bold text-purple-300">&euro;350/mese</span>
-                        </label>
+                    <div>
+                        <p class="text-xs font-bold uppercase text-purple-400 mb-2">Servizi (nome e importo &euro;/mese per moto)</p>
+                        <div id="mcServicesList" class="space-y-2"></div>
+                        <button type="button" class="mt-2 text-purple-300 hover:text-purple-100 font-semibold text-xs flex items-center gap-1" onclick="addConciergeService()"><i class="fa-solid fa-plus"></i> Aggiungi servizio</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
                         <div class="bg-purple-900 p-3 rounded border border-purple-700">
@@ -1096,9 +1079,9 @@
           impact: "41% Margine", subImpact: "\u20ac2.200 Gross Margin per Unit" },
         { id: 5, title: "Produttivizzazione Componenti", icon: "fa-industry", color: "text-amber-600", tag: "Intellectual Property",
           desc: "Stop ai pezzi unici. Componenti iconici gi\u00e0 sviluppati (selle, cupolini, telaietti, fari) inseriti a catalogo e venduti a prezzo premium.",
-          steps: ["Standardizzazione disegni CAD.", "Produzione piccola serie (Stampa 3D: da \u20ac1.500 a \u20ac6-55/pezzo).", "Vendita E-commerce globale + file CAD su Patreon."],
+          steps: ["Standardizzazione disegni CAD.", "Produzione piccola serie (Stampa 3D: da \u20ac1.500 a \u20ac6-55/pezzo).", "Vendita in officina e su E-commerce."],
           impact: "Alto", subImpact: "Scalabilit\u00e0 senza manodopera" },
-        { id: 6, title: "Moto-Concierge (Stash)", icon: "fa-key", color: "text-purple-600", tag: "Recurring Revenue",
+        { id: 6, title: "Ottodrom Care (Stash)", icon: "fa-key", color: "text-purple-600", tag: "Recurring Revenue",
           desc: "Rimessaggio d'\u00e9lite per collezionisti a Roma. Servizi modulari: custodia, assicurazione, detailing, manutenzione, restauro.",
           steps: ["Custodia e mantenimento carica costante.", "Assicurazione obbligatoria (DL 184/2023).", "Lock-in: manutenzione completa del parco custodito."],
           impact: "MRR", subImpact: "Flusso Cassa Fisso Mensile" }
@@ -1525,28 +1508,40 @@
     aspSlider.addEventListener('input', () => { updateGreenSim(); recalcFinancialPlan(); });
 
     // --- PRODUCTS SIMULATOR ---
-    const productsCatalog = [
-        { name: 'Sella Custom', price: 450, q1: 30, q2: 50, q3: 80 },
-        { name: 'Cupolino', price: 380, q1: 20, q2: 40, q3: 65 },
-        { name: 'Telaietto Posteriore', price: 520, q1: 15, q2: 30, q3: 50 },
-        { name: 'Faro LED Custom', price: 280, q1: 40, q2: 70, q3: 100 },
-        { name: 'Coprimotore', price: 320, q1: 25, q2: 45, q3: 70 },
-        { name: 'Staffa Strumentazione', price: 180, q1: 35, q2: 60, q3: 90 },
-        { name: 'File CAD (Patreon)', price: 45, q1: 100, q2: 200, q3: 350 }
-    ];
+    function emptyProduct() {
+        return { name: '', price: 0, q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0, q7: 0, q8: 0, q9: 0, q10: 0 };
+    }
+    const productsCatalog = [];
 
     let productsChart;
 
+    function addProductRow() {
+        productsCatalog.push(emptyProduct());
+        renderProducts();
+    }
+
+    function removeProductRow(i) {
+        productsCatalog.splice(i, 1);
+        renderProducts();
+    }
+
     function renderProducts() {
         const tbody = document.getElementById('productsBody');
+        const cols = ['price', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
         tbody.innerHTML = productsCatalog.map((p, i) => `
             <tr class="border-b border-slate-100 ${i % 2 ? 'bg-slate-50' : ''}">
-                <td class="p-2 font-semibold text-slate-700">${p.name}</td>
-                <td class="p-2 text-center"><input type="number" class="w-16 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.price}" data-row="${i}" data-col="price" onchange="updateProducts()"></td>
-                <td class="p-2 text-center"><input type="number" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.q1}" data-row="${i}" data-col="q1" onchange="updateProducts()"></td>
-                <td class="p-2 text-center"><input type="number" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.q2}" data-row="${i}" data-col="q2" onchange="updateProducts()"></td>
-                <td class="p-2 text-center"><input type="number" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.q3}" data-row="${i}" data-col="q3" onchange="updateProducts()"></td>
-            </tr>`).join('');
+                <td class="p-2">
+                    <input type="text" class="w-full max-w-[140px] border border-slate-300 rounded px-2 py-0.5 text-xs" value="${String(p.name || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" placeholder="Nome componente" data-row="${i}" data-col="name" onchange="updateProducts()">
+                </td>
+                <td class="p-2 text-center"><input type="number" min="0" class="w-14 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p.price}" data-row="${i}" data-col="price" onchange="updateProducts()"></td>
+                ${cols.slice(1).map((c, k) => `<td class="p-2 text-center"><input type="number" min="0" class="w-12 text-center border border-slate-300 rounded px-1 py-0.5 text-xs" value="${p[c]}" data-row="${i}" data-col="${c}" onchange="updateProducts()"></td>`).join('')}
+                <td class="p-2 text-center"><button type="button" class="text-rose-500 hover:text-rose-700 text-xs" onclick="removeProductRow(${i})" title="Rimuovi"><i class="fa-solid fa-trash-can"></i></button></td>
+            </tr>`).join('') + `
+            <tr class="border-b border-amber-200 bg-amber-50/50">
+                <td colspan="13" class="p-2">
+                    <button type="button" class="text-amber-700 hover:text-amber-900 font-semibold text-xs flex items-center gap-1" onclick="addProductRow()"><i class="fa-solid fa-plus"></i> Aggiungi componente</button>
+                </td>
+            </tr>`;
         updateProducts();
     }
 
@@ -1555,42 +1550,82 @@
         inputs.forEach(inp => {
             const r = parseInt(inp.dataset.row);
             const c = inp.dataset.col;
-            productsCatalog[r][c] = parseFloat(inp.value) || 0;
+            if (productsCatalog[r]) {
+                if (c === 'name') productsCatalog[r].name = (inp.value || '').trim();
+                else productsCatalog[r][c] = parseFloat(inp.value) || 0;
+            }
         });
 
-        let t1 = 0, t2 = 0, t3 = 0;
+        const totals = [0,0,0,0,0,0,0,0,0,0];
         productsCatalog.forEach(p => {
-            t1 += p.price * p.q1;
-            t2 += p.price * p.q2;
-            t3 += p.price * p.q3;
+            for (let y = 0; y < 10; y++) totals[y] += p.price * (p['q' + (y + 1)] || 0);
         });
 
-        document.getElementById('prodTot1').innerText = fmt(t1);
-        document.getElementById('prodTot2').innerText = fmt(t2);
-        document.getElementById('prodTot3').innerText = fmt(t3);
+        for (let y = 0; y < 10; y++) document.getElementById('prodTot' + (y + 1)).innerText = fmt(totals[y]);
 
         recalcFinancialPlan();
         if (productsChart) productsChart.destroy();
         productsChart = new Chart(document.getElementById('productsChart').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ['Anno 1', 'Anno 2', 'Anno 3'],
+                labels: ['Anno 1', 'Anno 2', 'Anno 3', 'Anno 4', 'Anno 5', 'Anno 6', 'Anno 7', 'Anno 8', 'Anno 9', 'Anno 10'],
                 datasets: [
-                    { label: 'Ricavi', data: [t1, t2, t3], backgroundColor: '#f59e0b', borderRadius: 4 },
-                    { label: 'Margine (75%)', data: [t1*0.75, t2*0.75, t3*0.75], backgroundColor: '#0f766e', borderRadius: 4 }
+                    { label: 'Ricavi', data: totals, backgroundColor: '#f59e0b', borderRadius: 4 },
+                    { label: 'Margine (75%)', data: totals.map(t => t * 0.75), backgroundColor: '#0f766e', borderRadius: 4 }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
         });
     }
 
-    // --- CONCIERGE SIMULATOR ---
-    function updateConcierge() {
-        const numMoto = parseInt(document.getElementById('mcMotoSlider').value);
-        let perMoto = 0;
-        document.querySelectorAll('.mc-service').forEach(cb => {
-            if (cb.checked) perMoto += parseInt(cb.dataset.cost);
+    // --- OTTODROM CARE (CONCIERGE) SIMULATOR ---
+    function emptyConciergeService() { return { name: '', cost: 0 }; }
+    const conciergeServices = [
+        { name: 'Custodia & Carica Batteria', cost: 120 },
+        { name: 'Assicurazione RC (gestione)', cost: 85 },
+        { name: 'Detailing Mensile', cost: 150 },
+        { name: 'Manutenzione Programmata', cost: 200 },
+        { name: 'Restauro / Interventi Speciali', cost: 350 }
+    ];
+
+    function addConciergeService() {
+        conciergeServices.push(emptyConciergeService());
+        renderConciergeServices();
+        updateConcierge();
+    }
+
+    function removeConciergeService(i) {
+        conciergeServices.splice(i, 1);
+        renderConciergeServices();
+        updateConcierge();
+    }
+
+    function syncConciergeFromDOM() {
+        document.querySelectorAll('[data-mc-row]').forEach(row => {
+            const i = parseInt(row.dataset.mcRow);
+            if (!conciergeServices[i]) return;
+            const nameInp = row.querySelector('.mc-service-name');
+            const costInp = row.querySelector('.mc-service-cost');
+            if (nameInp) conciergeServices[i].name = (nameInp.value || '').trim();
+            if (costInp) conciergeServices[i].cost = parseFloat(costInp.value) || 0;
         });
+    }
+
+    function renderConciergeServices() {
+        const list = document.getElementById('mcServicesList');
+        list.innerHTML = conciergeServices.map((s, i) => `
+            <div class="flex items-center gap-2 p-2 bg-purple-900/50 rounded border border-purple-700" data-mc-row="${i}">
+                <input type="text" class="mc-service-name flex-1 min-w-0 bg-purple-900/80 border border-purple-600 rounded px-2 py-1 text-sm text-white placeholder-purple-500" value="${String(s.name || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" placeholder="Nome servizio" oninput="syncConciergeFromDOM(); updateConcierge()">
+                <input type="number" min="0" step="5" class="mc-service-cost w-20 text-center bg-purple-900/80 border border-purple-600 rounded px-1 py-1 text-sm text-purple-200" value="${s.cost}" oninput="syncConciergeFromDOM(); updateConcierge()">
+                <span class="text-purple-400 text-xs whitespace-nowrap">&euro;/mese</span>
+                <button type="button" class="text-purple-400 hover:text-rose-400 text-xs p-1" onclick="removeConciergeService(${i})" title="Rimuovi"><i class="fa-solid fa-trash-can"></i></button>
+            </div>`).join('');
+    }
+
+    function updateConcierge() {
+        syncConciergeFromDOM();
+        const numMoto = parseInt(document.getElementById('mcMotoSlider').value) || 0;
+        const perMoto = conciergeServices.reduce((sum, s) => sum + (s.cost || 0), 0);
         const mrr = numMoto * perMoto;
         const arr = mrr * 12;
 
@@ -1719,12 +1754,12 @@
         const greenAsp = parseInt(document.getElementById('aspSlider').value) || 0;
         const selectedPlats = getSelectedPlatforms();
 
-        let pY1=0,pY2=0,pY3=0;
-        productsCatalog.forEach(p => { pY1+=p.price*p.q1; pY2+=p.price*p.q2; pY3+=p.price*p.q3; });
+        const pY = [0,0,0,0,0,0,0,0,0,0];
+        productsCatalog.forEach(p => { for (let i = 0; i < 10; i++) pY[i] += p.price * (p['q' + (i + 1)] || 0); });
 
+        syncConciergeFromDOM();
         const mcMoto = parseInt(document.getElementById('mcMotoSlider').value) || 0;
-        let mcPerMoto = 0;
-        document.querySelectorAll('.mc-service').forEach(cb => { if(cb.checked) mcPerMoto += parseInt(cb.dataset.cost); });
+        const mcPerMoto = conciergeServices.reduce((sum, s) => sum + (s.cost || 0), 0);
         const mcArr = mcMoto * mcPerMoto * 12;
 
         const years = [];
@@ -1754,7 +1789,7 @@
 
             const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
 
-            const prodBase = y === 0 ? pY1 : y === 1 ? pY2 : pY3;
+            const prodBase = pY[Math.min(y, 9)] || 0;
             const prodGrowth = y > 2 ? Math.pow(1.05, y - 2) : 1;
             const prodRev = prodBase * prodGrowth;
             const prodCV = prodRev * 0.25;
@@ -1833,7 +1868,7 @@
             { label: '  Componenti (Az.5)', vals: [0, ...years.map(y=>y.ricavi_componenti)], accent: true },
             { label: '  Kit & Moto Retrofit (Az.4)', vals: [0, ...years.map(y=>y.ricavi_kit)], accent: true },
             { label: '  Sharing (Az.3)', vals: [0, ...years.map(y=>y.ricavi_sharing)], accent: true },
-            { label: '  Moto-Concierge (Az.6)', vals: [0, ...years.map(y=>y.ricavi_concierge)], accent: true },
+            { label: '  Ottodrom Care (Az.6)', vals: [0, ...years.map(y=>y.ricavi_concierge)], accent: true },
             { label: '  Altro', vals: [BASE.ricavi_altro, ...years.map(y=>y.ricavi_altro)] },
             { sep: true },
             { label: 'COSTI VARIABILI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_cv, ...years.map(y=>y.totale_cv)], neg: true },
@@ -1987,7 +2022,7 @@
             ['  Componenti (Az.5)', 0, ...years.map(y=>y.ricavi_componenti)],
             ['  Kit & Moto Retrofit (Az.4)', 0, ...years.map(y=>y.ricavi_kit)],
             ['  Sharing (Az.3)', 0, ...years.map(y=>y.ricavi_sharing)],
-            ['  Moto-Concierge (Az.6)', 0, ...years.map(y=>y.ricavi_concierge)],
+            ['  Ottodrom Care (Az.6)', 0, ...years.map(y=>y.ricavi_concierge)],
             ['  Altro', BASE.ricavi_altro, ...years.map(y=>y.ricavi_altro)],
             [],
             ['COSTI VARIABILI', BASE.totale_cv, ...years.map(y=>y.totale_cv)],
@@ -2063,10 +2098,10 @@
             ['Green: Vol Target a Regime', greenVol],
             ['Green: ASP Kit Retail', greenAsp],
             ['Green: Piattaforme Aggiuntive', selPlats.map(p => p.name).join(', ') || 'Nessuna'],
-            ['Concierge: Moto Gestite', parseInt(document.getElementById('mcMotoSlider').value) || 0],
+            ['Ottodrom Care: Moto Gestite', parseInt(document.getElementById('mcMotoSlider').value) || 0],
             [],
-            ['Componenti (Catalogo)', 'Prezzo', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3'],
-            ...productsCatalog.map(p => [p.name, p.price, p.q1, p.q2, p.q3]),
+            ['Componenti (Catalogo)', 'Prezzo', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3', 'Q Anno 4', 'Q Anno 5', 'Q Anno 6', 'Q Anno 7', 'Q Anno 8', 'Q Anno 9', 'Q Anno 10'],
+            ...productsCatalog.map(p => [p.name || '', p.price, p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
             ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
             ['Nota', 'Green: ramp 2%/35%/100%, mix Retail 30% WS 60% Moto 10% a regime.'],
@@ -2089,6 +2124,7 @@
         renderProducts();
         updateDownsizing();
         updateSharing();
+        renderConciergeServices();
         updateConcierge();
         updateGreenSim();
         recalcFinancialPlan();
