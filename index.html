@@ -456,54 +456,93 @@
             <div>
                 <div class="inline-block bg-rose-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 2: FOCUS</div>
                 <h3 class="text-3xl font-bold uppercase font-oswald mb-4 text-slate-900">Downsizing <span class="text-rose-600">&amp; Service</span></h3>
-                <p class="text-slate-600 mb-6">Costo totale sedi attuale: <strong>&euro;87.700/anno</strong>. Cessione delle sedi non strategiche per concentrare le risorse sull'officina.</p>
+                <p class="text-slate-600 mb-6">Costo totale sedi (affitti + utenze): <strong>&euro;87.737/anno</strong>. Cessione o rinegoziazione per ogni sede. Dati da bilancio: affitto e utenze per indirizzo.</p>
                 <div class="space-y-4">
                     <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r">
-                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-building mr-2"></i>Via Pinciana, 41 (Emporium)</p>
-                        <p class="text-xs text-slate-600 mt-1">Showroom/Fashion. Affitto stimato <strong>&euro;42.000/anno</strong>. Con lo stock liquidato, non ha pi&ugrave; ragion d'essere.</p>
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-building mr-2"></i>Via Pinciana, 41 (Store Fashion)</p>
+                        <p class="text-xs text-slate-600 mt-1">Affitto &euro;26.741 + utenze &euro;1.103 = <strong>&euro;27.844/anno</strong>. Con lo stock liquidato, candidata a cessione o rinegoziazione.</p>
+                    </div>
+                    <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r">
+                        <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-palette mr-2"></i>Via Pinciana, 44 (Atelier)</p>
+                        <p class="text-xs text-slate-600 mt-1">Affitto + utenze: <strong>&euro;27.569/anno</strong>. Sede atelier/secondaria.</p>
                     </div>
                     <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r">
                         <p class="font-bold text-sm text-rose-800"><i class="fa-solid fa-warehouse mr-2"></i>Via Adige (Officina)</p>
-                        <p class="text-xs text-slate-600 mt-1">Officina principale. Affitto stimato <strong>&euro;33.700/anno</strong>. Obiettivo: trovare sede pi&ugrave; economica o rinegoziare.</p>
+                        <p class="text-xs text-slate-600 mt-1">Affitto &euro;17.448 + utenze &euro;2.876 = <strong>&euro;20.324/anno</strong>. Officina principale. Obiettivo: rinegoziare o consolidare.</p>
                     </div>
                     <div class="bg-slate-50 border-l-4 border-slate-400 p-4 rounded-r">
-                        <p class="font-bold text-sm text-slate-800"><i class="fa-solid fa-file-invoice-dollar mr-2"></i>Overhead Residuo</p>
-                        <p class="text-xs text-slate-600 mt-1">Utenze, assicurazioni, spese condominiali: <strong>&euro;12.000/anno</strong>.</p>
+                        <p class="font-bold text-sm text-slate-800"><i class="fa-solid fa-file-invoice-dollar mr-2"></i>Overhead residuo</p>
+                        <p class="text-xs text-slate-600 mt-1">Utenze generali, assicurazioni, spese condominiali: <strong>&euro;12.000/anno</strong>.</p>
                     </div>
                 </div>
             </div>
             <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 shadow-xl">
                 <h4 class="text-xl font-bold text-slate-800 mb-4 border-b border-slate-200 pb-2">Simulatore Risparmio Sedi</h4>
-                <div class="space-y-5">
-                    <div class="flex items-center justify-between p-3 bg-white rounded border border-slate-200">
-                        <div>
-                            <p class="font-bold text-sm text-slate-700">Via Pinciana, 41</p>
-                            <p class="text-xs text-slate-500">&euro;42.000/anno</p>
+                <div class="space-y-4">
+                    <!-- Via Pinciana 41 -->
+                    <div class="p-3 bg-white rounded border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-sm text-slate-700">Via Pinciana, 41 (Store Fashion)</p>
+                                <p class="text-xs text-slate-500">Aff.+utenze <strong>&euro;27.844</strong>/anno</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="togPinciana41" checked class="sr-only peer" onchange="updateDownsizing()">
+                                <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                                <span class="ml-2 text-xs font-bold" id="lblPinciana41">CESSIONE</span>
+                            </label>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="togPinciana" checked class="sr-only peer" onchange="updateDownsizing()">
-                            <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
-                            <span class="ml-2 text-xs font-bold" id="lblPinciana">CESSIONE</span>
-                        </label>
+                        <div id="renegP41" class="hidden pl-2 border-l-2 border-slate-200">
+                            <p class="text-xs text-slate-500 mb-1">Riduzione affitto %</p>
+                            <input type="range" min="0" max="50" value="0" id="redP41" class="w-full h-2 accent-rose-500" oninput="updateDownsizing()">
+                            <span class="text-xs font-bold text-slate-600" id="redP41Display">0%</span> &rarr; costo <span id="costP41Display">27.844</span>/anno
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-white rounded border border-slate-200">
-                        <div>
-                            <p class="font-bold text-sm text-slate-700">Via Adige (Officina)</p>
-                            <p class="text-xs text-slate-500">&euro;33.700/anno</p>
+                    <!-- Via Pinciana 44 -->
+                    <div class="p-3 bg-white rounded border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-sm text-slate-700">Via Pinciana, 44 (Atelier)</p>
+                                <p class="text-xs text-slate-500">Aff.+utenze <strong>&euro;27.569</strong>/anno</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="togPinciana44" checked class="sr-only peer" onchange="updateDownsizing()">
+                                <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                                <span class="ml-2 text-xs font-bold" id="lblPinciana44">CESSIONE</span>
+                            </label>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="togAdige" checked class="sr-only peer" onchange="updateDownsizing()">
-                            <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
-                            <span class="ml-2 text-xs font-bold" id="lblAdige">CESSIONE</span>
-                        </label>
+                        <div id="renegP44" class="hidden pl-2 border-l-2 border-slate-200">
+                            <p class="text-xs text-slate-500 mb-1">Riduzione affitto %</p>
+                            <input type="range" min="0" max="50" value="0" id="redP44" class="w-full h-2 accent-rose-500" oninput="updateDownsizing()">
+                            <span class="text-xs font-bold text-slate-600" id="redP44Display">0%</span> &rarr; costo <span id="costP44Display">27.569</span>/anno
+                        </div>
+                    </div>
+                    <!-- Via Adige -->
+                    <div class="p-3 bg-white rounded border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-sm text-slate-700">Via Adige (Officina)</p>
+                                <p class="text-xs text-slate-500">Aff.+utenze <strong>&euro;20.324</strong>/anno</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="togAdige" checked class="sr-only peer" onchange="updateDownsizing()">
+                                <div class="w-11 h-6 bg-rose-500 peer-checked:bg-teal-500 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                                <span class="ml-2 text-xs font-bold" id="lblAdige">CESSIONE</span>
+                            </label>
+                        </div>
+                        <div id="renegAdige" class="hidden pl-2 border-l-2 border-slate-200">
+                            <p class="text-xs text-slate-500 mb-1">Riduzione affitto %</p>
+                            <input type="range" min="0" max="50" value="0" id="redAdige" class="w-full h-2 accent-rose-500" oninput="updateDownsizing()">
+                            <span class="text-xs font-bold text-slate-600" id="redAdigeDisplay">0%</span> &rarr; costo <span id="costAdigeDisplay">20.324</span>/anno
+                        </div>
                     </div>
                     <div>
                         <div class="flex justify-between text-sm mb-1">
-                            <span class="text-slate-600">Nuova sede (affitto stimato)</span>
+                            <span class="text-slate-600">Nuova sede unica (se cedi tutte)</span>
                             <span class="font-bold text-slate-800" id="newRentDisplay">&euro;18.000</span>
                         </div>
-                        <input type="range" min="0" max="40000" step="500" value="18000" id="newRentSlider" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-rose-500" oninput="updateDownsizing()">
-                        <div class="flex justify-between text-[10px] text-slate-400 mt-0.5"><span>&euro;0</span><span>&euro;40.000</span></div>
+                        <input type="range" min="0" max="50000" step="500" value="18000" id="newRentSlider" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-rose-500" oninput="updateDownsizing()">
+                        <div class="flex justify-between text-[10px] text-slate-400 mt-0.5"><span>&euro;0</span><span>&euro;50.000</span></div>
                     </div>
                     <div class="chart-wrapper h-48">
                         <canvas id="downsizingChart"></canvas>
@@ -511,15 +550,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
                         <div class="bg-white p-3 rounded border border-slate-200">
                             <span class="block text-xs sm:text-[10px] text-slate-500 uppercase">Costo Attuale</span>
-                            <span class="block text-lg font-bold text-rose-600" id="dsCurrentDisplay">&euro;87.700</span>
+                            <span class="block text-lg font-bold text-rose-600" id="dsCurrentDisplay">&euro;87.737</span>
                         </div>
                         <div class="bg-white p-3 rounded border border-slate-200">
                             <span class="block text-xs sm:text-[10px] text-slate-500 uppercase">Costo Nuovo</span>
-                            <span class="block text-lg font-bold text-slate-800" id="dsNewDisplay">&euro;30.000</span>
+                            <span class="block text-lg font-bold text-slate-800" id="dsNewDisplay">&euro;39.693</span>
                         </div>
                         <div class="bg-teal-50 p-3 rounded border border-teal-200">
                             <span class="block text-xs sm:text-[10px] text-teal-600 uppercase">Risparmio/Anno</span>
-                            <span class="block text-lg font-bold text-teal-700" id="dsSavingDisplay">&euro;57.700</span>
+                            <span class="block text-lg font-bold text-teal-700" id="dsSavingDisplay">&euro;48.044</span>
                         </div>
                     </div>
                 </div>
@@ -558,20 +597,33 @@
             </div>
             <div class="bg-blue-800 p-6 rounded-lg border border-blue-700 shadow-xl">
                 <h4 class="text-xl font-bold mb-4 border-b border-blue-700 pb-2">Simulatore Sharing</h4>
+                <p class="text-xs text-blue-400 mb-3">Distribuisci il tempo di ciascun tecnico (€54k/anno) tra uso interno e sharing con partner.</p>
                 <div class="space-y-5">
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-blue-300"><i class="fa-solid fa-wrench mr-1"></i>% Tempo &rarr; Officine 42</span>
-                            <span class="font-bold text-blue-400" id="sh42Display">20%</span>
+                    <div class="bg-blue-900/50 rounded p-3 border border-blue-700">
+                        <p class="text-sm font-bold text-blue-300 mb-2">Operaio 1</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between text-xs mb-0.5"><span>% &rarr; Officine 42</span><span class="font-bold" id="shOp1_42Display">20%</span></div>
+                                <input type="range" min="0" max="50" value="20" id="shOp1_42" class="w-full h-2 bg-blue-700 rounded-lg accent-blue-400" oninput="updateSharing()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-0.5"><span>% &rarr; Nardi</span><span class="font-bold" id="shOp1_NardiDisplay">10%</span></div>
+                                <input type="range" min="0" max="50" value="10" id="shOp1_Nardi" class="w-full h-2 bg-blue-700 rounded-lg accent-blue-400" oninput="updateSharing()">
+                            </div>
                         </div>
-                        <input type="range" min="0" max="50" value="20" id="sh42Slider" class="w-full h-2 bg-blue-700 rounded-lg appearance-none cursor-pointer accent-blue-400" oninput="updateSharing()">
                     </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-blue-300"><i class="fa-solid fa-gear mr-1"></i>% Tempo &rarr; Nardi</span>
-                            <span class="font-bold text-blue-400" id="shNardiDisplay">15%</span>
+                    <div class="bg-blue-900/50 rounded p-3 border border-blue-700">
+                        <p class="text-sm font-bold text-blue-300 mb-2">Operaio 2</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between text-xs mb-0.5"><span>% &rarr; Officine 42</span><span class="font-bold" id="shOp2_42Display">15%</span></div>
+                                <input type="range" min="0" max="50" value="15" id="shOp2_42" class="w-full h-2 bg-blue-700 rounded-lg accent-blue-400" oninput="updateSharing()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-0.5"><span>% &rarr; Nardi</span><span class="font-bold" id="shOp2_NardiDisplay">10%</span></div>
+                                <input type="range" min="0" max="50" value="10" id="shOp2_Nardi" class="w-full h-2 bg-blue-700 rounded-lg accent-blue-400" oninput="updateSharing()">
+                            </div>
                         </div>
-                        <input type="range" min="0" max="50" value="15" id="shNardiSlider" class="w-full h-2 bg-blue-700 rounded-lg appearance-none cursor-pointer accent-blue-400" oninput="updateSharing()">
                     </div>
                     <div>
                         <div class="flex justify-between text-sm mb-1">
@@ -709,22 +761,29 @@
             <div>
                 <div class="inline-block bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AZIONE 5: FOCUS</div>
                 <h3 class="text-3xl font-bold uppercase font-oswald mb-4 text-slate-900">Produttivizzazione <span class="text-amber-600">Componenti</span></h3>
-                <p class="text-slate-600 mb-6">Stop ai pezzi unici. Componenti gi&agrave; sviluppati (selle, cupolini, telaietti, fari) inseriti a catalogo e venduti a prezzo premium. Stampa 3D e CNC abbattono i costi del 96-99%.</p>
+                <p class="text-slate-600 mb-6">Valorizzare il lavoro di R&amp;S svolto in questi anni commercializzando componenti &quot;On-board&quot; gi&agrave; sviluppati (selle, cupolini, telaietti, fari) inseriti a catalogo e venduti a prezzo premium.</p>
                 <div class="space-y-3">
                     <div class="flex items-start">
                         <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center border border-amber-400"><i class="fa-solid fa-cube text-amber-600"></i></div>
                         <div class="ml-4">
                             <h4 class="text-lg font-bold text-slate-800">Da Artigianale a Catalogo</h4>
-                            <p class="text-sm text-slate-500">Standardizzazione CAD &rarr; Produzione piccola serie &rarr; E-commerce globale + file CAD per DIY.</p>
+                            <p class="text-sm text-slate-500">L'investimento sulla R&amp;S di componenti unici Ottodrom diviene parte di un catalogo e viene presentato in officina e sull'E-commerce.</p>
                         </div>
                     </div>
                     <div class="flex items-start">
                         <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center border border-amber-400"><i class="fa-solid fa-print text-amber-600"></i></div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-bold text-slate-800">Costi Ridotti del 96%</h4>
+                            <h4 class="text-lg font-bold text-slate-800">Costi ridotti fino al 90%</h4>
                             <p class="text-sm text-slate-500">Da &euro;1.500/pezzo (manuale) a &euro;6-55/pezzo (Stampa 3D). Margine enorme sulla piccola serie.</p>
                         </div>
                     </div>
+                </div>
+                <div class="mt-6 p-4 bg-white rounded-lg border border-amber-200 shadow-sm">
+                    <p class="text-xs font-bold uppercase text-amber-700 mb-3">Esempio componente commercializzabile</p>
+                    <img src="assets/componente-ottodrom-intake.png" alt="Intake Ottodrom con branding, componente a catalogo" class="w-full max-w-sm rounded-lg border border-slate-200 mb-3" loading="lazy">
+                    <p class="text-sm font-bold text-slate-800">Intake/velocity stack Ottodrom (branding)</p>
+                    <p class="text-slate-500 text-sm">Pezzo con scritta Ottodrom, vendibile stand-alone.</p>
+                    <p class="mt-2 text-lg font-bold text-amber-600">&euro;129</p>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-lg border border-amber-200 shadow-xl">
@@ -1140,65 +1199,104 @@
     });
 
     // --- DOWNSIZING SIMULATOR ---
+    const SEDI = {
+        p41: { aff: 26741, ut: 1103, tot: 27844 },
+        p44: { aff: 25000, ut: 2569, tot: 27569 },
+        adige: { aff: 17448, ut: 2876, tot: 20324 }
+    };
+    const OVERHEAD = 12000;
+    const CURRENT_SEDI_TOT = 87737;
+
     let downsizingChart = new Chart(document.getElementById('downsizingChart').getContext('2d'), {
         type: 'bar',
         data: {
             labels: ['Costo Attuale', 'Costo Nuovo', 'Risparmio'],
-            datasets: [{ data: [87700, 30000, 57700], backgroundColor: ['#be123c', '#94a3b8', '#0f766e'], borderRadius: 4 }]
+            datasets: [{ data: [CURRENT_SEDI_TOT, 39693, 48044], backgroundColor: ['#be123c', '#94a3b8', '#0f766e'], borderRadius: 4 }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmt(ctx.raw) } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
     });
 
     function updateDownsizing() {
-        const cutP = document.getElementById('togPinciana').checked ? 42000 : 0;
-        const cutA = document.getElementById('togAdige').checked ? 33700 : 0;
-        const newRent = parseInt(document.getElementById('newRentSlider').value);
-        const overhead = 12000;
-        const currentTotal = 87700;
-        const newTotal = (87700 - cutP - cutA) + newRent;
-        const saving = currentTotal - newTotal;
+        const tog41 = document.getElementById('togPinciana41').checked;
+        const tog44 = document.getElementById('togPinciana44').checked;
+        const togAdige = document.getElementById('togAdige').checked;
+        const red41 = (parseInt(document.getElementById('redP41').value) || 0) / 100;
+        const red44 = (parseInt(document.getElementById('redP44').value) || 0) / 100;
+        const redAdige = (parseInt(document.getElementById('redAdige').value) || 0) / 100;
+
+        document.getElementById('renegP41').classList.toggle('hidden', tog41);
+        document.getElementById('renegP44').classList.toggle('hidden', tog44);
+        document.getElementById('renegAdige').classList.toggle('hidden', togAdige);
+
+        const cost41 = tog41 ? 0 : Math.round(SEDI.p41.aff * (1 - red41) + SEDI.p41.ut);
+        const cost44 = tog44 ? 0 : Math.round(SEDI.p44.aff * (1 - red44) + SEDI.p44.ut);
+        const costAdige = togAdige ? 0 : Math.round(SEDI.adige.aff * (1 - redAdige) + SEDI.adige.ut);
+
+        document.getElementById('redP41Display').textContent = Math.round(red41 * 100) + '%';
+        document.getElementById('redP44Display').textContent = Math.round(red44 * 100) + '%';
+        document.getElementById('redAdigeDisplay').textContent = Math.round(redAdige * 100) + '%';
+        document.getElementById('costP41Display').textContent = cost41.toLocaleString('it-IT');
+        document.getElementById('costP44Display').textContent = cost44.toLocaleString('it-IT');
+        document.getElementById('costAdigeDisplay').textContent = costAdige.toLocaleString('it-IT');
+
+        const anyCession = tog41 || tog44 || togAdige;
+        const newRent = anyCession ? parseInt(document.getElementById('newRentSlider').value) || 0 : 0;
+        const newTotal = cost41 + cost44 + costAdige + OVERHEAD + newRent;
+        const saving = CURRENT_SEDI_TOT - newTotal;
 
         document.getElementById('newRentDisplay').innerText = fmt(newRent);
-        document.getElementById('dsCurrentDisplay').innerText = fmt(currentTotal);
+        document.getElementById('dsCurrentDisplay').innerText = fmt(CURRENT_SEDI_TOT);
         document.getElementById('dsNewDisplay').innerText = fmt(newTotal);
         document.getElementById('dsSavingDisplay').innerText = fmt(saving);
-        document.getElementById('lblPinciana').innerText = document.getElementById('togPinciana').checked ? 'CESSIONE' : 'MANTENERE';
-        document.getElementById('lblAdige').innerText = document.getElementById('togAdige').checked ? 'CESSIONE' : 'MANTENERE';
+        document.getElementById('lblPinciana41').innerText = tog41 ? 'CESSIONE' : 'MANTENERE';
+        document.getElementById('lblPinciana44').innerText = tog44 ? 'CESSIONE' : 'MANTENERE';
+        document.getElementById('lblAdige').innerText = togAdige ? 'CESSIONE' : 'MANTENERE';
 
-        downsizingChart.data.datasets[0].data = [currentTotal, newTotal, saving];
+        downsizingChart.data.datasets[0].data = [CURRENT_SEDI_TOT, newTotal, saving];
         downsizingChart.data.datasets[0].backgroundColor = ['#be123c', '#94a3b8', saving > 0 ? '#0f766e' : '#be123c'];
         downsizingChart.update();
         recalcFinancialPlan();
     }
 
     // --- SHARING SIMULATOR ---
+    const COST_PER_WORKER = 54000;
+    const TOTAL_COST_SHARING = 108000;
+
     let sharingChart = new Chart(document.getElementById('sharingChart').getContext('2d'), {
         type: 'doughnut',
         data: {
             labels: ['Uso Interno Ottodrom', 'Sharing Officine 42', 'Sharing Nardi'],
-            datasets: [{ data: [65, 20, 15], backgroundColor: ['#1e3a5f', '#3b82f6', '#60a5fa'], borderWidth: 2, borderColor: '#1e3a8a' }]
+            datasets: [{ data: [65, 22, 13], backgroundColor: ['#1e3a5f', '#3b82f6', '#60a5fa'], borderWidth: 2, borderColor: '#1e3a8a' }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 }, padding: 8 } }, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } } } }
     });
 
     function updateSharing() {
-        const sh42 = parseInt(document.getElementById('sh42Slider').value);
-        const shNardi = parseInt(document.getElementById('shNardiSlider').value);
-        const markup = parseInt(document.getElementById('shMarkupSlider').value);
-        const totalCost = 108000;
-        const totalShPct = Math.min(sh42 + shNardi, 80);
-        const costShared = totalCost * (totalShPct / 100);
-        const revenue = costShared * (1 + markup / 100);
-        const netCost = totalCost - revenue;
+        const op1_42 = parseInt(document.getElementById('shOp1_42').value) || 0;
+        const op1_Nardi = parseInt(document.getElementById('shOp1_Nardi').value) || 0;
+        const op2_42 = parseInt(document.getElementById('shOp2_42').value) || 0;
+        const op2_Nardi = parseInt(document.getElementById('shOp2_Nardi').value) || 0;
+        const markup = (parseInt(document.getElementById('shMarkupSlider').value) || 0) / 100;
 
-        document.getElementById('sh42Display').innerText = sh42 + '%';
-        document.getElementById('shNardiDisplay').innerText = shNardi + '%';
-        document.getElementById('shMarkupDisplay').innerText = markup + '%';
+        document.getElementById('shOp1_42Display').textContent = op1_42 + '%';
+        document.getElementById('shOp1_NardiDisplay').textContent = op1_Nardi + '%';
+        document.getElementById('shOp2_42Display').textContent = op2_42 + '%';
+        document.getElementById('shOp2_NardiDisplay').textContent = op2_Nardi + '%';
+        document.getElementById('shMarkupDisplay').textContent = Math.round(markup * 100) + '%';
+
+        const costSharedOp1 = COST_PER_WORKER * (op1_42 + op1_Nardi) / 100;
+        const costSharedOp2 = COST_PER_WORKER * (op2_42 + op2_Nardi) / 100;
+        const costShared = costSharedOp1 + costSharedOp2;
+        const revenue = costShared * (1 + markup);
+        const netCost = TOTAL_COST_SHARING - revenue;
+
         document.getElementById('shRevenueDisplay').innerText = fmt(revenue);
         document.getElementById('shNetDisplay').innerText = fmt(Math.max(netCost, 0));
 
-        const interno = 100 - sh42 - shNardi;
-        sharingChart.data.datasets[0].data = [Math.max(interno, 0), sh42, shNardi];
+        const pct42 = (op1_42 + op2_42) / 2;
+        const pctNardi = (op1_Nardi + op2_Nardi) / 2;
+        const interno = Math.max(0, 100 - pct42 - pctNardi);
+        sharingChart.data.datasets[0].data = [interno, pct42, pctNardi];
         sharingChart.update();
         recalcFinancialPlan();
     }
@@ -1574,7 +1672,9 @@
         cv_operativi: 119026, cv_commerciali: 86651,
         cf_locali: 87737,
         cf_locali_pinciana41_aff: 26741, cf_locali_pinciana41_ut: 1103,
+        cf_locali_pinciana44_aff: 25000, cf_locali_pinciana44_ut: 2569,
         cf_locali_adige_aff: 17448, cf_locali_adige_ut: 2876,
+        cf_locali_overhead: 12000,
         cf_personale: 218447,
         cf_ga_altro: 29637,
         da: 79705, proventi_oneri: 14342,
@@ -1593,13 +1693,27 @@
         const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
         const fashionChoice = fashionRadio ? fashionRadio.value : 'combo';
 
-        const cutP41 = document.getElementById('togPinciana').checked;
+        const tog41 = document.getElementById('togPinciana41').checked;
+        const tog44 = document.getElementById('togPinciana44').checked;
         const cutAdige = document.getElementById('togAdige').checked;
+        const red41 = (parseInt(document.getElementById('redP41').value) || 0) / 100;
+        const red44 = (parseInt(document.getElementById('redP44').value) || 0) / 100;
+        const redAdige = (parseInt(document.getElementById('redAdige').value) || 0) / 100;
         const newRent = parseInt(document.getElementById('newRentSlider').value) || 0;
+        const anyCession = tog41 || tog44 || cutAdige;
+        const cost41 = tog41 ? 0 : Math.round(BASE.cf_locali_pinciana41_aff * (1 - red41) + BASE.cf_locali_pinciana41_ut);
+        const cost44 = tog44 ? 0 : Math.round(BASE.cf_locali_pinciana44_aff * (1 - red44) + BASE.cf_locali_pinciana44_ut);
+        const costAdige = cutAdige ? 0 : Math.round(BASE.cf_locali_adige_aff * (1 - redAdige) + BASE.cf_locali_adige_ut);
+        const localiNew = cost41 + cost44 + costAdige + BASE.cf_locali_overhead + (anyCession ? newRent : 0);
 
-        const sh42pct = (parseInt(document.getElementById('sh42Slider').value) || 0) / 100;
-        const shNardipct = (parseInt(document.getElementById('shNardiSlider').value) || 0) / 100;
+        const op1_42 = (parseInt(document.getElementById('shOp1_42').value) || 0) / 100;
+        const op1_Nardi = (parseInt(document.getElementById('shOp1_Nardi').value) || 0) / 100;
+        const op2_42 = (parseInt(document.getElementById('shOp2_42').value) || 0) / 100;
+        const op2_Nardi = (parseInt(document.getElementById('shOp2_Nardi').value) || 0) / 100;
         const shMarkup = (parseInt(document.getElementById('shMarkupSlider').value) || 0) / 100;
+        const costShared = 54000 * (op1_42 + op1_Nardi + op2_42 + op2_Nardi);
+        const sh42pct = op1_42 + op2_42;
+        const shNardipct = op1_Nardi + op2_Nardi;
 
         const greenVol = parseInt(document.getElementById('volSlider').value) || 0;
         const greenAsp = parseInt(document.getElementById('aspSlider').value) || 0;
@@ -1635,12 +1749,8 @@
                 fashCostSaved = 0;
             }
 
-            const localiSaved = (cutP41 ? BASE.cf_locali_pinciana41_aff + BASE.cf_locali_pinciana41_ut : 0)
-                              + (cutAdige ? BASE.cf_locali_adige_aff + BASE.cf_locali_adige_ut : 0);
-            const localiNew = BASE.cf_locali - localiSaved + newRent;
-
-            const totalShPct = Math.min(sh42pct + shNardipct, 0.8);
-            const sharingRev = 108000 * totalShPct * (1 + shMarkup);
+            const totalShPct = Math.min(sh42pct + shNardipct, 1);
+            const sharingRev = costShared * (1 + shMarkup);
 
             const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
 
@@ -1938,11 +2048,17 @@
             [],
             ['Parametro', 'Valore'],
             ['Fashion Scenario', fashionRadio ? fashionRadio.value : 'combo'],
-            ['Downsizing Via Pinciana 41', document.getElementById('togPinciana').checked ? 'SI' : 'NO'],
+            ['Downsizing Via Pinciana 41', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
+            ['Downsizing Via Pinciana 44', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
             ['Downsizing Via Adige', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
-            ['Nuovo Affitto (se downsizing)', parseInt(document.getElementById('newRentSlider').value) || 0],
-            ['Sharing % Officine42', parseInt(document.getElementById('sh42Slider').value) || 0],
-            ['Sharing % Nardi', parseInt(document.getElementById('shNardiSlider').value) || 0],
+            ['Riduzione % P41', parseInt(document.getElementById('redP41').value) || 0],
+            ['Riduzione % P44', parseInt(document.getElementById('redP44').value) || 0],
+            ['Riduzione % Adige', parseInt(document.getElementById('redAdige').value) || 0],
+            ['Nuovo Affitto (se cessione)', parseInt(document.getElementById('newRentSlider').value) || 0],
+            ['Sharing Op1 % 42', parseInt(document.getElementById('shOp1_42').value) || 0],
+            ['Sharing Op1 % Nardi', parseInt(document.getElementById('shOp1_Nardi').value) || 0],
+            ['Sharing Op2 % 42', parseInt(document.getElementById('shOp2_42').value) || 0],
+            ['Sharing Op2 % Nardi', parseInt(document.getElementById('shOp2_Nardi').value) || 0],
             ['Sharing Markup %', parseInt(document.getElementById('shMarkupSlider').value) || 0],
             ['Green: Vol Target a Regime', greenVol],
             ['Green: ASP Kit Retail', greenAsp],
