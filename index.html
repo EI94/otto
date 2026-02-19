@@ -672,8 +672,18 @@
                     3 canali: Kit Retail (installato), Kit Wholesale (B2B officine), Moto chiavi-in-mano.
                     Seleziona fino a <strong>3 piattaforme aggiuntive</strong> per espandere il business.
                 </p>
-                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 mb-4">
+                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 mb-4" id="bmwPilotCard">
                     <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>BMW R2V Airhead &mdash; Pilot (Lancio 2026)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase block mb-0.5">Volume 2026</label>
+                            <input type="number" min="0" max="500" value="8" id="bmwVol2026" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase block mb-0.5">Volume 2027</label>
+                            <input type="number" min="0" max="600" value="131" id="bmwVol2027" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
+                        </div>
+                    </div>
                     <div class="space-y-3">
                         <div>
                             <div class="flex justify-between text-sm mb-1">
@@ -691,14 +701,20 @@
                             <input type="range" min="3000" max="7000" step="100" value="3900" id="aspSlider" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
                             <div class="flex justify-between text-[10px] text-slate-500 mt-0.5"><span>&euro;3.000</span><span>&euro;7.000</span></div>
                         </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase block mb-0.5">Prezzo Kit Wholesale (ASP)</label>
+                            <input type="number" min="1500" max="6000" step="50" value="3120" id="bmwWsAsp" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase block mb-0.5">Prezzo Moto chiavi-in-mano (&euro;)</label>
+                            <input type="number" min="15000" max="35000" step="500" value="23000" id="bmwMotoPrice" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
+                        </div>
                     </div>
-                    <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 rounded p-2 space-y-0.5">
-                        <div class="flex justify-between"><span>Kit Wholesale (80% Retail)</span><span class="text-white font-bold" id="wsPriceDisplay">&euro;3.120</span></div>
-                        <div class="flex justify-between"><span>Moto chiavi-in-mano</span><span class="text-white font-bold">&euro;23.000</span></div>
-                        <div class="flex justify-between"><span>BOM Kit (Anno 1 &rarr; -5%/yr learning)</span><span class="text-rose-300 font-bold">&euro;2.300</span></div>
-                        <div class="flex justify-between"><span>BOM Moto (base+kit+ricambi)</span><span class="text-rose-300 font-bold">&euro;15.717</span></div>
-                        <div class="flex justify-between"><span>MdO Install Retail (Anno 3+)</span><span class="text-rose-300 font-bold">&euro;400</span></div>
-                        <div class="flex justify-between"><span>Omologa + Logistica + CAC</span><span class="text-rose-300 font-bold">&euro;800/kit</span></div>
+                    <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 rounded p-2 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="flex justify-between items-center"><span>BOM Kit (Anno 1 &rarr; -5%/yr)</span><input type="number" min="1500" max="4000" value="2300" id="bmwBomKit" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>BOM Moto (base+kit+ricambi)</span><input type="number" min="10000" max="25000" value="15717" id="bmwBomMoto" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>MdO Install Retail (Anno 3+)</span><input type="number" min="200" max="800" value="400" id="bmwMdo" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>Omologa + Logistica + CAC (&euro;/kit)</span><input type="number" min="300" max="1500" value="800" id="bmwOmologa" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center mt-3">
                         <div class="bg-slate-900 p-2 rounded border border-slate-700">
@@ -715,13 +731,14 @@
                         </div>
                     </div>
                     <div class="text-[10px] text-slate-500 mt-2">
-                        Ramp: 2% (2026) &rarr; 35% (2027) &rarr; 100% (2028+) | Mix 2028+: 30% Ret, 60% WS, 10% Moto |
+                        Ramp: vol 2026/2027 impostati sopra &rarr; 100% (2028+) | Mix 2028+: 30% Ret, 60% WS, 10% Moto |
                         <span class="text-amber-400 font-bold" id="grossMarginDisplay">GM ~41%</span>
                     </div>
                 </div>
                 <p class="text-xs font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-plus-circle mr-1"></i>Piattaforme Aggiuntive (max 3)</p>
                 <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1" id="platformList"></div>
                 <p class="text-[10px] text-slate-500 mt-2" id="platformCount">0/3 selezionate</p>
+                <div id="platformConfigs" class="mt-4 space-y-4"></div>
             </div>
             <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-xl">
                 <h4 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Roadmap Revenue &amp; EBITDA 2026&ndash;2036</h4>
@@ -923,6 +940,23 @@
                 <thead id="ceTableHead"></thead>
                 <tbody id="ceTableBody"></tbody>
             </table>
+        </div>
+        <div class="mt-6 border-t border-slate-700 pt-6">
+            <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-leaf mr-1"></i>Iconic Mobility Lab (Project Green) &mdash; Dettaglio per piattaforma</h4>
+            <div class="overflow-x-auto mb-4">
+                <p class="text-[10px] text-slate-500 mb-2">Revenue per piattaforma per anno (&euro;)</p>
+                <table class="w-full text-sm min-w-[640px]" id="greenDetailRevTable">
+                    <thead id="greenDetailRevHead"></thead>
+                    <tbody id="greenDetailRevBody"></tbody>
+                </table>
+            </div>
+            <div class="overflow-x-auto">
+                <p class="text-[10px] text-slate-500 mb-2">Unità vendute per piattaforma per anno</p>
+                <table class="w-full text-sm min-w-[640px]" id="greenDetailUnitsTable">
+                    <thead id="greenDetailUnitsHead"></thead>
+                    <tbody id="greenDetailUnitsBody"></tbody>
+                </table>
+            </div>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">
             <div class="text-xs sm:text-[11px] text-slate-500 bg-slate-800 rounded p-3 flex-1 min-w-0">
@@ -1286,35 +1320,75 @@
         recalcFinancialPlan();
     }
 
-    // --- PLATFORMS DATA (bom = BOM materiali, asp = prezzo retail kit) ---
+    // --- PLATFORMS DATA (bom = BOM materiali, asp = prezzo retail kit; dettagli da griglia retrofit .xlsx) ---
     const platforms = [
-        { id:'hd_sportster', name:'Harley-Davidson Sportster', prod:'1M+', asp:5200, bom:2500, vol:80, launch:2029 },
-        { id:'ducati_monster', name:'Ducati Monster 600-1200', prod:'300k', asp:4800, bom:2400, vol:60, launch:2029 },
-        { id:'yamaha_mt07', name:'Yamaha MT-07 (CP2)', prod:'200k+', asp:4200, bom:2200, vol:90, launch:2029 },
-        { id:'royal_enfield_mono', name:'Royal Enfield Mono (Bullet/Classic/Himalayan)', prod:'6-8M', asp:3600, bom:2000, vol:120, launch:2028 },
-        { id:'suzuki_sv650', name:'Suzuki SV650', prod:'300-500k', asp:4000, bom:2200, vol:70, launch:2029 },
-        { id:'honda_500', name:'Honda 500 Twins (CB/CMX/CL)', prod:'300-500k', asp:3800, bom:2100, vol:85, launch:2029 },
-        { id:'triumph_bonnie', name:'Triumph Bonneville (aria)', prod:'150k+', asp:4800, bom:2400, vol:50, launch:2030 },
-        { id:'ducati_desmo2v', name:'Ducati Desmodue 2V aria', prod:'500k+', asp:4600, bom:2300, vol:65, launch:2029 },
-        { id:'moto_guzzi_v7', name:'Moto Guzzi Small-Block (V7/V9)', prod:'40-50k', asp:4600, bom:2400, vol:35, launch:2030 },
-        { id:'bmw_k_brick', name:'BMW K-Series "Flying Brick"', prod:'300-350k', asp:5000, bom:2600, vol:45, launch:2030 },
-        { id:'re_650', name:'Royal Enfield 650 Twins', prod:'250-350k', asp:3800, bom:2100, vol:75, launch:2029 },
-        { id:'honda_transalp', name:'Honda Transalp XL600/650V', prod:'200-300k', asp:4200, bom:2300, vol:55, launch:2029 },
-        { id:'yamaha_xs650', name:'Yamaha XS650', prod:'200-250k', asp:4400, bom:2200, vol:40, launch:2031 },
-        { id:'honda_cb_four', name:'Honda CB Four SOHC (500-750)', prod:'700-850k', asp:4800, bom:2500, vol:45, launch:2030 },
-        { id:'suzuki_bandit', name:'Suzuki Bandit GSF', prod:'500-800k', asp:3800, bom:2100, vol:65, launch:2029 },
-        { id:'yamaha_sr', name:'Yamaha SR400/500', prod:'150-250k', asp:4000, bom:2100, vol:40, launch:2031 },
-        { id:'kawasaki_z70s', name:'Kawasaki Z 70s (Z1/Z900/Z1000)', prod:'200-250k', asp:5000, bom:2600, vol:35, launch:2031 },
-        { id:'honda_africa', name:'Honda Africa Twin XRV650/750', prod:'70-100k', asp:4600, bom:2400, vol:30, launch:2031 }
+        { id:'hd_sportster', name:'Harley-Davidson Sportster', prod:'1M+', asp:5200, bom:2500, vol:80, launch:2029,
+          dettaglio: { piattaforma: '883/1200 Evo, 1957–2022', produzione: '≥1M (multi-milionario)', parco: '~250–350k EU / ~20–35k IT', potenziale: 'Tubi acciaio, spazi diffusi: e-assist su primaria; EV light con upgrade freni/sosp.' } },
+        { id:'ducati_monster', name:'Ducati Monster 600-1200', prod:'300k', asp:4800, bom:2400, vol:60, launch:2029,
+          dettaglio: { piattaforma: '600/750/900/1100/1200, \'93–oggi', produzione: '~300k (fino ~2016)', parco: '~200–250k EU / ~50–80k IT', potenziale: 'Traliccio + naked: integrazione semplice; attenzione a pesi/raffreddamento.' } },
+        { id:'yamaha_mt07', name:'Yamaha MT-07 (CP2)', prod:'200k+', asp:4200, bom:2200, vol:90, launch:2029,
+          dettaglio: { piattaforma: '2014–oggi', produzione: '>200k', parco: '~120–140k EU / ~20–30k IT', potenziale: 'Telaio a diamante, naked leggera: ottima base per kit ibrido/EV modulare.' } },
+        { id:'royal_enfield_mono', name:'Royal Enfield Mono (Bullet/Classic/Himalayan)', prod:'6-8M', asp:3600, bom:2000, vol:120, launch:2028,
+          dettaglio: { piattaforma: '\'08–oggi', produzione: '≥6–8M', parco: '~90–140k EU / ~25–35k IT', potenziale: 'Doppia culla, volumi generosi: e-assist low-voltage; EV urban con pacchi modulari.' } },
+        { id:'suzuki_sv650', name:'Suzuki SV650', prod:'300-500k', asp:4000, bom:2200, vol:70, launch:2029,
+          dettaglio: { piattaforma: '\'99–\'12, \'16–oggi', produzione: '≥300–500k', parco: '~150–250k EU / ~10–20k IT', potenziale: 'Traliccio acciaio + V-twin: spazio sottosella; conversioni EV già viste.' } },
+        { id:'honda_500', name:'Honda 500 Twins (CB/CMX/CL)', prod:'300-500k', asp:3800, bom:2100, vol:85, launch:2029,
+          dettaglio: { piattaforma: 'CB500F/X/R, Rebel, CL; 2013–oggi', produzione: '≥300–500k', parco: '~150–250k EU / ~15–30k IT', potenziale: 'Telaio a diamante, A2-friendly: architettura semplice; ideale per retrofit entry.' } },
+        { id:'triumph_bonnie', name:'Triumph Bonneville (aria)', prod:'150k+', asp:4800, bom:2400, vol:50, launch:2030,
+          dettaglio: { piattaforma: 'T100/Thruxton/Scrambler 900, 2001–16', produzione: '>150k', parco: '~24–26k EU / ~8,8–9k IT', potenziale: 'Telaio tradizionale, integrazione batteria ok: ibrido/mozzo; EV con peso sotto controllo.' } },
+        { id:'ducati_desmo2v', name:'Ducati Desmodue 2V aria', prod:'500k+', asp:4600, bom:2300, vol:65, launch:2029,
+          dettaglio: { piattaforma: 'Monster/SS/Scrambler 800, \'93–oggi', produzione: '>500k', parco: '~100–105k EU / ~35–38k IT', potenziale: 'Traliccio + forte aftermarket: ibrido su primaria; EV possibile su versioni recenti.' } },
+        { id:'moto_guzzi_v7', name:'Moto Guzzi Small-Block (V7/V9)', prod:'40-50k', asp:4600, bom:2400, vol:35, launch:2030,
+          dettaglio: { piattaforma: 'V7 I–III, V9, \'08–\'20 ca.', produzione: '~40–50k', parco: '~32–34k EU / ~18–19k IT', potenziale: 'Architettura compatta, ottimi volumi sotto sella: e-assist sensato; EV urban modulare.' } },
+        { id:'bmw_k_brick', name:'BMW K-Series "Flying Brick"', prod:'300-350k', asp:5000, bom:2600, vol:45, launch:2030,
+          dettaglio: { piattaforma: 'K75/100/1100, \'83–\'96', produzione: '~300–350k', parco: '~90–120k EU / ~20–30k IT', potenziale: 'Layout longitudinale + cardano: e-assist su albero/primaria top; ampio "sotto serbatoio".' } },
+        { id:'re_650', name:'Royal Enfield 650 Twins', prod:'250-350k', asp:3800, bom:2100, vol:75, launch:2029,
+          dettaglio: { piattaforma: 'Interceptor/Continental GT, 2018–oggi', produzione: '≥250–350k', parco: '~30–60k EU / ~1–3k IT', potenziale: 'Doppio tubo discendente + P-twin: layout pulito; conversione ibrida/EV agevole.' } },
+        { id:'honda_transalp', name:'Honda Transalp XL600/650V', prod:'200-300k', asp:4200, bom:2300, vol:55, launch:2029,
+          dettaglio: { piattaforma: '\'87–\'06 ca.', produzione: '~200–300k', parco: '~150–200k EU / ~20–35k IT', potenziale: 'Telaio tubi + V-twin: spazio serbatoio/fiancate; ibrido plausibile; EV mid-pack.' } },
+        { id:'yamaha_xs650', name:'Yamaha XS650', prod:'200-250k', asp:4400, bom:2200, vol:40, launch:2031,
+          dettaglio: { piattaforma: '\'69–\'85', produzione: '~200–250k', parco: '~25–35k EU / ~5–7k IT', potenziale: 'Telaio lineare, community enorme: kit ibrido ideale; EV urban con pacchi compatti.' } },
+        { id:'honda_cb_four', name:'Honda CB Four SOHC (500-750)', prod:'700-850k', asp:4800, bom:2500, vol:45, launch:2030,
+          dettaglio: { piattaforma: '\'69–\'78, incl. TT/HL', produzione: '~700–850k', parco: '~45–55k EU / ~7–9k IT', potenziale: 'Spazi in airbox/triangolo: ibrido/EV fattibili; servono upgrade freni/sospensioni.' } },
+        { id:'suzuki_bandit', name:'Suzuki Bandit GSF', prod:'500-800k', asp:3800, bom:2100, vol:65, launch:2029,
+          dettaglio: { piattaforma: '600/650/1200/1250, \'95–\'16', produzione: '≥500–800k', parco: '~300–450k EU / ~30–60k IT', potenziale: 'Doppia culla + serbatoio 19–20 L: volumi utili; ibrido/EV con upgrade impianti.' } },
+        { id:'yamaha_sr', name:'Yamaha SR400/500', prod:'150-250k', asp:4000, bom:2100, vol:40, launch:2031,
+          dettaglio: { piattaforma: 'SR500 \'78–\'99, SR400 \'78–2021', produzione: '≥150–250k', parco: '~20–35k EU / ~3–5k IT', potenziale: 'Semi-doppia culla, batteria sotto sella: semplice, perfetta per ibrido/EV cittadino.' } },
+        { id:'kawasaki_z70s', name:'Kawasaki Z 70s (Z1/Z900/Z1000)', prod:'200-250k', asp:5000, bom:2600, vol:35, launch:2031,
+          dettaglio: { piattaforma: '\'72–\'80', produzione: '~200–250k', parco: '~20–30k EU / ~2–4k IT', potenziale: 'Struttura solida; batteria in airbox/lati: ibrido ok; EV con attenzione a freni.' } },
+        { id:'honda_africa', name:'Honda Africa Twin XRV650/750', prod:'70-100k', asp:4600, bom:2400, vol:30, launch:2031,
+          dettaglio: { piattaforma: '\'88–\'03', produzione: '≥70–100k', parco: '~50–80k EU / ~3–6k IT', potenziale: 'Doppia culla + serbatoio capiente: rugged; ibrido molto sensato.' } }
     ];
 
     function renderPlatforms() {
-        document.getElementById('platformList').innerHTML = platforms.map(p => `
-            <label class="flex items-center p-2 bg-slate-800/60 rounded border border-slate-700 cursor-pointer hover:bg-slate-700/60 text-xs">
-                <input type="checkbox" class="platform-cb mr-2 accent-teal-400" data-id="${p.id}" onchange="onPlatformChange()">
-                <span class="flex-1">${p.name} <span class="text-slate-500">(${p.prod})</span></span>
-                <span class="text-teal-400 font-bold ml-1">${p.launch}</span>
-            </label>`).join('');
+        document.getElementById('platformList').innerHTML = platforms.map(p => {
+            const d = p.dettaglio || {};
+            const tooltipHtml = d.piattaforma || d.parco || d.potenziale ? `
+                <div class="platform-detail absolute left-0 top-full mt-1 z-50 hidden w-full min-w-[280px] max-w-sm rounded-lg border border-teal-600 bg-slate-800 p-3 text-left text-xs shadow-xl" role="tooltip">
+                    <p class="font-bold text-teal-400 uppercase mb-2">Perché questa piattaforma</p>
+                    ${d.piattaforma ? `<p><span class="text-slate-400">Modelli, anni:</span> <span class="text-slate-200">${d.piattaforma}</span></p>` : ''}
+                    ${d.produzione ? `<p><span class="text-slate-400">Produzione globale (stima):</span> <span class="text-slate-200">${d.produzione}</span></p>` : ''}
+                    ${d.parco ? `<p><span class="text-slate-400">Parco circolante (EU / IT):</span> <span class="text-slate-200">${d.parco}</span></p>` : ''}
+                    ${d.potenziale ? `<p class="mt-2 border-t border-slate-600 pt-2"><span class="text-slate-400">Potenziale tecnico retrofit:</span> <span class="text-slate-200">${d.potenziale}</span></p>` : ''}
+                </div>` : '';
+            return `
+            <div class="relative platform-item group">
+                <label class="flex items-center p-2 bg-slate-800/60 rounded border border-slate-700 cursor-pointer hover:bg-slate-700/60 text-xs">
+                    <input type="checkbox" class="platform-cb mr-2 accent-teal-400" data-id="${p.id}" onchange="onPlatformChange()">
+                    <span class="flex-1">${p.name} <span class="text-slate-500">(${p.prod})</span></span>
+                    <span class="text-teal-400 font-bold ml-1">${p.launch}</span>
+                    <i class="fa-solid fa-circle-info ml-1 text-slate-500 group-hover:text-teal-400"></i>
+                </label>
+                ${tooltipHtml}
+            </div>`;
+        }).join('');
+        document.querySelectorAll('.platform-item').forEach(el => {
+            const detail = el.querySelector('.platform-detail');
+            if (!detail) return;
+            el.addEventListener('mouseenter', () => { detail.classList.remove('hidden'); });
+            el.addEventListener('mouseleave', () => { detail.classList.add('hidden'); });
+            el.querySelector('label').addEventListener('click', (e) => { if (e.target.type !== 'checkbox') detail.classList.toggle('hidden'); });
+        });
     }
 
     function onPlatformChange() {
@@ -1323,6 +1397,7 @@
         if (checked.length > 3) { checked[checked.length-1].checked = false; return; }
         cbs.forEach(cb => { if (!cb.checked && checked.length >= 3) cb.closest('label').classList.add('opacity-40'); else cb.closest('label').classList.remove('opacity-40'); });
         document.getElementById('platformCount').innerText = checked.length + '/3 selezionate';
+        renderPlatformConfigs();
         updateGreenSim();
         recalcFinancialPlan();
     }
@@ -1331,17 +1406,78 @@
         return [...document.querySelectorAll('.platform-cb:checked')].map(cb => platforms.find(p => p.id === cb.dataset.id));
     }
 
-    // --- PROJECT GREEN P&L ENGINE (aligned to High Level BP Feb 2026 GC) ---
-    const GREEN_BMW_LAUNCH = 2026;
-    const GREEN_MOTO_PRICE = 23000;
-    const GREEN_MOTO_BOM = 15717;
+    function getGreenParams() {
+        const vol = parseInt(document.getElementById('volSlider')?.value) || 375;
+        const asp = parseInt(document.getElementById('aspSlider')?.value) || 3900;
+        const bmw = {
+            launchYear: 2026,
+            vol2026: parseInt(document.getElementById('bmwVol2026')?.value) || 8,
+            vol2027: parseInt(document.getElementById('bmwVol2027')?.value) || 131,
+            volRegime: vol,
+            retailASP: asp,
+            wholesaleASP: parseInt(document.getElementById('bmwWsAsp')?.value) || Math.round(asp * 0.8),
+            motoPrice: parseInt(document.getElementById('bmwMotoPrice')?.value) || 23000,
+            bomKit: parseInt(document.getElementById('bmwBomKit')?.value) || 2300,
+            bomMoto: parseInt(document.getElementById('bmwBomMoto')?.value) || 15717,
+            mdoRetail: parseInt(document.getElementById('bmwMdo')?.value) || 400,
+            omologaCac: parseInt(document.getElementById('bmwOmologa')?.value) || 800
+        };
+        const selected = getSelectedPlatforms();
+        const platformsParams = selected.map(p => {
+            const card = document.querySelector(`[data-green-plat-id="${p.id}"]`);
+            const defVol = p.vol || 80, defAsp = p.asp || 5200;
+            return {
+                id: p.id, name: p.name, launchYear: p.launch,
+                volRegime: card ? parseInt(card.querySelector('[data-green-vol]')?.value) || defVol : defVol,
+                retailASP: card ? parseInt(card.querySelector('[data-green-asp]')?.value) || defAsp : defAsp,
+                wholesaleASP: card ? parseInt(card.querySelector('[data-green-ws]')?.value) || Math.round(defAsp * 0.8) : Math.round(defAsp * 0.8),
+                motoPrice: card ? parseInt(card.querySelector('[data-green-moto]')?.value) || 23000 : 23000,
+                bomKit: card ? parseInt(card.querySelector('[data-green-bomkit]')?.value) || p.bom : p.bom,
+                bomMoto: card ? parseInt(card.querySelector('[data-green-bommoto]')?.value) || 15717 : 15717,
+                mdoRetail: bmw.mdoRetail,
+                omologaCac: bmw.omologaCac
+            };
+        });
+        return { bmw, platforms: platformsParams };
+    }
 
-    function calcPlatformPL(yr, launchYear, volRegime, retailASP, bomBase) {
+    function renderPlatformConfigs() {
+        const container = document.getElementById('platformConfigs');
+        const selected = getSelectedPlatforms();
+        container.innerHTML = selected.map(p => {
+            const defWs = Math.round((p.asp || 5200) * 0.8);
+            return `<div class="bg-slate-800 p-4 rounded-lg border border-slate-700" data-green-plat-id="${p.id}">
+                <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>${p.name} (Lancio ${p.launch})</h4>
+                <p class="text-[10px] text-slate-500 mb-2">Suggerimento TAM: ~${p.vol} u/yr. Imposta volume a regime e prezzi.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
+                    <div><label class="text-slate-400 block mb-0.5">Volume a Regime (Anno 3+)</label><input type="number" min="1" max="500" value="${p.vol}" data-green-vol class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Kit Retail ASP (&euro;)</label><input type="number" min="2000" max="8000" value="${p.asp}" data-green-asp class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Kit Wholesale ASP (&euro;)</label><input type="number" min="1500" max="6000" value="${defWs}" data-green-ws class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">Moto chiavi-in-mano (&euro;)</label><input type="number" min="15000" max="35000" value="23000" data-green-moto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">BOM Kit (&euro;)</label><input type="number" min="1500" max="4000" value="${p.bom}" data-green-bomkit class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">BOM Moto (&euro;)</label><input type="number" min="10000" max="25000" value="15717" data-green-bommoto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // --- PROJECT GREEN P&L ENGINE (parametri per piattaforma, ramp pilot 2026/2027) ---
+    const GREEN_BMW_LAUNCH = 2026;
+
+    function calcPlatformPL(yr, launchYear, params) {
         const d = yr - launchYear;
         if (d < 0) return { rev:0, cogs:0, varOpex:0, units:0 };
 
-        const ramp = d === 0 ? 0.02 : d === 1 ? 0.35 : Math.pow(1.03, Math.max(0, d - 2));
-        const units = volRegime * ramp;
+        const isPilot = launchYear === GREEN_BMW_LAUNCH;
+        let units;
+        if (isPilot) {
+            if (yr === 2026) units = params.vol2026 || 0;
+            else if (yr === 2027) units = params.vol2027 || 0;
+            else units = (params.volRegime || 0) * Math.pow(1.03, Math.max(0, yr - 2028));
+        } else {
+            const ramp = d === 0 ? 0.02 : d === 1 ? 0.35 : Math.pow(1.03, Math.max(0, d - 2));
+            units = (params.volRegime || 0) * ramp;
+        }
 
         let retPct, wsPct, motPct;
         if (d === 0) { retPct=1; wsPct=0; motPct=0; }
@@ -1350,31 +1486,47 @@
 
         const retU = units * retPct, wsU = units * wsPct, motU = units * motPct;
         const pEsc = d <= 0 ? 1 : 1.10 * Math.pow(1.05, Math.max(0, d - 1));
-        const pRet = retailASP * pEsc;
-        const pWS = pRet * 0.80;
+        const pRet = (params.retailASP || 0) * pEsc;
+        const pWS = (params.wholesaleASP || 0) * pEsc;
         const kitRev = retU * pRet + wsU * pWS;
-        const rev = kitRev + motU * GREEN_MOTO_PRICE;
+        const rev = kitRev + motU * (params.motoPrice || 23000);
 
-        const bom = Math.max(1800, bomBase * Math.pow(0.95, Math.min(d, 10)));
-        const cogs = (retU + wsU) * bom + motU * GREEN_MOTO_BOM;
+        const bomKit = Math.max(1800, (params.bomKit || 2300) * Math.pow(0.95, Math.min(d, 10)));
+        const cogs = (retU + wsU) * bomKit + motU * (params.bomMoto || 15717);
 
-        const labor = d === 0 ? 2500 : d === 1 ? 700 : 400;
-        const logist = d === 0 ? 1250 : d === 1 ? 300 : 150;
-        const varOpex = retU * (labor + 500) + units * (logist + 150) + kitRev * 0.01;
+        const mdo = params.mdoRetail || 400;
+        const omologa = params.omologaCac || 800;
+        const varOpex = retU * mdo + units * omologa + kitRev * 0.01;
 
         return { rev, cogs, varOpex, units };
     }
 
-    function calcGreenPL(yr, bmwVolRegime, retailASP, selectedPlats) {
-        const bmw = calcPlatformPL(yr, GREEN_BMW_LAUNCH, bmwVolRegime, retailASP, 2300);
+    function calcGreenPL(yr, params) {
+        const bmwParams = {
+            ...params.bmw,
+            vol2026: params.bmw.vol2026,
+            vol2027: params.bmw.vol2027,
+            volRegime: params.bmw.volRegime,
+            retailASP: params.bmw.retailASP,
+            wholesaleASP: params.bmw.wholesaleASP,
+            motoPrice: params.bmw.motoPrice,
+            bomKit: params.bmw.bomKit,
+            bomMoto: params.bmw.bomMoto,
+            mdoRetail: params.bmw.mdoRetail,
+            omologaCac: params.bmw.omologaCac
+        };
+        const bmw = calcPlatformPL(yr, GREEN_BMW_LAUNCH, bmwParams);
 
-        let platRev=0, platCOGS=0, platVar=0, platUnits=0;
-        selectedPlats.forEach(p => {
-            const r = calcPlatformPL(yr, p.launch, p.vol, p.asp, p.bom);
+        const perPlatform = [{ name: 'BMW R2V Airhead', rev: bmw.rev, cogs: bmw.cogs, varOpex: bmw.varOpex, units: bmw.units }];
+        let platRev = 0, platCOGS = 0, platVar = 0, platUnits = 0;
+        params.platforms.forEach(pp => {
+            if (yr < pp.launchYear) return;
+            const r = calcPlatformPL(yr, pp.launchYear, pp);
             platRev += r.rev; platCOGS += r.cogs; platVar += r.varOpex; platUnits += r.units;
+            perPlatform.push({ name: pp.name, rev: r.rev, cogs: r.cogs, varOpex: r.varOpex, units: r.units });
         });
 
-        const numActive = 1 + selectedPlats.filter(p => yr >= p.launch).length;
+        const numActive = 1 + params.platforms.filter(pp => yr >= pp.launchYear).length;
         const fScale = 1 + (numActive - 1) * 0.3;
         const yIdx = yr - GREEN_BMW_LAUNCH;
 
@@ -1406,7 +1558,8 @@
             ebitda, ebit,
             totalUnits: bmw.units + platUnits,
             bmwUnits: bmw.units, platUnits,
-            bmwRev: bmw.rev, platRev
+            bmwRev: bmw.rev, platRev,
+            perPlatform
         };
     }
 
@@ -1416,15 +1569,13 @@
     const aspSlider = document.getElementById('aspSlider');
 
     function updateGreenSim() {
-        const vol = parseInt(volSlider.value);
-        const asp = parseInt(aspSlider.value);
+        const params = getGreenParams();
+        const vol = params.bmw.volRegime;
+        const asp = params.bmw.retailASP;
         document.getElementById('volDisplay').innerText = vol;
         document.getElementById('aspDisplay').innerText = fmt(asp);
-        document.getElementById('wsPriceDisplay').innerText = fmt(Math.round(asp * 0.8));
 
-        const selected = getSelectedPlatforms();
-
-        const regimeGreen = calcGreenPL(2028, vol, asp, selected);
+        const regimeGreen = calcGreenPL(2028, params);
         document.getElementById('revenueDisplay').innerText = fmt(regimeGreen.revenue);
         document.getElementById('gpDisplay').innerText = fmt(regimeGreen.grossProfit);
         const ebitdaEl = document.getElementById('greenEbitdaDisplay');
@@ -1432,7 +1583,10 @@
         ebitdaEl.className = 'block text-sm font-bold ' + (regimeGreen.ebitda >= 0 ? 'text-teal-400' : 'text-rose-400');
         document.getElementById('grossMarginDisplay').innerText = 'GM ' + regimeGreen.grossMarginPct.toFixed(1) + '%';
 
-        const allPlats = [{ name:'BMW R2V Airhead', vol, asp, launch:GREEN_BMW_LAUNCH }, ...selected.map(p => ({name:p.name, vol:p.vol, asp:p.asp, launch:p.launch}))];
+        const allPlats = [
+            { name: 'BMW R2V Airhead', vol: params.bmw.volRegime, asp: params.bmw.retailASP, launch: GREEN_BMW_LAUNCH },
+            ...params.platforms.map(p => ({ name: p.name, vol: p.volRegime, asp: p.retailASP, launch: p.launchYear }))
+        ];
         document.getElementById('platformSummary').innerHTML = allPlats.map((p, i) => {
             const c = i === 0 ? 'text-teal-400' : 'text-amber-400';
             return `<div class="flex justify-between items-center text-xs p-2 bg-slate-900/60 rounded border border-slate-700">
@@ -1441,9 +1595,9 @@
             </div>`;
         }).join('');
 
-        const maxLaunch = Math.max(...allPlats.map(p => p.launch));
+        const maxLaunch = params.platforms.length ? Math.max(...params.platforms.map(p => p.launchYear)) : GREEN_BMW_LAUNCH;
         const regimeYear = Math.max(2028, maxLaunch + 2);
-        const fullRegime = calcGreenPL(regimeYear, vol, asp, selected);
+        const fullRegime = calcGreenPL(regimeYear, params);
         document.getElementById('greenTotalRevenue').innerText = fmt(fullRegime.revenue);
         document.getElementById('greenTotalKits').innerText = Math.round(fullRegime.totalUnits);
         document.getElementById('greenTotalMargin').innerText = fmt(fullRegime.ebitda);
@@ -1452,7 +1606,7 @@
 
         const years10 = [];
         for (let yr = 2026; yr <= 2036; yr++) {
-            const gpl = calcGreenPL(yr, vol, asp, selected);
+            const gpl = calcGreenPL(yr, params);
             years10.push({ yr, rev: gpl.revenue, ebitda: gpl.ebitda });
         }
 
@@ -1473,12 +1627,12 @@
             }
         });
 
-        renderGreenPLTable(vol, asp, selected);
+        renderGreenPLTable(params);
     }
 
-    function renderGreenPLTable(vol, asp, sel) {
+    function renderGreenPLTable(params) {
         const yrs = [2026, 2027, 2028, 2030, 2033, 2036];
-        const data = yrs.map(yr => calcGreenPL(yr, vol, asp, sel));
+        const data = yrs.map(yr => calcGreenPL(yr, params));
         document.getElementById('greenPLHead').innerHTML = `<tr class="border-b border-slate-700 text-slate-500 uppercase text-[9px]">
             <th class="p-1.5 text-left">Green P&L</th>${yrs.map(yr => `<th class="p-1.5 text-right">${yr}</th>`).join('')}</tr>`;
         const rows = [
@@ -1760,9 +1914,7 @@
         const sh42pct = op1_42 + op2_42;
         const shNardipct = op1_Nardi + op2_Nardi;
 
-        const greenVol = parseInt(document.getElementById('volSlider').value) || 0;
-        const greenAsp = parseInt(document.getElementById('aspSlider').value) || 0;
-        const selectedPlats = getSelectedPlatforms();
+        const greenParams = getGreenParams();
 
         const pY = [0,0,0,0,0,0,0,0,0,0];
         const pYCost = [0,0,0,0,0,0,0,0,0,0];
@@ -1805,7 +1957,7 @@
             const totalShPct = Math.min(sh42pct + shNardipct, 1);
             const sharingRev = costShared * (1 + shMarkup);
 
-            const gpl = calcGreenPL(yr, greenVol, greenAsp, selectedPlats);
+            const gpl = calcGreenPL(yr, greenParams);
 
             const prodBase = pY[Math.min(y, 9)] || 0;
             const prodCostBase = pYCost[Math.min(y, 9)] || 0;
@@ -1847,12 +1999,14 @@
                 ricavi_sharing, ricavi_concierge, ricavi_altro, totale_ricavi,
                 cv_operativi: Math.max(cv_operativi,0), cv_commerciali: Math.max(cv_commerciali,0), totale_cv,
                 mdc, cf_locali, cf_personale, cf_ga, cf_green, totale_cf, ebitda, da, ebit,
-                green_ebitda: gpl.ebitda, green_units: gpl.totalUnits
+                green_ebitda: gpl.ebitda, green_units: gpl.totalUnits,
+                greenPerPlatform: gpl.perPlatform || []
             });
         }
 
         lastYearsData = years;
         renderCETable(years);
+        renderGreenDetailTable(years);
         renderEbitdaChart(years);
         renderEbitdaCards(years);
         renderMixCharts(years);
@@ -1926,6 +2080,47 @@
                     else if (r.accent && i > 0 && v > 0) color = 'text-teal-400';
                     return `<td class="p-2 text-right ${color} tabular-nums whitespace-nowrap">${r.units ? v : fmt(v)}</td>`;
                 }).join('')}
+            </tr>`;
+        }).join('');
+    }
+
+    function renderGreenDetailTable(years) {
+        const allNames = [];
+        const seen = new Set();
+        years.forEach(y => {
+            (y.greenPerPlatform || []).forEach(pp => {
+                if (pp.name && !seen.has(pp.name)) { seen.add(pp.name); allNames.push(pp.name); }
+            });
+        });
+        const labels = years.map(y => y.label);
+        const revHead = document.getElementById('greenDetailRevHead');
+        const revBody = document.getElementById('greenDetailRevBody');
+        const unitsHead = document.getElementById('greenDetailUnitsHead');
+        const unitsBody = document.getElementById('greenDetailUnitsBody');
+        if (!revHead || !revBody) return;
+        revHead.innerHTML = `<tr class="border-b border-slate-700 text-slate-400 uppercase text-[10px]">
+            <th class="p-2 text-left sticky left-0 bg-slate-900 z-10 min-w-[180px]">Piattaforma</th>
+            ${labels.map(l => `<th class="p-2 text-right min-w-[80px]">${l}</th>`).join('')}
+        </tr>`;
+        unitsHead.innerHTML = revHead.innerHTML;
+        revBody.innerHTML = allNames.map(name => {
+            const vals = years.map(y => {
+                const pp = (y.greenPerPlatform || []).find(p => p.name === name);
+                return pp ? pp.rev : 0;
+            });
+            return `<tr class="border-b border-slate-800/50">
+                <td class="p-2 sticky left-0 bg-slate-900 text-teal-400 font-medium">${name}</td>
+                ${vals.map(v => `<td class="p-2 text-right text-slate-300 tabular-nums">${fmt(v)}</td>`).join('')}
+            </tr>`;
+        }).join('');
+        unitsBody.innerHTML = allNames.map(name => {
+            const vals = years.map(y => {
+                const pp = (y.greenPerPlatform || []).find(p => p.name === name);
+                return pp ? Math.round(pp.units) : 0;
+            });
+            return `<tr class="border-b border-slate-800/50">
+                <td class="p-2 sticky left-0 bg-slate-900 text-teal-400 font-medium">${name}</td>
+                ${vals.map(v => `<td class="p-2 text-right text-slate-300 tabular-nums">${v}</td>`).join('')}
             </tr>`;
         }).join('');
     }
@@ -2068,13 +2263,11 @@
         ws1['!cols'] = [{ wch: 32 }, ...Array(years.length + 1).fill({ wch: 15 })];
         XLSX.utils.book_append_sheet(wb, ws1, 'BP Ottodrom 2026-2036');
 
-        const greenVol = parseInt(document.getElementById('volSlider').value) || 375;
-        const greenAsp = parseInt(document.getElementById('aspSlider').value) || 3900;
-        const selPlats = getSelectedPlatforms();
+        const greenParams = getGreenParams();
         const greenHdr = ['Green P&L', '2025', ...years.map(y => y.label)];
         const greenYears = years.map(y => {
             const yr = parseInt(y.label);
-            return calcGreenPL(yr, greenVol, greenAsp, selPlats);
+            return calcGreenPL(yr, greenParams);
         });
         const greenRows = [
             greenHdr,
@@ -2096,6 +2289,29 @@
         ws2['!cols'] = [{ wch: 30 }, ...Array(years.length + 1).fill({ wch: 15 })];
         XLSX.utils.book_append_sheet(wb, ws2, 'Project Green P&L');
 
+        const allNames = [];
+        const seen = new Set();
+        years.forEach(y => {
+            (y.greenPerPlatform || []).forEach(pp => {
+                if (pp.name && !seen.has(pp.name)) { seen.add(pp.name); allNames.push(pp.name); }
+            });
+        });
+        const platRevRows = [['Piattaforma', ...years.map(y => y.label)]];
+        const platUnitsRows = [['Piattaforma', ...years.map(y => y.label)]];
+        allNames.forEach(name => {
+            platRevRows.push([name, ...years.map(y => {
+                const pp = (y.greenPerPlatform || []).find(p => p.name === name);
+                return pp ? pp.rev : 0;
+            })]);
+            platUnitsRows.push([name, ...years.map(y => {
+                const pp = (y.greenPerPlatform || []).find(p => p.name === name);
+                return pp ? Math.round(pp.units) : 0;
+            })]);
+        });
+        const wsPlat = XLSX.utils.aoa_to_sheet([['Revenue per piattaforma (€)'], [], ...platRevRows, [], ['Unità per piattaforma'], [], ...platUnitsRows]);
+        wsPlat['!cols'] = [{ wch: 28 }, ...Array(years.length).fill({ wch: 12 })];
+        XLSX.utils.book_append_sheet(wb, wsPlat, 'Green per Piattaforma');
+
         const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
         const assRows = [
             ['ASSUMPTIONS – Piano Industriale Ottodrom'],
@@ -2114,9 +2330,25 @@
             ['Sharing Op2 % 42', parseInt(document.getElementById('shOp2_42').value) || 0],
             ['Sharing Op2 % Nardi', parseInt(document.getElementById('shOp2_Nardi').value) || 0],
             ['Sharing Markup %', parseInt(document.getElementById('shMarkupSlider').value) || 0],
-            ['Green: Vol Target a Regime', greenVol],
-            ['Green: ASP Kit Retail', greenAsp],
-            ['Green: Piattaforme Aggiuntive', selPlats.map(p => p.name).join(', ') || 'Nessuna'],
+            ['Green BMW: Volume 2026', greenParams.bmw.vol2026],
+            ['Green BMW: Volume 2027', greenParams.bmw.vol2027],
+            ['Green BMW: Volume a Regime', greenParams.bmw.volRegime],
+            ['Green BMW: Kit Retail ASP', greenParams.bmw.retailASP],
+            ['Green BMW: Kit Wholesale ASP', greenParams.bmw.wholesaleASP],
+            ['Green BMW: Moto chiavi-in-mano', greenParams.bmw.motoPrice],
+            ['Green BMW: BOM Kit', greenParams.bmw.bomKit],
+            ['Green BMW: BOM Moto', greenParams.bmw.bomMoto],
+            ['Green BMW: MdO Retail', greenParams.bmw.mdoRetail],
+            ['Green BMW: Omologa+Log+CAC', greenParams.bmw.omologaCac],
+            ['Green: Piattaforme Aggiuntive', greenParams.platforms.map(p => p.name).join(', ') || 'Nessuna'],
+            ...greenParams.platforms.flatMap((p, i) => [
+                ['Green Plat ' + (i+1) + ' ' + p.name + ' Vol Regime', p.volRegime],
+                ['Green Plat ' + (i+1) + ' Retail ASP', p.retailASP],
+                ['Green Plat ' + (i+1) + ' Wholesale ASP', p.wholesaleASP],
+                ['Green Plat ' + (i+1) + ' Moto Price', p.motoPrice],
+                ['Green Plat ' + (i+1) + ' BOM Kit', p.bomKit],
+                ['Green Plat ' + (i+1) + ' BOM Moto', p.bomMoto]
+            ]),
             ['Ottodrom Care: Moto Gestite', parseInt(document.getElementById('mcMotoSlider').value) || 0],
             [],
             ['Componenti (Catalogo)', 'Prezzo', 'Margine %', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3', 'Q Anno 4', 'Q Anno 5', 'Q Anno 6', 'Q Anno 7', 'Q Anno 8', 'Q Anno 9', 'Q Anno 10'],
@@ -2140,6 +2372,7 @@
         switchBenchmark('revival', document.querySelector('#benchmarks button'));
         renderActions();
         renderPlatforms();
+        renderPlatformConfigs();
         renderProducts();
         updateDownsizing();
         updateSharing();
