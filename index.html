@@ -8,7 +8,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -713,8 +714,16 @@
                     <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 rounded p-2 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div class="flex justify-between items-center"><span>BOM Kit (Anno 1 &rarr; -5%/yr)</span><input type="number" min="1500" max="4000" value="2300" id="bmwBomKit" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                         <div class="flex justify-between items-center"><span>BOM Moto (base+kit+ricambi)</span><input type="number" min="10000" max="25000" value="15717" id="bmwBomMoto" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                        <div class="flex justify-between items-center"><span>MdO Install Retail (Anno 3+)</span><input type="number" min="200" max="800" value="400" id="bmwMdo" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                        <div class="flex justify-between items-center"><span>Omologa + Logistica + CAC (&euro;/kit)</span><input type="number" min="300" max="1500" value="800" id="bmwOmologa" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>MdO Retail Anno 1 (&euro;/kit)</span><input type="number" min="0" max="5000" value="2500" id="bmwMdoY1" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>MdO Retail Anno 2 (&euro;/kit)</span><input type="number" min="0" max="2000" value="700" id="bmwMdoY2" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>MdO Retail Anno 3+ (&euro;/kit)</span><input type="number" min="0" max="1000" value="400" id="bmwMdoY3" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>Omologa solo kit retail (&euro;/kit)</span><input type="number" min="0" max="1000" value="500" id="bmwOmologaRetail" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>Logistica WS Anno 1 (&euro;/kit)</span><input type="number" min="0" max="2000" value="1250" id="bmwLogWsY1" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>Logistica WS Anno 2 (&euro;/kit)</span><input type="number" min="0" max="800" value="300" id="bmwLogWsY2" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div class="flex justify-between items-center"><span>Logistica WS Anno 3+ (&euro;/kit)</span><input type="number" min="0" max="400" value="150" id="bmwLogWsY3" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    </div>
+                    <div class="mt-2 p-2 bg-teal-900/20 rounded border border-teal-700/50 text-[10px]">
+                        <span class="text-teal-400 font-bold">Riduzione BOM Kit (Cina)</span>: da anno <input type="number" min="2026" max="2035" value="" placeholder="es. 2029" id="greenChinaYear" class="w-14 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white inline" onchange="updateGreenSim(); recalcFinancialPlan();"> riduzione <input type="number" min="0" max="50" value="0" id="greenChinaPct" class="w-10 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white inline" onchange="updateGreenSim(); recalcFinancialPlan();">%
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center mt-3">
                         <div class="bg-slate-900 p-2 rounded border border-slate-700">
@@ -765,6 +774,10 @@
                         <thead id="greenPLHead"></thead>
                         <tbody id="greenPLBody"></tbody>
                     </table>
+                </div>
+                <div class="mt-4 border-t border-slate-700 pt-4">
+                    <button type="button" class="text-teal-400 font-bold text-xs uppercase flex items-center gap-2" onclick="document.getElementById('greenAssumptionsDoc').classList.toggle('hidden'); this.querySelector('i').classList.toggle('fa-chevron-down'); this.querySelector('i').classList.toggle('fa-chevron-up');"><i class="fa-solid fa-chevron-down"></i> Assunzioni e formule P&L Project Green (per CFO)</button>
+                    <div id="greenAssumptionsDoc" class="hidden mt-2 text-[10px] text-slate-400 bg-slate-900/60 rounded p-3 space-y-2"></div>
                 </div>
             </div>
         </div>
@@ -1409,6 +1422,8 @@
     function getGreenParams() {
         const vol = parseInt(document.getElementById('volSlider')?.value) || 375;
         const asp = parseInt(document.getElementById('aspSlider')?.value) || 3900;
+        const chinaYear = parseInt(document.getElementById('greenChinaYear')?.value) || 0;
+        const chinaPct = Math.min(50, Math.max(0, parseInt(document.getElementById('greenChinaPct')?.value) || 0)) / 100;
         const bmw = {
             launchYear: 2026,
             vol2026: parseInt(document.getElementById('bmwVol2026')?.value) || 8,
@@ -1419,9 +1434,16 @@
             motoPrice: parseInt(document.getElementById('bmwMotoPrice')?.value) || 23000,
             bomKit: parseInt(document.getElementById('bmwBomKit')?.value) || 2300,
             bomMoto: parseInt(document.getElementById('bmwBomMoto')?.value) || 15717,
-            mdoRetail: parseInt(document.getElementById('bmwMdo')?.value) || 400,
-            omologaCac: parseInt(document.getElementById('bmwOmologa')?.value) || 800
+            mdoY1: parseInt(document.getElementById('bmwMdoY1')?.value) || 2500,
+            mdoY2: parseInt(document.getElementById('bmwMdoY2')?.value) || 700,
+            mdoY3: parseInt(document.getElementById('bmwMdoY3')?.value) || 400,
+            omologaRetail: parseInt(document.getElementById('bmwOmologaRetail')?.value) || 500,
+            logWsY1: parseInt(document.getElementById('bmwLogWsY1')?.value) || 1250,
+            logWsY2: parseInt(document.getElementById('bmwLogWsY2')?.value) || 300,
+            logWsY3: parseInt(document.getElementById('bmwLogWsY3')?.value) || 150
         };
+        bmw.chinaYear = chinaYear || 9999;
+        bmw.chinaPct = chinaPct;
         const selected = getSelectedPlatforms();
         const platformsParams = selected.map(p => {
             const card = document.querySelector(`[data-green-plat-id="${p.id}"]`);
@@ -1439,11 +1461,13 @@
                 motoPrice: card ? parseInt(card.querySelector('[data-green-moto]')?.value) || 23000 : 23000,
                 bomKit: card ? parseInt(card.querySelector('[data-green-bomkit]')?.value) || p.bom : p.bom,
                 bomMoto: card ? parseInt(card.querySelector('[data-green-bommoto]')?.value) || 15717 : 15717,
-                mdoRetail: bmw.mdoRetail,
-                omologaCac: bmw.omologaCac
+                mdoY1: bmw.mdoY1, mdoY2: bmw.mdoY2, mdoY3: bmw.mdoY3,
+                omologaRetail: bmw.omologaRetail,
+                logWsY1: bmw.logWsY1, logWsY2: bmw.logWsY2, logWsY3: bmw.logWsY3,
+                chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct
             };
         });
-        return { bmw, platforms: platformsParams };
+        return { bmw, platforms: platformsParams, chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct };
     }
 
     function renderPlatformConfigs() {
@@ -1515,12 +1539,15 @@
         const kitRev = retU * pRet + wsU * pWS;
         const rev = kitRev + motU * (params.motoPrice || 23000);
 
-        const bomKit = Math.max(1800, (params.bomKit || 2300) * Math.pow(0.95, Math.min(d, 10)));
+        let bomKitBase = (params.bomKit || 2300) * Math.pow(0.95, Math.min(d, 10));
+        if (yr >= (params.chinaYear || 9999)) bomKitBase *= (1 - (params.chinaPct || 0));
+        const bomKit = Math.max(1800, bomKitBase);
         const cogs = (retU + wsU) * bomKit + motU * (params.bomMoto || 15717);
 
-        const mdo = params.mdoRetail || 400;
-        const omologa = params.omologaCac || 800;
-        const varOpex = retU * mdo + units * omologa + kitRev * 0.01;
+        const mdo = d === 0 ? (params.mdoY1 ?? 2500) : d === 1 ? (params.mdoY2 ?? 700) : (params.mdoY3 ?? 400);
+        const omologaRetail = params.omologaRetail ?? 500;
+        const logWs = d === 0 ? (params.logWsY1 ?? 1250) : d === 1 ? (params.logWsY2 ?? 300) : (params.logWsY3 ?? 150);
+        const varOpex = retU * mdo + retU * omologaRetail + wsU * logWs;
 
         return { rev, cogs, varOpex, units };
     }
@@ -1536,8 +1563,10 @@
             motoPrice: params.bmw.motoPrice,
             bomKit: params.bmw.bomKit,
             bomMoto: params.bmw.bomMoto,
-            mdoRetail: params.bmw.mdoRetail,
-            omologaCac: params.bmw.omologaCac
+            mdoY1: params.bmw.mdoY1, mdoY2: params.bmw.mdoY2, mdoY3: params.bmw.mdoY3,
+            omologaRetail: params.bmw.omologaRetail,
+            logWsY1: params.bmw.logWsY1, logWsY2: params.bmw.logWsY2, logWsY3: params.bmw.logWsY3,
+            chinaYear: params.bmw.chinaYear, chinaPct: params.bmw.chinaPct
         };
         const bmw = calcPlatformPL(yr, GREEN_BMW_LAUNCH, bmwParams);
 
@@ -1551,17 +1580,14 @@
         });
 
         const numActive = 1 + params.platforms.filter(pp => yr >= pp.launchYear).length;
-        const fScale = 1 + (numActive - 1) * 0.3;
         const yIdx = yr - GREEN_BMW_LAUNCH;
-
-        let payroll, mktg, cert, fac, it, ga;
-        if (yIdx <= 0) { payroll=230000; mktg=43875; cert=40000; fac=30000; it=10000; ga=14569; }
-        else if (yIdx === 1) { payroll=340000; mktg=85000; cert=40000; fac=50000; it=15000; ga=38425; }
-        else {
-            const e = Math.pow(1.03, yIdx - 2);
-            payroll=380000*e; mktg=115000*e; cert=30000+5000*(numActive-1); fac=80000*e; it=19000*e; ga=34275;
-        }
-        const fixedOpex = (payroll + mktg + cert + fac + it + ga) * fScale;
+        let baseOverhead;
+        if (yIdx <= 0) baseOverhead = 200000;
+        else if (yIdx === 1) baseOverhead = 500000;
+        else if (yIdx === 2) baseOverhead = 600000;
+        else baseOverhead = 600000 * Math.pow(1.03, yIdx - 2);
+        const fScale = 1 + (numActive - 1) * 0.2;
+        const fixedOpex = baseOverhead * fScale;
 
         let da;
         if (yIdx <= 0) da = 75000;
@@ -1652,6 +1678,42 @@
         });
 
         renderGreenPLTable(params);
+        renderGreenAssumptionsDoc(params);
+    }
+
+    function renderGreenAssumptionsDoc(params) {
+        const el = document.getElementById('greenAssumptionsDoc');
+        if (!el) return;
+        const p = params.bmw;
+        const china = params.chinaYear <= 2036 ? ' Da anno ' + params.chinaYear + ': riduzione BOM Kit ' + (params.chinaPct * 100) + '%.' : '';
+        el.innerHTML = `
+            <p class="font-bold text-teal-400 uppercase">Revenue</p>
+            <ul class="list-disc pl-4 space-y-0.5">
+                <li><strong>Kit</strong> = Unit&agrave; Retail &times; Prezzo Kit Retail + Unit&agrave; WS &times; Prezzo Kit WS. Escalation prezzi: +10% anno 1, +5%/anno da anno 2.</li>
+                <li><strong>Moto</strong> = Unit&agrave; Moto &times; Prezzo Moto chiavi-in-mano.</li>
+                <li>Mix canali: Anno 1 → 100% Retail; Anno 2 → 50% Ret, 40% WS, 10% Moto; Dal 3° → 30% Ret, 60% WS, 10% Moto.</li>
+            </ul>
+            <p class="font-bold text-teal-400 uppercase mt-2">COGS (costo del venduto)</p>
+            <ul class="list-disc pl-4 space-y-0.5">
+                <li><strong>Kit</strong> = (Unit&agrave; Retail + Unit&agrave; WS) &times; BOM Kit. BOM Kit con learning curve: -5% annuo (cap 10 anni), minimo &euro;1.800.${china}</li>
+                <li><strong>Moto</strong> = Unit&agrave; Moto &times; BOM Moto (base+kit+ricambi).</li>
+            </ul>
+            <p class="font-bold text-teal-400 uppercase mt-2">Costi variabili (Var Opex)</p>
+            <ul class="list-disc pl-4 space-y-0.5">
+                <li><strong>MdO</strong> solo su kit Retail: Anno 1 = ${fmt(p.mdoY1)}/kit, Anno 2 = ${fmt(p.mdoY2)}/kit, Anno 3+ = ${fmt(p.mdoY3)}/kit.</li>
+                <li><strong>Omologa</strong> solo su kit Retail: ${fmt(p.omologaRetail)}/kit.</li>
+                <li><strong>Logistica</strong> solo su kit Wholesale: Anno 1 = ${fmt(p.logWsY1)}/kit, Anno 2 = ${fmt(p.logWsY2)}/kit, Anno 3+ = ${fmt(p.logWsY3)}/kit.</li>
+            </ul>
+            <p class="font-bold text-teal-400 uppercase mt-2">Costi fissi (Overheads)</p>
+            <ul class="list-disc pl-4 space-y-0.5">
+                <li>Allineati all&apos;analisi preliminare: 2026 = &euro;200k, 2027 = &euro;500k, 2028 = &euro;600k. Da 2029: 600k &times; 1,03<sup>(anno-2028)</sup>. Con piattaforme aggiuntive: base &times; (1 + 20% per ogni piattaforma oltre la prima).</li>
+            </ul>
+            <p class="font-bold text-teal-400 uppercase mt-2">EBITDA e D&A</p>
+            <ul class="list-disc pl-4 space-y-0.5">
+                <li><strong>Gross Profit</strong> = Revenue − COGS. <strong>EBITDA Green</strong> = Gross Profit − Var Opex − Overheads.</li>
+                <li>D&A: 2026 = &euro;75k, 2027 = &euro;91k, da 2028 in crescita + quota per piattaforme aggiuntive.</li>
+            </ul>
+        `;
     }
 
     function renderGreenPLTable(params) {
@@ -2246,13 +2308,54 @@
     }
 
     // --- DOWNLOAD EXCEL ---
-    function downloadExcel() {
-        if (!lastYearsData.length) { alert('Calcola prima il piano finanziario.'); return; }
-        const wb = XLSX.utils.book_new();
-        const years = lastYearsData;
-        const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
+    function applyHeaderStyle(cell, bgHex) {
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: bgHex } };
+        cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+        cell.alignment = { vertical: 'middle', wrapText: true };
+        cell.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    }
+    function applySectionStyle(cell) {
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF334155' } };
+        cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        cell.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    }
+    function applySubStyle(cell) {
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+        cell.font = { bold: true, color: { argb: 'FF0F172A' } };
+        cell.border = { bottom: { style: 'hair' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    }
+    function applyResultStyle(cell) {
+        cell.font = { bold: true, color: { argb: 'FF0F766E' } };
+        cell.border = { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    }
+    function applyNumStyle(cell, isNeg) {
+        cell.alignment = { horizontal: 'right' };
+        cell.numFmt = isNeg ? '"€"-#,##0;-"€"#,##0' : '"€"#,##0';
+        cell.font = isNeg ? { color: { argb: 'FFB91C1C' } } : {};
+    }
+    function applyAssumptionParamStyle(cell) {
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
+        cell.font = { color: { argb: 'FF475569' } };
+    }
 
-        const ceRows = [
+    async function downloadExcel() {
+        if (!lastYearsData.length) { alert('Calcola prima il piano finanziario.'); return; }
+        const years = lastYearsData;
+        const TEAL = 'FF0F766E', SLATE = 'FF334155', LIGHT = 'FFF8FAFC';
+
+        const wb = new ExcelJS.Workbook();
+        wb.creator = 'Ottodrom Piano Industriale';
+        wb.created = new Date();
+
+        const ws1 = wb.addWorksheet('BP Ottodrom 2026-2036', { views: [{ state: 'frozen', ySplit: 1 }] });
+        const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
+        ws1.addRow(['Piano industriale Ottodrom – Conto economico (€)']);
+        ws1.mergeCells(1, 1, 1, hdr.length);
+        ws1.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+        ws1.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
+        ws1.getCell(1, 1).alignment = { horizontal: 'center' };
+        ws1.addRow([]);
+        const ceData = [
             hdr,
             ['RICAVI', BASE.totale_ricavi, ...years.map(y=>y.totale_ricavi)],
             ['  Officina & Service', BASE.ricavi_officina, ...years.map(y=>y.ricavi_officina)],
@@ -2282,17 +2385,30 @@
             ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
             ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
         ];
-
-        const ws1 = XLSX.utils.aoa_to_sheet(ceRows);
-        ws1['!cols'] = [{ wch: 32 }, ...Array(years.length + 1).fill({ wch: 15 })];
-        XLSX.utils.book_append_sheet(wb, ws1, 'BP Ottodrom 2026-2036');
+        const sectionRows = { RICAVI: 1, 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, EBITDA: 1, EBIT: 1 };
+        const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, EBITDA: 1, EBIT: 1 };
+        ceData.forEach((row, i) => {
+            const r = ws1.addRow(row);
+            const firstLabel = row[0];
+            if (i === 0) { r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); return; }
+            if (sectionRows[firstLabel]) { r.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } }; r.getCell(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }; }
+            else if (firstLabel && firstLabel.startsWith('  ')) r.getCell(1).font = { bold: true };
+            if (resultRows[firstLabel]) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
+            else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
+        });
+        ws1.getColumn(1).width = 34;
+        for (let c = 2; c <= hdr.length; c++) ws1.getColumn(c).width = 14;
 
         const greenParams = getGreenParams();
-        const greenHdr = ['Green P&L', '2025', ...years.map(y => y.label)];
-        const greenYears = years.map(y => {
-            const yr = parseInt(y.label);
-            return calcGreenPL(yr, greenParams);
-        });
+        const greenYears = years.map(y => calcGreenPL(parseInt(y.label), greenParams));
+        const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 1 }] });
+        ws2.addRow(['Iconic Mobility Lab – Project Green – P&L (€)']);
+        ws2.mergeCells(1, 1, 1, years.length + 3);
+        ws2.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+        ws2.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
+        ws2.getCell(1, 1).alignment = { horizontal: 'center' };
+        ws2.addRow([]);
+        const greenHdr = ['Voce', '2025', ...years.map(y => y.label)];
         const greenRows = [
             greenHdr,
             ['Revenue', 0, ...greenYears.map(g=>g.revenue)],
@@ -2309,32 +2425,36 @@
             ['  BMW R2V Units', 0, ...greenYears.map(g=>Math.round(g.bmwUnits))],
             ['  Piattaforme Aggiuntive Units', 0, ...greenYears.map(g=>Math.round(g.platUnits))]
         ];
-        const ws2 = XLSX.utils.aoa_to_sheet(greenRows);
-        ws2['!cols'] = [{ wch: 30 }, ...Array(years.length + 1).fill({ wch: 15 })];
-        XLSX.utils.book_append_sheet(wb, ws2, 'Project Green P&L');
+        greenRows.forEach((row, i) => {
+            const r = ws2.addRow(row);
+            if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+            else if (row[0] === 'EBITDA' || row[0] === 'EBIT' || row[0] === 'Gross Profit') r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
+            else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
+        });
+        ws2.getColumn(1).width = 30;
+        for (let c = 2; c <= greenHdr.length; c++) ws2.getColumn(c).width = 14;
 
         const allNames = [];
         const seen = new Set();
-        years.forEach(y => {
-            (y.greenPerPlatform || []).forEach(pp => {
-                if (pp.name && !seen.has(pp.name)) { seen.add(pp.name); allNames.push(pp.name); }
-            });
-        });
+        years.forEach(y => { (y.greenPerPlatform || []).forEach(pp => { if (pp.name && !seen.has(pp.name)) { seen.add(pp.name); allNames.push(pp.name); } }); });
         const platRevRows = [['Piattaforma', ...years.map(y => y.label)]];
         const platUnitsRows = [['Piattaforma', ...years.map(y => y.label)]];
         allNames.forEach(name => {
-            platRevRows.push([name, ...years.map(y => {
-                const pp = (y.greenPerPlatform || []).find(p => p.name === name);
-                return pp ? pp.rev : 0;
-            })]);
-            platUnitsRows.push([name, ...years.map(y => {
-                const pp = (y.greenPerPlatform || []).find(p => p.name === name);
-                return pp ? Math.round(pp.units) : 0;
-            })]);
+            platRevRows.push([name, ...years.map(y => { const pp = (y.greenPerPlatform || []).find(p => p.name === name); return pp ? pp.rev : 0; })]);
+            platUnitsRows.push([name, ...years.map(y => { const pp = (y.greenPerPlatform || []).find(p => p.name === name); return pp ? Math.round(pp.units) : 0; })]);
         });
-        const wsPlat = XLSX.utils.aoa_to_sheet([['Revenue per piattaforma (€)'], [], ...platRevRows, [], ['Unità per piattaforma'], [], ...platUnitsRows]);
-        wsPlat['!cols'] = [{ wch: 28 }, ...Array(years.length).fill({ wch: 12 })];
-        XLSX.utils.book_append_sheet(wb, wsPlat, 'Green per Piattaforma');
+        const wsPlat = wb.addWorksheet('Green per Piattaforma', { views: [{ state: 'frozen', ySplit: 1 }] });
+        wsPlat.addRow(['Project Green – Dettaglio per piattaforma']);
+        wsPlat.mergeCells(1, 1, 1, years.length + 1);
+        wsPlat.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+        wsPlat.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
+        wsPlat.addRow(['Revenue (€)']);
+        wsPlat.getCell(2, 1).font = { bold: true };
+        platRevRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; } }); });
+        wsPlat.addRow([]);
+        wsPlat.addRow(['Unità']).getCell(1).font = { bold: true };
+        platUnitsRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); });
+        wsPlat.getColumn(1).width = 28;
 
         const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
         const assRows = [
@@ -2362,8 +2482,11 @@
             ['Green BMW: Moto chiavi-in-mano', greenParams.bmw.motoPrice],
             ['Green BMW: BOM Kit', greenParams.bmw.bomKit],
             ['Green BMW: BOM Moto', greenParams.bmw.bomMoto],
-            ['Green BMW: MdO Retail', greenParams.bmw.mdoRetail],
-            ['Green BMW: Omologa+Log+CAC', greenParams.bmw.omologaCac],
+            ['Green BMW: MdO Retail Anno 1/2/3+', greenParams.bmw.mdoY1 + '/' + greenParams.bmw.mdoY2 + '/' + greenParams.bmw.mdoY3],
+            ['Green BMW: Omologa solo retail', greenParams.bmw.omologaRetail],
+            ['Green BMW: Logistica WS Anno 1/2/3+', greenParams.bmw.logWsY1 + '/' + greenParams.bmw.logWsY2 + '/' + greenParams.bmw.logWsY3],
+            ['Green: Cina da anno / riduzione %', (greenParams.chinaYear <= 2036 ? greenParams.chinaYear : '') + ' / ' + (greenParams.chinaPct * 100)],
+            ['Green: Overheads 2026/2027/2028', '200k / 500k / 600k'],
             ['Green: Piattaforme Aggiuntive', greenParams.platforms.map(p => p.name).join(', ') || 'Nessuna'],
             ...greenParams.platforms.flatMap((p, i) => [
                 ['Green Plat ' + (i+1) + ' ' + p.name + ' Anno lancio', p.launchYear],
@@ -2382,16 +2505,39 @@
             ...productsCatalog.map(p => [p.name || '', p.price, (p.margin !== undefined ? p.margin : 75), p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
             ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
-            ['Nota', 'Green: BMW vol 2026/2027/regime impostati; altre piattaforme: Anno lancio + Vol Anno 1, Anno 2, Regime. Mix Retail 30% WS 60% Moto 10% a regime.'],
-            ['Nota', 'Green Fixed Opex: da High Level BP Feb 2026 (Payroll, Mktg, Cert, Facilities, IT, G&A).'],
+            ['Nota', 'Green: Overheads 200k/500k/600k (2026-2028) poi +3%/anno. Var Opex: MdO solo retail, Omologa solo retail, Logistica solo WS. Opzione Cina: riduzione % BOM Kit da anno.'],
             ['Nota', 'Service Ottodrom: crescita 3%/anno (cap +15%).'],
             ['Generato il', new Date().toLocaleString('it-IT')]
         ];
-        const ws3 = XLSX.utils.aoa_to_sheet(assRows);
-        ws3['!cols'] = [{ wch: 35 }, { wch: 15 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
-        XLSX.utils.book_append_sheet(wb, ws3, 'Assumptions');
+        const ws3 = wb.addWorksheet('Assumptions');
+        ws3.addRow(['Assunzioni – Piano Industriale Ottodrom']);
+        ws3.mergeCells(1, 1, 1, 2);
+        ws3.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
+        ws3.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
+        ws3.addRow([]);
+        assRows.slice(2).forEach((row, i) => {
+            const r = ws3.addRow(row);
+            if (row[0] === '' && row[1] === undefined) return;
+            if (row[0] === 'Parametro' && row[1] === 'Valore') r.eachCell(c => applyHeaderStyle(c, SLATE));
+            else if (String(row[0]).indexOf('Nota') === 0) { r.getCell(1).font = { italic: true, color: { argb: 'FF64748B' } }; r.getCell(2).font = { italic: true, color: { argb: 'FF64748B' } }; }
+            else if (row[0] === 'Generato il') { r.getCell(1).font = { bold: true }; r.getCell(2).font = { color: { argb: 'FF64748B' } }; }
+            else { applyAssumptionParamStyle(r.getCell(1)); r.getCell(2).font = { bold: true }; }
+        });
+        ws3.getColumn(1).width = 38;
+        ws3.getColumn(2).width = 18;
 
-        XLSX.writeFile(wb, 'Ottodrom_Business_Plan_2026-2036.xlsx');
+        try {
+            const buffer = await wb.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Ottodrom_Business_Plan_2026-2036.xlsx';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        } catch (e) {
+            console.error(e);
+            alert('Errore nella generazione del file Excel. Verifica che la libreria ExcelJS sia caricata.');
+        }
     }
 
     // --- INIT ---
