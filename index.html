@@ -2535,8 +2535,9 @@
         const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
         const fashionChoice = fashionRadio ? fashionRadio.value : 'combo';
         const pY0 = productsCatalog.reduce((s, p) => s + (p.price || 0) * (p.q1 || 0), 0);
+        const greenYearsFull = [calcGreenPL(2025, greenParams)].concat(years.map(y => calcGreenPL(parseInt(y.label), greenParams)));
 
-        const ASSUM_START = 5;
+        const ASSUM_START = 4;
         const actionCoreExcel = getActionCoreFlags();
         const assumpRows = [
             ['Iconic Mobility Lab – Volume BMW 2026 (unità)', greenParams.bmw.vol2026],
@@ -2556,6 +2557,10 @@
             ['Fashion – Scenario (combo / piva / stocchista / nulla)', fashionChoice],
             ['Altro – Ricavi base (€)', BASE.ricavi_altro],
             ['Componenti – Ricavi Anno 1 (€)', pY0],
+        ];
+        const pY = [pY0].concat([1,2,3,4,5,6,7,8,9].map(j => productsCatalog.reduce((s, p) => s + (p.price||0)*(p['q'+(j+1)]||0), 0)));
+        for (let j = 1; j <= 9; j++) assumpRows.push(['Componenti – Ricavi Anno ' + (j + 1) + ' (€)', pY[j] || 0]);
+        assumpRows.push(
             ['Azione 1 Fashion – In piano: Core o Upside', actionCoreExcel[1] ? 'Core' : 'Upside'],
             ['Azione 2 Downsizing – In piano: Core o Upside', actionCoreExcel[2] ? 'Core' : 'Upside'],
             ['Azione 3 Sharing – In piano: Core o Upside', actionCoreExcel[3] ? 'Core' : 'Upside'],
@@ -2563,13 +2568,40 @@
             ['Azione 5 Componenti – In piano: Core o Upside', actionCoreExcel[5] ? 'Core' : 'Upside'],
             ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside']
         ];
+        const yearLabels = [2025, ...years.map(y => parseInt(y.label))];
+        const GREEN_PL_METRICS = 5;
+        for (let yi = 0; yi < yearLabels.length; yi++) {
+            const yr = yearLabels[yi];
+            const g = greenYearsFull[yi] || {};
+            assumpRows.push(
+                ['Green P&L – COGS ' + yr + ' (€)', g.cogs != null ? g.cogs : 0],
+                ['Green P&L – Variable Opex ' + yr + ' (€)', g.varOpex != null ? g.varOpex : 0],
+                ['Green P&L – Fixed Opex ' + yr + ' (€)', g.fixedOpex != null ? g.fixedOpex : 0],
+                ['Green P&L – D&A ' + yr + ' (€)', g.da != null ? g.da : 0],
+                ['Green P&L – D&A Capex sviluppo ' + yr + ' (€)', g.daCapex != null ? g.daCapex : 0]
+            );
+        }
+        const CE_ASSUM_BASE = ASSUM_START + 32 + 12 * GREEN_PL_METRICS;
+        for (let yi = 0; yi < yearLabels.length; yi++) {
+            const yr = yearLabels[yi];
+            const y = yi === 0 ? null : years[yi - 1];
+            assumpRows.push(
+                ['CE – Costi variabili totali ' + yr + ' (€)', y != null ? y.totale_cv : BASE.totale_cv],
+                ['CE – Costi fissi totali ' + yr + ' (€)', y != null ? y.totale_cf : BASE.totale_cf],
+                ['CE – Margine di contribuzione ' + yr + ' (€)', y != null ? y.mdc : (BASE.totale_ricavi - BASE.totale_cv)],
+                ['CE – EBITDA ' + yr + ' (€)', y != null ? y.ebitda : BASE.ebitda],
+                ['CE – D&A ' + yr + ' (€)', y != null ? y.da : BASE.da],
+                ['CE – EBIT ' + yr + ' (€)', y != null ? y.ebit : (BASE.ebitda - BASE.da)]
+            );
+        }
         const excelMaxPlat = 10;
         const platsForExcel = [];
-        const ROWS_PER_PLAT = 9;
+        const ROWS_PER_PLAT = 10;
         for (let i = 0; i < excelMaxPlat; i++) {
-            const p = greenParams.platforms[i] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0, devCapex: 0, capexCapitalizePct: 0 };
+            const p = greenParams.platforms[i] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0, devCapex: 0, capexCapitalizePct: 0, name: '' };
             platsForExcel.push(p);
             const pre = 'Piattaforma ' + (i + 1) + ' – ';
+            const rationaleDefault = (p.name && (p.volYear1 > 0 || p.volRegime > 0)) ? 'Inclusa nel piano per target volumi e ricavi; anno lancio e prezzi nelle righe sopra. Strategia Iconic Mobility Lab.' : 'Non attiva o parametri a zero.';
             assumpRows.push(
                 [pre + 'Anno lancio', p.launchYear],
                 [pre + 'Volume Anno 1 (unità)', p.volYear1],
@@ -2579,19 +2611,24 @@
                 [pre + 'Prezzo Wholesale (€/unità)', p.wholesaleASP],
                 [pre + 'Prezzo moto (€)', p.motoPrice],
                 [pre + 'Capex sviluppo (€)', p.devCapex != null ? p.devCapex : 0],
-                [pre + '% Capex capitalizzato (D&A in 5 anni)', p.capexCapitalizePct != null ? p.capexCapitalizePct : 0]
+                [pre + '% Capex capitalizzato (D&A in 5 anni)', p.capexCapitalizePct != null ? p.capexCapitalizePct : 0],
+                [pre + 'Perché inclusa nel piano (rationale)', rationaleDefault]
             );
         }
-        const PLAT_ASSUM_BASE = ASSUM_START + 23;
+        const GREEN_PL_ASSUM_BASE = ASSUM_START + 32;
+        const greenPLRow = (yr, metric) => GREEN_PL_ASSUM_BASE + (yr - 2025) * GREEN_PL_METRICS + metric;
+        const CE_METRICS = 6;
+        const ceRow = (yr, metric) => CE_ASSUM_BASE + (yr - 2025) * CE_METRICS + metric;
+        const PLAT_ASSUM_BASE = CE_ASSUM_BASE + 12 * CE_METRICS;
         const platR = (i, j) => PLAT_ASSUM_BASE + i * ROWS_PER_PLAT + j;
-        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, azione1: ASSUM_START+17, azione2: ASSUM_START+18, azione3: ASSUM_START+19, azione4: ASSUM_START+20, azione5: ASSUM_START+21, azione6: ASSUM_START+22 };
+        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, compY1: ASSUM_START+16, compY2: ASSUM_START+17, compY3: ASSUM_START+18, compY4: ASSUM_START+19, compY5: ASSUM_START+20, compY6: ASSUM_START+21, compY7: ASSUM_START+22, compY8: ASSUM_START+23, compY9: ASSUM_START+24, compY10: ASSUM_START+25, azione1: ASSUM_START+26, azione2: ASSUM_START+27, azione3: ASSUM_START+28, azione4: ASSUM_START+29, azione5: ASSUM_START+30, azione6: ASSUM_START+31 };
         const nPlat = Math.min(excelMaxPlat, greenParams.platforms.length);
         const rowRevTotalGreen = 16 + 2 * nPlat;
         const yearCols = ['2025', ...years.map(y => y.label)];
         const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
         const numCols = hdr.length;
         const colForYear = (yr) => 2 + years.findIndex(y => y.label === String(yr));
-        const yearForCol = (col) => col <= 2 ? 2025 : parseInt(yearCols[col - 1]);
+        const yearForCol = (col) => col <= 2 ? 2025 : parseInt(yearCols[col - 2]);
 
         const ws1 = wb.addWorksheet('BP Ottodrom 2026-2036', { views: [{ state: 'frozen', ySplit: 4 }] });
         ws1.addRow(['Piano industriale Ottodrom – Conto economico (€)']);
@@ -2654,17 +2691,31 @@
             ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
             ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
         ];
+        const ceFormulaRows = { 'COSTI VARIABILI': 0, 'MARGINE DI CONTRIBUZIONE': 2, 'COSTI FISSI': 1, 'EBITDA': 3, '  D&A (Ottodrom + Green)': 4, 'EBIT': 5 };
         let bpRow = 13;
         const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, EBITDA: 1, EBIT: 1 };
         const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, EBITDA: 1, EBIT: 1 };
+        const yearLabelsBP = [2025, ...years.map(y => parseInt(y.label))];
         ceRest.forEach((row) => {
             bpRow++;
-            const r = ws1.addRow(row);
             const firstLabel = row[0];
+            const useFormula = ceFormulaRows[firstLabel] !== undefined;
+            const r = ws1.addRow(useFormula ? [firstLabel].concat(Array(numCols - 1).fill(0)) : row);
             if (sectionRows[firstLabel]) { r.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } }; r.getCell(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }; }
             else if (firstLabel && firstLabel.startsWith('  ')) r.getCell(1).font = { bold: true };
-            if (resultRows[firstLabel]) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
-            else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
+            if (useFormula) {
+                const metric = ceFormulaRows[firstLabel];
+                for (let col = 2; col <= numCols; col++) {
+                    const yr = yearLabelsBP[col - 2];
+                    const cell = r.getCell(col);
+                    cell.value = { formula: `=Assumptions!$B$${ceRow(yr, metric)}` };
+                    cell.numFmt = '"€"#,##0';
+                    cell.alignment = { horizontal: 'right' };
+                    if (resultRows[firstLabel]) applyResultStyle(cell);
+                }
+            }
+            if (resultRows[firstLabel] && !useFormula) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
+            else if (!useFormula) r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
         ws1.getColumn(1).width = 42;
         for (let c = 2; c <= numCols; c++) ws1.getColumn(c).width = 14;
@@ -2732,7 +2783,7 @@
         const wsCare = addToplineSheet('Topline Ottodrom Care', 'Ottodrom Care – Revenue (€)');
         wsCare.getCell(3, 1).value = 'Revenue (€)';
         wsCare.getCell(3, 1).font = { bold: true };
-        wsCare.getCell(3, 2).value = 0;
+        wsCare.getCell(3, 2).value = { formula: '=0' };
         for (let c = 3; c <= yearCols.length + 1; c++) {
             const yr = yearForCol(c);
             const ramp = yr === 2026 ? 0.5 : yr === 2027 ? 0.85 : 1;
@@ -2745,7 +2796,7 @@
         wsShare.getCell(3, 1).value = 'Revenue (€)';
         wsShare.getCell(3, 1).font = { bold: true };
         for (let c = 2; c <= yearCols.length + 1; c++) {
-            wsShare.getCell(3, c).value = c === 2 ? 0 : { formula: `=Assumptions!$B$${R.shareBase}*(1+Assumptions!$B$${R.shareMark}/100)` };
+            wsShare.getCell(3, c).value = c === 2 ? { formula: '=0' } : { formula: `=Assumptions!$B$${R.shareBase}*(1+Assumptions!$B$${R.shareMark}/100)` };
             wsShare.getCell(3, c).numFmt = '"€"#,##0';
         }
 
@@ -2783,14 +2834,17 @@
         const wsComp = addToplineSheet('Topline Componenti', 'Componenti (Az.5) – Revenue (€)');
         wsComp.getCell(3, 1).value = 'Revenue (€)';
         wsComp.getCell(3, 1).font = { bold: true };
-        const compBases = years.map((y, i) => productsCatalog.reduce((s, p) => s + (p.price||0)*(p['q'+(i+1)]||0), 0));
-        const compGrowth = (yr) => yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
-        for (let c = 2; c <= yearCols.length + 1; c++) {
+        const B = 'Assumptions!$B$';
+        wsComp.getCell(3, 2).value = { formula: '=0' };
+        wsComp.getCell(3, 2).numFmt = '"€"#,##0';
+        for (let c = 3; c <= yearCols.length + 1; c++) {
             const yr = yearForCol(c);
-            const idx = Math.min(c - 2, 9);
-            const base = compBases[idx] || 0;
-            const g = compGrowth(yr);
-            wsComp.getCell(3, c).value = c === 2 ? 0 : base * g;
+            const idx = Math.min(c - 1, 10);
+            if (idx <= 0) continue;
+            const compRow = [0, R.compY1, R.compY2, R.compY3, R.compY4, R.compY5, R.compY6, R.compY7, R.compY8, R.compY9, R.compY10][idx];
+            const growth = yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
+            const formula = growth === 1 ? `=Assumptions!$B$${compRow}` : `=Assumptions!$B$${compRow}*${growth.toFixed(4)}`;
+            wsComp.getCell(3, c).value = { formula };
             wsComp.getCell(3, c).numFmt = '"€"#,##0';
         }
 
@@ -2935,60 +2989,109 @@
         ws2.getCell(rowPLRevenue, 1).value = 'Revenue';
         ws2.getCell(rowPLRevenue, 1).font = { bold: true };
         let plRow = rowPLRevenue;
-        const greenPLRows = [
-            ['(-) COGS', 0, ...greenYears.map(g=>-g.cogs)],
-            ['Gross Profit', 0, ...greenYears.map(g=>g.grossProfit)],
-            ['  Gross Margin %', '', ...greenYears.map(g=>g.grossMarginPct.toFixed(1)+'%')],
-            ['(-) Variable Opex', 0, ...greenYears.map(g=>-g.varOpex)],
-            ['(-) Fixed Opex', 0, ...greenYears.map(g=>-g.fixedOpex)],
-            ['EBITDA', 0, ...greenYears.map(g=>g.ebitda)],
-            ['(-) D&A', 0, ...greenYears.map(g=>-g.da)],
-            ['  di cui D&A Capex sviluppo (5 anni)', 0, ...greenYears.map(g=>-(g.daCapex || 0))],
-            ['EBIT', 0, ...greenYears.map(g=>g.ebit)],
-            [],
-            ['Total Units', 0, ...greenYears.map(g=>Math.round(g.totalUnits))],
-            ['  BMW R2V Units', 0, ...greenYears.map(g=>Math.round(g.bmwUnits))],
-            ['  Piattaforme Aggiuntive Units', 0, ...greenYears.map(g=>Math.round(g.platUnits))]
+        const B = 'Assumptions!$B$';
+        const plRows = [
+            { label: '(-) COGS', metric: 0, neg: true },
+            { label: 'Gross Profit', type: 'gp' },
+            { label: '  Gross Margin %', type: 'margin' },
+            { label: '(-) Variable Opex', metric: 1, neg: true },
+            { label: '(-) Fixed Opex', metric: 2, neg: true },
+            { label: 'EBITDA', type: 'ebitda' },
+            { label: '(-) D&A', metric: 3, neg: true },
+            { label: '  di cui D&A Capex sviluppo (5 anni)', metric: 4, neg: true },
+            { label: 'EBIT', type: 'ebit' },
+            { label: '', type: 'blank' },
+            { label: 'Total Units', type: 'units' },
+            { label: '  BMW R2V Units', type: 'bmwUnits' },
+            { label: '  Piattaforme Aggiuntive Units', type: 'platUnits' }
         ];
-        greenPLRows.forEach((row) => {
+        plRows.forEach((pr) => {
             plRow++;
-            const r = ws2.addRow(row);
-            if (row[0] === 'EBITDA' || row[0] === 'EBIT' || row[0] === 'Gross Profit') r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
-            else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
+            const r = ws2.addRow([pr.label].concat(Array(greenNumCols - 1).fill(0)));
+            r.getCell(1).font = pr.label ? { bold: true } : {};
+            if (pr.type === 'blank') return;
+            for (let col = 2; col <= greenNumCols; col++) {
+                const yr = greenHdr[col - 1];
+                const colLetter = excelColLetter(col - 1);
+                let formula = '';
+                if (pr.metric !== undefined) {
+                    const rowNum = greenPLRow(yr, pr.metric);
+                    formula = pr.neg ? `=-${B}${rowNum}` : `=${B}${rowNum}`;
+                } else if (pr.type === 'gp') formula = `=${colLetter}${rowPLRevenue}-${colLetter}${rowPLRevenue + 1}`;
+                else if (pr.type === 'margin') formula = `=IF(${colLetter}${rowPLRevenue}=0,"",${colLetter}${plRow - 1}/${colLetter}${rowPLRevenue}*100)&"%"`;
+                else if (pr.type === 'ebitda') formula = `=${colLetter}${plRow - 4}-${colLetter}${plRow - 2}-${colLetter}${plRow - 1}`;
+                else if (pr.type === 'ebit') formula = `=${colLetter}${plRow - 1}-${colLetter}${plRow - 2}`;
+                else if (pr.type === 'units') formula = `=${colLetter}${rowUTotal}`;
+                else if (pr.type === 'bmwUnits') formula = `=${colLetter}${rowUb}`;
+                else if (pr.type === 'platUnits') formula = nPlat === 0 ? '=0' : `=${colLetter}${rowUTotal}-${colLetter}${rowUb}`;
+                if (formula) {
+                    r.getCell(col).value = { formula };
+                    if (pr.type === 'margin') r.getCell(col).numFmt = '0.0"%"';
+                    else if (pr.type === 'units' || pr.type === 'bmwUnits' || pr.type === 'platUnits') r.getCell(col).numFmt = '#,##0';
+                    else r.getCell(col).numFmt = '"€"#,##0';
+                    if (pr.neg && formula) r.getCell(col).font = { color: { argb: 'FFB91C1C' } };
+                }
+            }
+            if (pr.type === 'ebitda' || pr.type === 'ebit' || pr.type === 'gp') r.eachCell(c => { applyResultStyle(c); });
         });
+        ws2.addRow([]);
+        ws2.addRow(['Piattaforme – Perché incluse nel piano (rationale)']);
+        ws2.getRow(plRow + 2).getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.getRow(plRow + 2).getCell(1).alignment = { wrapText: true };
+        ws2.mergeCells(plRow + 2, 1, plRow + 2, greenNumCols);
+        for (let i = 0; i < nPlat; i++) {
+            const r = ws2.addRow(['Piattaforma ' + (i + 1) + ' – ' + (platsForExcel[i].name || 'N/D'), '', '', '']);
+            r.getCell(1).font = { bold: true };
+            r.getCell(2).value = { formula: `=Assumptions!$B$${platR(i, 9)}` };
+            r.getCell(2).alignment = { wrapText: true };
+            ws2.mergeCells(r.number, 2, r.number, Math.min(4, greenNumCols));
+        }
         ws2.getColumn(1).width = 34;
         for (let c = 2; c <= greenNumCols; c++) ws2.getColumn(c).width = 14;
 
-        const allNames = [];
-        const seen = new Set();
-        years.forEach(y => { (y.greenPerPlatform || []).forEach(pp => { if (pp.name && !seen.has(pp.name)) { seen.add(pp.name); allNames.push(pp.name); } }); });
-        const platRevRows = [['Piattaforma', ...years.map(y => y.label)]];
-        const platUnitsRows = [['Piattaforma', ...years.map(y => y.label)]];
-        allNames.forEach(name => {
-            platRevRows.push([name, ...years.map(y => { const pp = (y.greenPerPlatform || []).find(p => p.name === name); return pp ? pp.rev : 0; })]);
-            platUnitsRows.push([name, ...years.map(y => { const pp = (y.greenPerPlatform || []).find(p => p.name === name); return pp ? Math.round(pp.units) : 0; })]);
-        });
-        const wsPlat = wb.addWorksheet('Green per Piattaforma', { views: [{ state: 'frozen', ySplit: 1 }] });
-        wsPlat.addRow(['Project Green – Dettaglio per piattaforma']);
-        wsPlat.mergeCells(1, 1, 1, years.length + 1);
+        const wsPlat = wb.addWorksheet('Green per Piattaforma', { views: [{ state: 'frozen', ySplit: 3 }] });
+        wsPlat.addRow(['Project Green – Dettaglio per piattaforma (formule da Project Green P&L)']);
+        wsPlat.mergeCells(1, 1, 1, greenNumCols);
         wsPlat.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         wsPlat.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
         wsPlat.addRow(['Revenue (€)']);
         wsPlat.getCell(2, 1).font = { bold: true };
-        platRevRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; } }); });
+        const platHdrRow = wsPlat.addRow(['Piattaforma', ...greenHdr.slice(1)]);
+        platHdrRow.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+        for (let i = 0; i < nPlat; i++) {
+            const r = wsPlat.addRow([(platsForExcel[i].name || 'P' + (i + 1))].concat(Array(greenNumCols - 1).fill(0)));
+            r.getCell(1).font = { bold: true };
+            for (let col = 2; col <= greenNumCols; col++) {
+                const colLetter = excelColLetter(col - 1);
+                r.getCell(col).value = { formula: `='Project Green P&L'!${colLetter}${rowRevPlat0 + i}` };
+                r.getCell(col).numFmt = '"€"#,##0';
+                r.getCell(col).alignment = { horizontal: 'right' };
+            }
+        }
         wsPlat.addRow([]);
         wsPlat.addRow(['Unità']).getCell(1).font = { bold: true };
-        platUnitsRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); });
+        const platUnitsHdr = wsPlat.addRow(['Piattaforma', ...greenHdr.slice(1)]);
+        platUnitsHdr.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+        for (let i = 0; i < nPlat; i++) {
+            const r = wsPlat.addRow([(platsForExcel[i].name || 'P' + (i + 1))].concat(Array(greenNumCols - 1).fill(0)));
+            r.getCell(1).font = { bold: true };
+            for (let col = 2; col <= greenNumCols; col++) {
+                const colLetter = excelColLetter(col - 1);
+                r.getCell(col).value = { formula: `='Project Green P&L'!${colLetter}${rowUPlat0 + i}` };
+                r.getCell(col).numFmt = '#,##0';
+                r.getCell(col).alignment = { horizontal: 'right' };
+            }
+        }
         wsPlat.getColumn(1).width = 28;
 
         const wsUpside = wb.addWorksheet('Recap Upside', { views: [{ state: 'frozen', ySplit: 3 }] });
         wsUpside.addRow(['Recap potenziali Upside (azioni non in piano)']);
-        wsUpside.mergeCells(1, 1, 1, 13);
+        wsUpside.mergeCells(1, 1, 1, 14);
         wsUpside.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF59E0B' } };
         wsUpside.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
         wsUpside.addRow(['Ricavi potenziali delle azioni marcate come Upside in Assumptions: non inclusi nel Conto Economico.', '']);
         wsUpside.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
-        wsUpside.mergeCells(2, 1, 2, 13);
+        wsUpside.mergeCells(2, 1, 2, 14);
         wsUpside.getRow(2).getCell(1).alignment = { wrapText: true };
         wsUpside.addRow(['Azione', '2025', ...years.map(y => y.label), 'Totale']);
         wsUpside.getRow(3).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
@@ -3000,33 +3103,34 @@
             { label: 'Componenti (Az.5)', sheet: 'Topline Componenti', row: 3, azione: R.azione5 },
             { label: 'Ottodrom Care (Az.6)', sheet: 'Topline Ottodrom Care', row: 3, azione: R.azione6 }
         ];
+        const upsideNumYears = 1 + years.length;
         upsideSheetRows.forEach((sr, i) => {
-            const r = wsUpside.addRow([sr.label].concat(Array(12).fill(0)));
+            const r = wsUpside.addRow([sr.label].concat(Array(upsideNumYears + 1).fill(0)));
             r.getCell(1).font = { bold: true };
-            for (let col = 2; col <= 12; col++) {
+            for (let col = 2; col <= upsideNumYears + 1; col++) {
                 const colLetter = excelColLetter(col - 1);
                 const ref = col === 2 ? `'${sr.sheet}'!$B$${sr.row}` : `'${sr.sheet}'!${colLetter}${sr.row}`;
                 r.getCell(col).value = { formula: `IF(${B}${sr.azione}="Upside",${ref},0)` };
                 r.getCell(col).numFmt = '"€"#,##0';
             }
-            r.getCell(13).value = { formula: `SUM(${excelColLetter(1)}${i + 4}:${excelColLetter(11)}${i + 4})` };
-            r.getCell(13).numFmt = '"€"#,##0';
-            r.getCell(13).font = { bold: true };
+            r.getCell(upsideNumYears + 2).value = { formula: `SUM(${excelColLetter(1)}${i + 4}:${excelColLetter(upsideNumYears)}${i + 4})` };
+            r.getCell(upsideNumYears + 2).numFmt = '"€"#,##0';
+            r.getCell(upsideNumYears + 2).font = { bold: true };
         });
         const lastDataRow = 3 + upsideSheetRows.length;
-        const totRow = wsUpside.addRow(['Totale Upside'].concat(Array(12).fill(0)));
+        const totRow = wsUpside.addRow(['Totale Upside'].concat(Array(upsideNumYears + 1).fill(0)));
         totRow.getCell(1).font = { bold: true };
-        for (let col = 2; col <= 12; col++) {
+        for (let col = 2; col <= upsideNumYears + 1; col++) {
             const colLetter = excelColLetter(col - 1);
             totRow.getCell(col).value = { formula: `SUM(${colLetter}4:${colLetter}${lastDataRow})` };
             totRow.getCell(col).numFmt = '"€"#,##0';
             totRow.getCell(col).font = { bold: true };
         }
-        totRow.getCell(13).value = { formula: `SUM(${excelColLetter(12)}4:${excelColLetter(12)}${lastDataRow})` };
-        totRow.getCell(13).numFmt = '"€"#,##0';
-        totRow.getCell(13).font = { bold: true };
+        totRow.getCell(upsideNumYears + 2).value = { formula: `SUM(${excelColLetter(1)}${lastDataRow + 1}:${excelColLetter(upsideNumYears)}${lastDataRow + 1})` };
+        totRow.getCell(upsideNumYears + 2).numFmt = '"€"#,##0';
+        totRow.getCell(upsideNumYears + 2).font = { bold: true };
         wsUpside.getColumn(1).width = 26;
-        for (let c = 2; c <= 13; c++) wsUpside.getColumn(c).width = 12;
+        for (let c = 2; c <= upsideNumYears + 2; c++) wsUpside.getColumn(c).width = 12;
 
         wsAss.addRow([]);
         wsAss.addRow(['Dettaglio parametri (solo riferimento – non modificare per le formule)', '']);
