@@ -1596,13 +1596,26 @@
                     <div><label class="text-slate-400 block mb-0.5">Capex sviluppo (&euro;)</label><input type="number" min="0" step="1000" value="${devcapex}" data-green-devcapex class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                     <div><label class="text-slate-400 block mb-0.5">% Capex capitalizzato (D&A in 5 anni)</label><input type="number" min="0" max="100" value="${capexpct}" data-green-capexpct class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                 </div>
-                <div class="text-[10px] text-amber-400 font-bold uppercase mb-1">Mix canali (% Retail / Wholesale / Moto)</div>
-                <div class="grid grid-cols-3 gap-1 text-[10px] mb-2">
-                    <div><label class="text-slate-500 block mb-0.5">Anno 1 Ret/WS/Moto</label><input type="number" min="0" max="100" value="${pctRetY1}" data-green-pct-ret-y1 class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white" onchange="updateGreenSim(); recalcFinancialPlan();"><input type="number" min="0" max="100" value="${pctWsY1}" data-green-pct-ws-y1 class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white mt-0.5" onchange="updateGreenSim(); recalcFinancialPlan();"><input type="number" min="0" max="100" value="${pctMotoY1}" data-green-pct-moto-y1 class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white mt-0.5" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-500 block mb-0.5">Anno 2 Ret/WS/Moto</label><input type="number" min="0" max="100" value="${pctRetY2}" data-green-pct-ret-y2 class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white" onchange="updateGreenSim(); recalcFinancialPlan();"><input type="number" min="0" max="100" value="${pctWsY2}" data-green-pct-ws-y2 class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white mt-0.5" onchange="updateGreenSim(); recalcFinancialPlan();"><input type="number" min="0" max="100" value="${pctMotoY2}" data-green-pct-moto-y2 class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white mt-0.5" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
-                    <div><label class="text-slate-500 block mb-0.5">Regime Ret/WS/Moto</label><input type="number" min="0" max="100" value="${pctRetReg}" data-green-pct-ret-reg class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white" onchange="updateGreenSim(); recalcFinancialPlan();"><input type="number" min="0" max="100" value="${pctWsReg}" data-green-pct-ws-reg class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white mt-0.5" onchange="updateGreenSim(); recalcFinancialPlan();"><input type="number" min="0" max="100" value="${pctMotoReg}" data-green-pct-moto-reg class="w-full bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-white mt-0.5" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                <div class="mt-3 text-[10px] text-slate-400 rounded p-2 bg-amber-900/20 border border-amber-700/50">
+                    <div class="font-bold uppercase text-amber-400 mb-2">Mix canali (% Retail / Wholesale / Moto)</div>
+                    <p class="text-[10px] text-slate-500 mb-2">Anno 1 = primo anno dal lancio (anno di lancio scelto sopra). Anno 2 = secondo anno. Dal 3&deg; = regime.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+                        <div><label class="text-slate-400 block mb-0.5">Anno 1 – Retail %</label><input type="number" min="0" max="100" value="${pctRetY1}" data-green-pct-ret-y1 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div><label class="text-slate-400 block mb-0.5">Anno 1 – Wholesale %</label><input type="number" min="0" max="100" value="${pctWsY1}" data-green-pct-ws-y1 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div><label class="text-slate-400 block mb-0.5">Anno 1 – Moto %</label><input type="number" min="0" max="100" value="${pctMotoY1}" data-green-pct-moto-y1 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+                        <div><label class="text-slate-400 block mb-0.5">Anno 2 – Retail %</label><input type="number" min="0" max="100" value="${pctRetY2}" data-green-pct-ret-y2 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div><label class="text-slate-400 block mb-0.5">Anno 2 – Wholesale %</label><input type="number" min="0" max="100" value="${pctWsY2}" data-green-pct-ws-y2 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div><label class="text-slate-400 block mb-0.5">Anno 2 – Moto %</label><input type="number" min="0" max="100" value="${pctMotoY2}" data-green-pct-moto-y2 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div><label class="text-slate-400 block mb-0.5">Dal 3&deg; anno – Retail %</label><input type="number" min="0" max="100" value="${pctRetReg}" data-green-pct-ret-reg class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div><label class="text-slate-400 block mb-0.5">Dal 3&deg; – Wholesale %</label><input type="number" min="0" max="100" value="${pctWsReg}" data-green-pct-ws-reg class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                        <div><label class="text-slate-400 block mb-0.5">Dal 3&deg; – Moto %</label><input type="number" min="0" max="100" value="${pctMotoReg}" data-green-pct-moto-reg class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] mt-3">
                     <div><label class="text-slate-400 block mb-0.5">Kit Retail ASP (&euro;)</label><input type="number" min="2000" max="8000" value="${asp}" data-green-asp class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                     <div><label class="text-slate-400 block mb-0.5">Kit Wholesale ASP (&euro;)</label><input type="number" min="1500" max="6000" value="${ws}" data-green-ws class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                     <div><label class="text-slate-400 block mb-0.5">Moto chiavi-in-mano (&euro;)</label><input type="number" min="15000" max="35000" value="${moto}" data-green-moto class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
@@ -2616,9 +2629,9 @@
             ['Iconic Mobility Lab – Prezzo moto chiavi in mano (€)', greenParams.bmw.motoPrice],
             ['Iconic Mobility Lab – Capex sviluppo BMW Pilot (€)', greenParams.bmw.devCapex != null ? greenParams.bmw.devCapex : 100000],
             ['Iconic Mobility Lab – % Capex capitalizzato BMW Pilot (D&A in 5 anni)', greenParams.bmw.capexCapitalizePct != null ? greenParams.bmw.capexCapitalizePct : 50],
-            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 1 (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY1 ?? 100) + ' / ' + (greenParams.bmw.pctWsY1 ?? 0) + ' / ' + (greenParams.bmw.pctMotoY1 ?? 0)],
-            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 2 (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY2 ?? 50) + ' / ' + (greenParams.bmw.pctWsY2 ?? 40) + ' / ' + (greenParams.bmw.pctMotoY2 ?? 10)],
-            ['Iconic Mobility Lab – Mix canali BMW Pilot Regime (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailReg ?? 30) + ' / ' + (greenParams.bmw.pctWsReg ?? 60) + ' / ' + (greenParams.bmw.pctMotoReg ?? 10)],
+            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 1 (2026) (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY1 ?? 100) + ' / ' + (greenParams.bmw.pctWsY1 ?? 0) + ' / ' + (greenParams.bmw.pctMotoY1 ?? 0)],
+            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 2 (2027) (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY2 ?? 50) + ' / ' + (greenParams.bmw.pctWsY2 ?? 40) + ' / ' + (greenParams.bmw.pctMotoY2 ?? 10)],
+            ['Iconic Mobility Lab – Mix canali BMW Pilot Dal 3° anno (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailReg ?? 30) + ' / ' + (greenParams.bmw.pctWsReg ?? 60) + ' / ' + (greenParams.bmw.pctMotoReg ?? 10)],
             ['Iconic Mobility Lab – Overhead 2026 (€)', greenParams.overheadY1],
             ['Iconic Mobility Lab – Overhead 2027 (€)', greenParams.overheadY2],
             ['Iconic Mobility Lab – Overhead da 2028 (€)', greenParams.overheadFrom2028],
@@ -2691,7 +2704,7 @@
                 [pre + '% Capex capitalizzato (D&A in 5 anni)', p.capexCapitalizePct != null ? p.capexCapitalizePct : 0],
                 [pre + 'Mix canali Anno 1 (Ret % / WS % / Moto %)', mixY1],
                 [pre + 'Mix canali Anno 2 (Ret % / WS % / Moto %)', mixY2],
-                [pre + 'Mix canali Regime (Ret % / WS % / Moto %)', mixReg],
+                [pre + 'Mix canali Dal 3° anno (Ret % / WS % / Moto %)', mixReg],
                 [pre + 'Perché inclusa nel piano (rationale)', rationaleDefault]
             );
         }
@@ -3235,9 +3248,9 @@
             ['Iconic Mobility Lab – Prezzo moto (€)', greenParams.bmw.motoPrice],
             ['Iconic Mobility Lab – Capex sviluppo BMW Pilot (€)', greenParams.bmw.devCapex != null ? greenParams.bmw.devCapex : 100000],
             ['Iconic Mobility Lab – % Capex capitalizzato BMW Pilot (D&A in 5 anni)', greenParams.bmw.capexCapitalizePct != null ? greenParams.bmw.capexCapitalizePct : 50],
-            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 1 (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY1 ?? 100) + ' / ' + (greenParams.bmw.pctWsY1 ?? 0) + ' / ' + (greenParams.bmw.pctMotoY1 ?? 0)],
-            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 2 (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY2 ?? 50) + ' / ' + (greenParams.bmw.pctWsY2 ?? 40) + ' / ' + (greenParams.bmw.pctMotoY2 ?? 10)],
-            ['Iconic Mobility Lab – Mix canali BMW Pilot Regime (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailReg ?? 30) + ' / ' + (greenParams.bmw.pctWsReg ?? 60) + ' / ' + (greenParams.bmw.pctMotoReg ?? 10)],
+            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 1 (2026) (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY1 ?? 100) + ' / ' + (greenParams.bmw.pctWsY1 ?? 0) + ' / ' + (greenParams.bmw.pctMotoY1 ?? 0)],
+            ['Iconic Mobility Lab – Mix canali BMW Pilot Anno 2 (2027) (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailY2 ?? 50) + ' / ' + (greenParams.bmw.pctWsY2 ?? 40) + ' / ' + (greenParams.bmw.pctMotoY2 ?? 10)],
+            ['Iconic Mobility Lab – Mix canali BMW Pilot Dal 3° anno (Ret % / WS % / Moto %)', (greenParams.bmw.pctRetailReg ?? 30) + ' / ' + (greenParams.bmw.pctWsReg ?? 60) + ' / ' + (greenParams.bmw.pctMotoReg ?? 10)],
             ['Iconic Mobility Lab – BOM Kit (€/unità)', greenParams.bmw.bomKit],
             ['Iconic Mobility Lab – BOM Moto (€/unità)', greenParams.bmw.bomMoto],
             ['Iconic Mobility Lab – Manodopera Retail (€/kit Anno 1/2/3+)', greenParams.bmw.mdoY1 + ' / ' + greenParams.bmw.mdoY2 + ' / ' + greenParams.bmw.mdoY3],
@@ -3258,7 +3271,7 @@
                 ['P' + (i+1) + ' ' + p.name + ' – Prezzo moto (€)', p.motoPrice],
                 ['P' + (i+1) + ' ' + p.name + ' – Mix canali Anno 1 (Ret % / WS % / Moto %)', (p.pctRetailY1 ?? 100) + ' / ' + (p.pctWsY1 ?? 0) + ' / ' + (p.pctMotoY1 ?? 0)],
                 ['P' + (i+1) + ' ' + p.name + ' – Mix canali Anno 2 (Ret % / WS % / Moto %)', (p.pctRetailY2 ?? 50) + ' / ' + (p.pctWsY2 ?? 40) + ' / ' + (p.pctMotoY2 ?? 10)],
-                ['P' + (i+1) + ' ' + p.name + ' – Mix canali Regime (Ret % / WS % / Moto %)', (p.pctRetailReg ?? 30) + ' / ' + (p.pctWsReg ?? 60) + ' / ' + (p.pctMotoReg ?? 10)],
+                ['P' + (i+1) + ' ' + p.name + ' – Mix canali Dal 3° anno (Ret % / WS % / Moto %)', (p.pctRetailReg ?? 30) + ' / ' + (p.pctWsReg ?? 60) + ' / ' + (p.pctMotoReg ?? 10)],
                 ['P' + (i+1) + ' ' + p.name + ' – BOM Kit (€)', p.bomKit],
                 ['P' + (i+1) + ' ' + p.name + ' – BOM Moto (€)', p.bomMoto]
             ]),
@@ -3269,7 +3282,7 @@
             ...productsCatalog.map(p => [p.name || '', p.price, (p.margin !== undefined ? p.margin : 75), p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
             ['Nota metodologia', 'Componenti e Ottodrom Care: crescita +5% annuo dopo Anno 3.'],
-            ['Nota metodologia', 'Iconic Mobility Lab: Overheads e mix canali (Retail % / Wholesale % / Moto %) modificabili per Pilot e per ogni piattaforma (Anno 1, Anno 2, Regime). Var Opex = MdO (retail), Omologa (retail), Logistica (WS). Opzione Cina = riduzione % su BOM Kit da anno indicato.'],
+            ['Nota metodologia', 'Iconic Mobility Lab: Overheads e mix canali (Retail % / Wholesale % / Moto %) modificabili. Pilot BMW: Anno 1 = 2026, Anno 2 = 2027, Dal 3° = dal 2028. Altre piattaforme: Anno 1/2/Dal 3° sono relativi all\'anno di lancio (es. lancio 2028 → Anno 1 = 2028, Dal 3° = dal 2030). Var Opex = MdO (retail), Omologa (retail), Logistica (WS). Opzione Cina = riduzione % su BOM Kit da anno indicato.'],
             ['Nota metodologia', 'Officina e Service: crescita +3%/anno (tetto +15% cumulato).'],
             [],
             ['Come usare questo file: BP Ottodrom è il Conto Economico; le formule leggono da Assumptions e dai fogli Topline. Core = azione inclusa nel piano; Upside = potenziale solo in Recap. Modificare solo la colonna Valore nella sezione Parametri in alto.', ''],
