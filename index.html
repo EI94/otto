@@ -1386,7 +1386,7 @@
           dettaglio: { piattaforma: '\'87–\'06 ca.', produzione: '~200–300k', parco: '~150–200k EU / ~20–35k IT', potenziale: 'Telaio tubi + V-twin: spazio serbatoio/fiancate; ibrido plausibile; EV mid-pack.' } },
         { id:'yamaha_xs650', name:'Yamaha XS650', prod:'200-250k', asp:4400, bom:2200, vol:40, launch:2031,
           dettaglio: { piattaforma: '\'69–\'85', produzione: '~200–250k', parco: '~25–35k EU / ~5–7k IT', potenziale: 'Telaio lineare, community enorme: kit ibrido ideale; EV urban con pacchi compatti.' } },
-        { id:'honda_cb_four', name:'Honda CB Four SOHC (500-750)', prod:'700-850k', asp:4800, bom:2500, vol:45, launch:2030,
+        { id:'honda_cb_four', name:"Honda CB Four SOHC (500-750)", prod:'700-850k', asp:4800, bom:2500, vol:45, launch:2030,
           dettaglio: { piattaforma: '\'69–\'78, incl. TT/HL', produzione: '~700–850k', parco: '~45–55k EU / ~7–9k IT', potenziale: 'Spazi in airbox/triangolo: ibrido/EV fattibili; servono upgrade freni/sospensioni.' } },
         { id:'suzuki_bandit', name:'Suzuki Bandit GSF', prod:'500-800k', asp:3800, bom:2100, vol:65, launch:2029,
           dettaglio: { piattaforma: '600/650/1200/1250, \'95–\'16', produzione: '≥500–800k', parco: '~300–450k EU / ~30–60k IT', potenziale: 'Doppia culla + serbatoio 19–20 L: volumi utili; ibrido/EV con upgrade impianti.' } },
@@ -2502,8 +2502,8 @@
             ['• Metodologia P&L Green – Spiegazione formule e logica del P&L Project Green.'],
             [],
             ['Core vs Upside'],
-            ['• Core = l\'azione è inclusa nel Conto Economico e nel Business Plan. I suoi ricavi e costi entrano nei totali.'],
-            ['• Upside = l\'azione non è nel piano; i suoi numeri compaiono solo nel Recap Upside come potenziale.'],
+            ["• Core = l'azione è inclusa nel Conto Economico e nel Business Plan. I suoi ricavi e costi entrano nei totali."],
+            ["• Upside = l'azione non è nel piano; i suoi numeri compaiono solo nel Recap Upside come potenziale."],
             ['• In Assumptions, per ogni Azione 1–6, il valore "Core" o "Upside" determina se quella voce è in piano o solo in recap.'],
             [],
             ['Come modificare il piano'],
@@ -2567,7 +2567,7 @@
             ['Azione 4 Iconic Mobility Lab – In piano: Core o Upside', actionCoreExcel[4] ? 'Core' : 'Upside'],
             ['Azione 5 Componenti – In piano: Core o Upside', actionCoreExcel[5] ? 'Core' : 'Upside'],
             ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside']
-        ];
+        );
         const yearLabels = [2025, ...years.map(y => parseInt(y.label))];
         const GREEN_PL_METRICS = 5;
         for (let yi = 0; yi < yearLabels.length; yi++) {
@@ -2693,8 +2693,8 @@
         ];
         const ceFormulaRows = { 'COSTI VARIABILI': 0, 'MARGINE DI CONTRIBUZIONE': 2, 'COSTI FISSI': 1, 'EBITDA': 3, '  D&A (Ottodrom + Green)': 4, 'EBIT': 5 };
         let bpRow = 13;
-        const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, EBITDA: 1, EBIT: 1 };
-        const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, EBITDA: 1, EBIT: 1 };
+        const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, 'EBITDA': 1, 'EBIT': 1 };
+        const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, 'EBITDA': 1, 'EBIT': 1 };
         const yearLabelsBP = [2025, ...years.map(y => parseInt(y.label))];
         ceRest.forEach((row) => {
             bpRow++;
