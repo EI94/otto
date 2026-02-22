@@ -2483,6 +2483,7 @@
         if (!lastYearsData.length) { alert('Calcola prima il piano finanziario.'); return; }
         const years = lastYearsData;
         const TEAL = 'FF0F766E', SLATE = 'FF334155', LIGHT = 'FFF8FAFC';
+        const B = 'Assumptions!$B$';
 
         const wb = new ExcelJS.Workbook();
         wb.creator = 'Ottodrom Piano Industriale';
@@ -2645,7 +2646,6 @@
         ws1.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
         for (let col = 2; col <= numCols; col++) {
             const colLetter = excelColLetter(col - 1);
-            const B = 'Assumptions!$B$';
             ws1.getCell(5, col).value = { formula: `SUM(${colLetter}6:${colLetter}12)` };
             ws1.getCell(5, col).numFmt = '"€"#,##0';
             ws1.getCell(6, col).value = { formula: `'Topline Officina'!${colLetter}3` };
@@ -2834,7 +2834,6 @@
         const wsComp = addToplineSheet('Topline Componenti', 'Componenti (Az.5) – Revenue (€)');
         wsComp.getCell(3, 1).value = 'Revenue (€)';
         wsComp.getCell(3, 1).font = { bold: true };
-        const B = 'Assumptions!$B$';
         wsComp.getCell(3, 2).value = { formula: '=0' };
         wsComp.getCell(3, 2).numFmt = '"€"#,##0';
         for (let c = 3; c <= yearCols.length + 1; c++) {
@@ -2989,7 +2988,6 @@
         ws2.getCell(rowPLRevenue, 1).value = 'Revenue';
         ws2.getCell(rowPLRevenue, 1).font = { bold: true };
         let plRow = rowPLRevenue;
-        const B = 'Assumptions!$B$';
         const plRows = [
             { label: '(-) COGS', metric: 0, neg: true },
             { label: 'Gross Profit', type: 'gp' },
@@ -3095,7 +3093,6 @@
         wsUpside.getRow(2).getCell(1).alignment = { wrapText: true };
         wsUpside.addRow(['Azione', '2025', ...years.map(y => y.label), 'Totale']);
         wsUpside.getRow(3).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
-        const B = 'Assumptions!$B$';
         const upsideSheetRows = [
             { label: 'Fashion (Az.1)', sheet: 'Topline Fashion', row: 3, azione: R.azione1 },
             { label: 'Sharing (Az.3)', sheet: 'Topline Sharing', row: 3, azione: R.azione3 },
