@@ -712,6 +712,14 @@
                             <label class="text-[10px] text-slate-400 uppercase block mb-0.5">Prezzo Moto chiavi-in-mano (&euro;)</label>
                             <input type="number" min="15000" max="35000" step="500" value="23000" id="bmwMotoPrice" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
                         </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase block mb-0.5">Capex sviluppo (&euro;)</label>
+                            <input type="number" min="0" step="1000" value="100000" id="bmwDevCapex" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase block mb-0.5">% Capex capitalizzato (D&A in 5 anni)</label>
+                            <input type="number" min="0" max="100" value="50" id="bmwCapexPct" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();">
+                        </div>
                     </div>
                     <div class="mt-3 text-[10px] text-slate-400 bg-slate-900/60 rounded p-2 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div class="flex justify-between items-center"><span>BOM Kit (Anno 1 &rarr; -5%/yr)</span><input type="number" min="1500" max="4000" value="2300" id="bmwBomKit" class="w-16 bg-slate-700 border border-slate-600 rounded px-1 py-0.5 text-right text-white text-[10px]" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
@@ -1470,6 +1478,10 @@
         };
         bmw.chinaYear = chinaYear || 9999;
         bmw.chinaPct = chinaPct;
+        bmw.devCapex = Math.max(0, parseInt(document.getElementById('bmwDevCapex')?.value) || 100000);
+        bmw.capexCapitalizePct = Math.min(100, Math.max(0, parseInt(document.getElementById('bmwCapexPct')?.value) || 50));
+        const bmwCapitalized = bmw.devCapex * (bmw.capexCapitalizePct / 100);
+        bmw.yearlyDaCapex = bmwCapitalized / 5;
         const overheadY1 = Math.max(0, parseInt(document.getElementById('greenOverheadY1')?.value) || 200000);
         const overheadY2 = Math.max(0, parseInt(document.getElementById('greenOverheadY2')?.value) || 500000);
         const overheadFrom2028 = Math.max(0, parseInt(document.getElementById('greenOverheadFrom2028')?.value) || 600000);
@@ -1636,6 +1648,8 @@
         else da = 110000 * Math.pow(1.03, Math.max(0, yIdx - 2)) + 15000 * (numActive - 1);
 
         let daCapex = 0;
+        if (yr >= GREEN_BMW_LAUNCH && yr < GREEN_BMW_LAUNCH + 5 && (params.bmw.yearlyDaCapex || 0) > 0)
+            daCapex += params.bmw.yearlyDaCapex;
         params.platforms.forEach(pp => {
             if (yr >= pp.launchYear && yr < pp.launchYear + 5 && (pp.yearlyDaCapex || 0) > 0)
                 daCapex += pp.yearlyDaCapex;
@@ -2547,6 +2561,8 @@
             ['Iconic Mobility Lab – Prezzo kit Retail (€/unità)', greenParams.bmw.retailASP],
             ['Iconic Mobility Lab – Prezzo kit Wholesale (€/unità)', greenParams.bmw.wholesaleASP],
             ['Iconic Mobility Lab – Prezzo moto chiavi in mano (€)', greenParams.bmw.motoPrice],
+            ['Iconic Mobility Lab – Capex sviluppo BMW Pilot (€)', greenParams.bmw.devCapex != null ? greenParams.bmw.devCapex : 100000],
+            ['Iconic Mobility Lab – % Capex capitalizzato BMW Pilot (D&A in 5 anni)', greenParams.bmw.capexCapitalizePct != null ? greenParams.bmw.capexCapitalizePct : 50],
             ['Iconic Mobility Lab – Overhead 2026 (€)', greenParams.overheadY1],
             ['Iconic Mobility Lab – Overhead 2027 (€)', greenParams.overheadY2],
             ['Iconic Mobility Lab – Overhead da 2028 (€)', greenParams.overheadFrom2028],
@@ -2582,7 +2598,7 @@
                 ['Green P&L – D&A Capex sviluppo ' + yr + ' (€)', g.daCapex != null ? g.daCapex : 0]
             );
         }
-        const CE_ASSUM_BASE = ASSUM_START + 32 + 12 * GREEN_PL_METRICS;
+        const CE_ASSUM_BASE = ASSUM_START + 34 + 12 * GREEN_PL_METRICS;
         for (let yi = 0; yi < yearLabels.length; yi++) {
             const yr = yearLabels[yi];
             const y = yi === 0 ? null : years[yi - 1];
@@ -2616,13 +2632,13 @@
                 [pre + 'Perché inclusa nel piano (rationale)', rationaleDefault]
             );
         }
-        const GREEN_PL_ASSUM_BASE = ASSUM_START + 32;
+        const GREEN_PL_ASSUM_BASE = ASSUM_START + 34;
         const greenPLRow = (yr, metric) => GREEN_PL_ASSUM_BASE + (yr - 2025) * GREEN_PL_METRICS + metric;
         const CE_METRICS = 6;
         const ceRow = (yr, metric) => CE_ASSUM_BASE + (yr - 2025) * CE_METRICS + metric;
         const PLAT_ASSUM_BASE = CE_ASSUM_BASE + 12 * CE_METRICS;
         const platR = (i, j) => PLAT_ASSUM_BASE + i * ROWS_PER_PLAT + j;
-        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, compY1: ASSUM_START+16, compY2: ASSUM_START+17, compY3: ASSUM_START+18, compY4: ASSUM_START+19, compY5: ASSUM_START+20, compY6: ASSUM_START+21, compY7: ASSUM_START+22, compY8: ASSUM_START+23, compY9: ASSUM_START+24, compY10: ASSUM_START+25, azione1: ASSUM_START+26, azione2: ASSUM_START+27, azione3: ASSUM_START+28, azione4: ASSUM_START+29, azione5: ASSUM_START+30, azione6: ASSUM_START+31 };
+        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenCapexPilot: ASSUM_START+6, greenCapexPctPilot: ASSUM_START+7, greenOh1: ASSUM_START+8, greenOh2: ASSUM_START+9, greenOh8: ASSUM_START+10, careMoto: ASSUM_START+11, carePrezzo: ASSUM_START+12, shareBase: ASSUM_START+13, shareMark: ASSUM_START+14, offBase: ASSUM_START+15, fashion: ASSUM_START+16, altro: ASSUM_START+17, compBase: ASSUM_START+18, compY1: ASSUM_START+18, compY2: ASSUM_START+19, compY3: ASSUM_START+20, compY4: ASSUM_START+21, compY5: ASSUM_START+22, compY6: ASSUM_START+23, compY7: ASSUM_START+24, compY8: ASSUM_START+25, compY9: ASSUM_START+26, compY10: ASSUM_START+27, azione1: ASSUM_START+28, azione2: ASSUM_START+29, azione3: ASSUM_START+30, azione4: ASSUM_START+31, azione5: ASSUM_START+32, azione6: ASSUM_START+33 };
         const nPlat = Math.min(excelMaxPlat, greenParams.platforms.length);
         const rowRevTotalGreen = 16 + 2 * nPlat;
         const yearCols = ['2025', ...years.map(y => y.label)];
@@ -3154,6 +3170,8 @@
             ['Iconic Mobility Lab – Prezzo kit Retail (€)', greenParams.bmw.retailASP],
             ['Iconic Mobility Lab – Prezzo kit Wholesale (€)', greenParams.bmw.wholesaleASP],
             ['Iconic Mobility Lab – Prezzo moto (€)', greenParams.bmw.motoPrice],
+            ['Iconic Mobility Lab – Capex sviluppo BMW Pilot (€)', greenParams.bmw.devCapex != null ? greenParams.bmw.devCapex : 100000],
+            ['Iconic Mobility Lab – % Capex capitalizzato BMW Pilot (D&A in 5 anni)', greenParams.bmw.capexCapitalizePct != null ? greenParams.bmw.capexCapitalizePct : 50],
             ['Iconic Mobility Lab – BOM Kit (€/unità)', greenParams.bmw.bomKit],
             ['Iconic Mobility Lab – BOM Moto (€/unità)', greenParams.bmw.bomMoto],
             ['Iconic Mobility Lab – Manodopera Retail (€/kit Anno 1/2/3+)', greenParams.bmw.mdoY1 + ' / ' + greenParams.bmw.mdoY2 + ' / ' + greenParams.bmw.mdoY3],
