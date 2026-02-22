@@ -38,6 +38,8 @@
     #navOverlay { transition: opacity 0.2s ease; }
     #navOverlay.closed { opacity: 0; pointer-events: none; }
     @media (min-width: 768px) { #navMenuBtn { display: none !important; } #navDrawer, #navOverlay { display: none !important; } }
+    .action-role-core:has(input:checked) { background: #ccfbf1; border-color: #0d9488; }
+    .action-role-upside:has(input:checked) { background: #fef3c7; border-color: #d97706; }
 </style>
 </head>
 <body class="antialiased">
@@ -755,9 +757,9 @@
                         <strong>Overheads</strong> sopra sono quelli del BP analisi preliminare (modificabili). Senza produzione interna puoi ridurli; riducendo i fissi l&apos;EBITDA migliora anche a volumi minori.
                     </p>
                 </div>
-                <p class="text-xs font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-plus-circle mr-1"></i>Piattaforme Aggiuntive (max 3)</p>
+                <p class="text-xs font-bold uppercase text-teal-400 mb-2"><i class="fa-solid fa-plus-circle mr-1"></i>Piattaforme Aggiuntive (max 10)</p>
                 <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1" id="platformList"></div>
-                <p class="text-[10px] text-slate-500 mt-2" id="platformCount">0/3 selezionate</p>
+                <p class="text-[10px] text-slate-500 mt-2" id="platformCount">0/10 selezionate</p>
                 <div id="platformConfigs" class="mt-4 space-y-4"></div>
             </div>
             <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-xl">
@@ -982,6 +984,18 @@
                 </table>
             </div>
         </div>
+
+        <div id="recapUpsideContainer" class="hidden mt-8 p-4 rounded-lg border border-amber-600/50 bg-amber-950/30">
+            <h4 class="text-sm font-bold uppercase text-amber-400 mb-3"><i class="fa-solid fa-chart-line mr-1"></i>Recap potenziali Upside (azioni non in piano)</h4>
+            <p class="text-xs text-slate-400 mb-3">Ricavi potenziali delle azioni marcate come Upside: non inclusi nel CE/BP sopra.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[520px]" id="recapUpsideTable">
+                    <thead id="recapUpsideHead"></thead>
+                    <tbody id="recapUpsideBody"></tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">
             <div class="text-xs sm:text-[11px] text-slate-500 bg-slate-800 rounded p-3 flex-1 min-w-0">
                 <i class="fa-solid fa-info-circle mr-1"></i> I valori 2025 provengono dal CE Analitico consuntivo. Le proiezioni 2026&ndash;2036 si aggiornano in tempo reale.
@@ -1415,12 +1429,13 @@
         });
     }
 
+    const MAX_PLATFORMS = 10;
     function onPlatformChange() {
         const cbs = document.querySelectorAll('.platform-cb');
         const checked = [...cbs].filter(c => c.checked);
-        if (checked.length > 3) { checked[checked.length-1].checked = false; return; }
-        cbs.forEach(cb => { if (!cb.checked && checked.length >= 3) cb.closest('label').classList.add('opacity-40'); else cb.closest('label').classList.remove('opacity-40'); });
-        document.getElementById('platformCount').innerText = checked.length + '/3 selezionate';
+        if (checked.length > MAX_PLATFORMS) { checked[checked.length-1].checked = false; return; }
+        cbs.forEach(cb => { if (!cb.checked && checked.length >= MAX_PLATFORMS) cb.closest('label').classList.add('opacity-40'); else cb.closest('label').classList.remove('opacity-40'); });
+        document.getElementById('platformCount').innerText = checked.length + '/' + MAX_PLATFORMS + ' selezionate';
         renderPlatformConfigs();
         updateGreenSim();
         recalcFinancialPlan();
@@ -1475,11 +1490,16 @@
                 motoPrice: card ? parseInt(card.querySelector('[data-green-moto]')?.value) || 23000 : 23000,
                 bomKit: card ? parseInt(card.querySelector('[data-green-bomkit]')?.value) || p.bom : p.bom,
                 bomMoto: card ? parseInt(card.querySelector('[data-green-bommoto]')?.value) || 15717 : 15717,
+                devCapex: Math.max(0, parseInt(card?.querySelector('[data-green-devcapex]')?.value) || 100000),
+                capexCapitalizePct: Math.min(100, Math.max(0, parseInt(card?.querySelector('[data-green-capexpct]')?.value) || 50)),
                 mdoY1: bmw.mdoY1, mdoY2: bmw.mdoY2, mdoY3: bmw.mdoY3,
                 omologaRetail: bmw.omologaRetail,
                 logWsY1: bmw.logWsY1, logWsY2: bmw.logWsY2, logWsY3: bmw.logWsY3,
                 chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct
             };
+        }).map(pp => {
+            const capitalized = pp.devCapex * (pp.capexCapitalizePct / 100);
+            return { ...pp, capitalizedAmount: capitalized, yearlyDaCapex: capitalized / 5 };
         });
         return { bmw, platforms: platformsParams, chinaYear: bmw.chinaYear, chinaPct: bmw.chinaPct, overheadY1, overheadY2, overheadFrom2028 };
     }
@@ -1502,6 +1522,10 @@
             const moto = existing ? (parseInt(existing.querySelector('[data-green-moto]')?.value) ?? 23000) : 23000;
             const bomkit = existing ? (parseInt(existing.querySelector('[data-green-bomkit]')?.value) ?? p.bom) : p.bom;
             const bommoto = existing ? (parseInt(existing.querySelector('[data-green-bommoto]')?.value) ?? 15717) : 15717;
+            const defCapex = 100000;
+            const defCapexPct = 50;
+            const devcapex = existing ? (parseInt(existing.querySelector('[data-green-devcapex]')?.value) ?? defCapex) : defCapex;
+            const capexpct = existing ? (parseInt(existing.querySelector('[data-green-capexpct]')?.value) ?? defCapexPct) : defCapexPct;
             return `<div class="bg-slate-800 p-4 rounded-lg border border-slate-700" data-green-plat-id="${p.id}">
                 <h4 class="text-sm font-bold uppercase text-teal-400 mb-3"><i class="fa-solid fa-motorcycle mr-1"></i>${p.name}</h4>
                 <p class="text-[10px] text-slate-500 mb-2">Suggerimento TAM: ~${defVol} u/yr. Imposta anno di lancio, volumi (Anno 1, Anno 2, dal 3&deg;) e prezzi.</p>
@@ -1510,6 +1534,10 @@
                     <div><label class="text-slate-400 block mb-0.5">Volume Anno 1 (primo anno)</label><input type="number" min="0" max="500" value="${vy1}" data-green-vy1 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                     <div><label class="text-slate-400 block mb-0.5">Volume Anno 2 (secondo anno)</label><input type="number" min="0" max="500" value="${vy2}" data-green-vy2 class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                     <div><label class="text-slate-400 block mb-0.5">Volume a Regime (dal 3&deg; anno)</label><input type="number" min="1" max="500" value="${vol}" data-green-vol class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] mb-2">
+                    <div><label class="text-slate-400 block mb-0.5">Capex sviluppo (&euro;)</label><input type="number" min="0" step="1000" value="${devcapex}" data-green-devcapex class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
+                    <div><label class="text-slate-400 block mb-0.5">% Capex capitalizzato (D&A in 5 anni)</label><input type="number" min="0" max="100" value="${capexpct}" data-green-capexpct class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
                     <div><label class="text-slate-400 block mb-0.5">Kit Retail ASP (&euro;)</label><input type="number" min="2000" max="8000" value="${asp}" data-green-asp class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
@@ -1607,6 +1635,13 @@
         else if (yIdx === 1) da = 91000;
         else da = 110000 * Math.pow(1.03, Math.max(0, yIdx - 2)) + 15000 * (numActive - 1);
 
+        let daCapex = 0;
+        params.platforms.forEach(pp => {
+            if (yr >= pp.launchYear && yr < pp.launchYear + 5 && (pp.yearlyDaCapex || 0) > 0)
+                daCapex += pp.yearlyDaCapex;
+        });
+        da = da + daCapex;
+
         const rev = bmw.rev + platRev;
         const cogs = bmw.cogs + platCOGS;
         const varOpex = bmw.varOpex + platVar;
@@ -1616,6 +1651,7 @@
 
         return {
             revenue: rev, cogs, varOpex, fixedOpex, da,
+            daCapex,
             grossProfit: gp,
             grossMarginPct: rev > 0 ? gp / rev * 100 : 0,
             ebitda, ebit,
@@ -1933,6 +1969,15 @@
     }
 
     // --- ACTIONS GRID ---
+    function getActionCoreFlags() {
+        const out = {};
+        for (let i = 1; i <= 6; i++) {
+            const r = document.querySelector(`input[name="actionRole${i}"]:checked`);
+            out[i] = r ? r.value === 'core' : true;
+        }
+        return out;
+    }
+
     function renderActions() {
         document.getElementById('actionsGrid').innerHTML = actions.map(a => `
             <div class="action-card bg-white p-5 rounded-lg border border-slate-200 cursor-pointer group" onclick="showActionDetail(${a.id})">
@@ -1942,11 +1987,30 @@
                 </div>
                 <h4 class="font-bold text-slate-800 text-lg leading-tight mb-2">${a.title}</h4>
                 <p class="text-xs text-slate-500 line-clamp-2">${a.desc}</p>
-                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                <div class="mt-4 pt-3 border-t border-slate-100 space-y-2" onclick="event.stopPropagation()">
+                    <p class="text-[10px] font-bold uppercase text-slate-500">In piano</p>
+                    <div class="flex gap-2">
+                        <label class="flex-1 flex items-center justify-center gap-1 p-1.5 rounded border cursor-pointer transition-colors border-slate-200 action-role-core">
+                            <input type="radio" name="actionRole${a.id}" value="core" checked class="sr-only" onchange="recalcFinancialPlan()">
+                            <span class="text-xs font-semibold text-teal-700">Core</span>
+                        </label>
+                        <label class="flex-1 flex items-center justify-center gap-1 p-1.5 rounded border cursor-pointer transition-colors border-slate-200 action-role-upside">
+                            <input type="radio" name="actionRole${a.id}" value="upside" class="sr-only" onchange="recalcFinancialPlan()">
+                            <span class="text-xs font-semibold text-slate-600">Upside</span>
+                        </label>
+                    </div>
+                    <p class="text-[9px] text-slate-400">Core = in CE/BP; Upside = solo recap</p>
+                </div>
+                <div class="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center">
                     <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">${a.tag}</span>
                     <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-teal-500 transition-colors text-sm"></i>
                 </div>
             </div>`).join('');
+        // Fix default "core" for first load (radios are checked in HTML but getActionCoreFlags may run before first recalc)
+        for (let i = 1; i <= 6; i++) {
+            const core = document.querySelector(`input[name="actionRole${i}"][value="core"]`);
+            if (core && !document.querySelector(`input[name="actionRole${i}"]:checked`)) core.checked = true;
+        }
     }
 
     function showActionDetail(id) {
@@ -2014,6 +2078,7 @@
         const shNardipct = op1_Nardi + op2_Nardi;
 
         const greenParams = getGreenParams();
+        const actionCore = getActionCoreFlags();
 
         const pY = [0,0,0,0,0,0,0,0,0,0];
         const pYCost = [0,0,0,0,0,0,0,0,0,0];
@@ -2068,47 +2133,108 @@
             const concRev = mcArr * rampConc * concGrowth;
             const concCV = concRev * 0.35;
 
+            const c1 = actionCore[1], c2 = actionCore[2], c3 = actionCore[3], c4 = actionCore[4], c5 = actionCore[5], c6 = actionCore[6];
             const ricavi_officina = BASE.ricavi_officina * serviceGrowth;
-            const ricavi_fashion = fashRev;
-            const ricavi_componenti = prodRev;
-            const ricavi_kit = gpl.revenue;
-            const ricavi_sharing = sharingRev;
-            const ricavi_concierge = concRev;
+            const ricavi_fashion = c1 ? fashRev : 0;
+            const ricavi_componenti = c5 ? prodRev : 0;
+            const ricavi_kit = c4 ? gpl.revenue : 0;
+            const ricavi_sharing = c3 ? sharingRev : 0;
+            const ricavi_concierge = c6 ? concRev : 0;
             const ricavi_altro = BASE.ricavi_altro;
             const totale_ricavi = ricavi_officina + ricavi_fashion + ricavi_componenti + ricavi_kit + ricavi_sharing + ricavi_concierge + ricavi_altro;
 
-            const cv_operativi = (BASE.cv_operativi - BASE.costi_fashion_prod + (fashionChoice === 'nulla' ? BASE.costi_fashion_prod : 0)) * serviceGrowth + gpl.cogs + gpl.varOpex + prodCV + concCV;
-            const cv_commerciali = BASE.cv_commerciali - fashCostSaved - (y === 0 ? BASE.costi_marketing * 0.5 : BASE.costi_marketing * 0.3) - (y === 0 ? BASE.costi_it * 0.3 : BASE.costi_it * 0.2);
+            const fashCostAdj = c1 ? fashCostSaved : 0;
+            const gplCogs = c4 ? gpl.cogs : 0, gplVar = c4 ? gpl.varOpex : 0, gplFixed = c4 ? gpl.fixedOpex : 0, gplDa = c4 ? gpl.da : 0;
+            const cv_operativi = (BASE.cv_operativi - BASE.costi_fashion_prod + (fashionChoice === 'nulla' ? BASE.costi_fashion_prod : 0)) * serviceGrowth + gplCogs + gplVar + (c5 ? prodCV : 0) + (c6 ? concCV : 0);
+            const cv_commerciali = BASE.cv_commerciali - fashCostAdj - (y === 0 ? BASE.costi_marketing * 0.5 : BASE.costi_marketing * 0.3) - (y === 0 ? BASE.costi_it * 0.3 : BASE.costi_it * 0.2);
             const totale_cv = Math.max(cv_operativi, 0) + Math.max(cv_commerciali, 0);
 
             const mdc = totale_ricavi - totale_cv;
 
-            const cf_locali = localiNew;
+            const cf_locali = c2 ? localiNew : BASE.cf_locali;
             const cf_personale = BASE.cf_personale;
             const cf_ga = BASE.cf_ga_altro * (y === 0 ? 0.85 : 0.80);
-            const cf_green = gpl.fixedOpex;
+            const cf_green = gplFixed;
             const totale_cf = cf_locali + cf_personale + cf_ga + cf_green;
 
             const ebitda = mdc - totale_cf;
-            const da = BASE.da + gpl.da;
+            const da = BASE.da + gplDa;
             const ebit = ebitda - da;
+
+            const green_ebitda_plan = c4 ? gpl.ebitda : 0;
+            const green_units_plan = c4 ? gpl.totalUnits : 0;
+            const greenPerPlatformPlan = c4 ? (gpl.perPlatform || []) : [];
+
+            const upside_fashion = c1 ? 0 : fashRev;
+            const upside_kit = c4 ? 0 : gpl.revenue;
+            const upside_sharing = c3 ? 0 : sharingRev;
+            const upside_componenti = c5 ? 0 : prodRev;
+            const upside_concierge = c6 ? 0 : concRev;
+            const upside_totale = upside_fashion + upside_kit + upside_sharing + upside_componenti + upside_concierge;
 
             years.push({
                 label, ricavi_officina, ricavi_fashion, ricavi_componenti, ricavi_kit,
                 ricavi_sharing, ricavi_concierge, ricavi_altro, totale_ricavi,
                 cv_operativi: Math.max(cv_operativi,0), cv_commerciali: Math.max(cv_commerciali,0), totale_cv,
                 mdc, cf_locali, cf_personale, cf_ga, cf_green, totale_cf, ebitda, da, ebit,
-                green_ebitda: gpl.ebitda, green_units: gpl.totalUnits,
-                greenPerPlatform: gpl.perPlatform || []
+                green_ebitda: green_ebitda_plan, green_units: green_units_plan,
+                greenPerPlatform: greenPerPlatformPlan,
+                upside_fashion, upside_kit, upside_sharing, upside_componenti, upside_concierge, upside_totale
             });
         }
 
         lastYearsData = years;
         renderCETable(years);
         renderGreenDetailTable(years);
+        renderRecapUpside(years);
         renderEbitdaChart(years);
         renderEbitdaCards(years);
         renderMixCharts(years);
+    }
+
+    function renderRecapUpside(years) {
+        const container = document.getElementById('recapUpsideContainer');
+        const head = document.getElementById('recapUpsideHead');
+        const body = document.getElementById('recapUpsideBody');
+        if (!container || !head || !body) return;
+        const actionCore = getActionCoreFlags();
+        const upsideLabels = [
+            { id: 1, label: 'Fashion (Az.1)' },
+            { id: 3, label: 'Sharing (Az.3)' },
+            { id: 4, label: 'Kit & Moto Green (Az.4)' },
+            { id: 5, label: 'Componenti (Az.5)' },
+            { id: 6, label: 'Ottodrom Care (Az.6)' }
+        ];
+        const upsideRows = upsideLabels.filter(r => !actionCore[r.id]);
+        if (upsideRows.length === 0) {
+            container.classList.add('hidden');
+            return;
+        }
+        container.classList.remove('hidden');
+        const keys = { 1: 'upside_fashion', 3: 'upside_sharing', 4: 'upside_kit', 5: 'upside_componenti', 6: 'upside_concierge' };
+        head.innerHTML = `<tr class="border-b border-slate-600 text-amber-400/90 uppercase text-[10px]">
+            <th class="p-2 text-left sticky left-0 bg-slate-900/95 z-10">Azione</th>
+            ${years.map(y => `<th class="p-2 text-right min-w-[80px]">${y.label}</th>`).join('')}
+            <th class="p-2 text-right min-w-[80px]">Totale</th>
+        </tr>`;
+        let totalRow = years.map(() => 0);
+        body.innerHTML = upsideRows.map(r => {
+            const key = keys[r.id];
+            const vals = years.map(y => y[key] || 0);
+            vals.forEach((v, i) => { totalRow[i] += v; });
+            const rowTotal = vals.reduce((a, b) => a + b, 0);
+            return `<tr class="border-b border-slate-700/50">
+                <td class="p-2 sticky left-0 bg-slate-900/95 text-amber-200 font-medium">${r.label}</td>
+                ${vals.map(v => `<td class="p-2 text-right text-slate-300 tabular-nums">${fmt(v)}</td>`).join('')}
+                <td class="p-2 text-right text-amber-300 font-semibold tabular-nums">${fmt(rowTotal)}</td>
+            </tr>`;
+        }).join('');
+        const totalLine = `<tr class="border-t-2 border-amber-500/70 bg-slate-800/50">
+            <td class="p-2 sticky left-0 bg-slate-800 font-bold text-amber-300">Totale Upside</td>
+            ${totalRow.map(v => `<td class="p-2 text-right font-semibold text-amber-300 tabular-nums">${fmt(v)}</td>`).join('')}
+            <td class="p-2 text-right font-bold text-amber-400 tabular-nums">${fmt(totalRow.reduce((a,b)=>a+b,0))}</td>
+        </tr>`;
+        body.insertAdjacentHTML('beforeend', totalLine);
     }
 
     function renderEbitdaCards(years) {
@@ -2377,6 +2503,7 @@
         const pY0 = productsCatalog.reduce((s, p) => s + (p.price || 0) * (p.q1 || 0), 0);
 
         const ASSUM_START = 4;
+        const actionCoreExcel = getActionCoreFlags();
         const assumpRows = [
             ['Green Vol 2026', greenParams.bmw.vol2026],
             ['Green Vol 2027', greenParams.bmw.vol2027],
@@ -2394,27 +2521,38 @@
             ['Officina base (€)', BASE.ricavi_officina],
             ['Fashion scenario', fashionChoice],
             ['Altro base (€)', BASE.ricavi_altro],
-            ['Componenti base Anno 1 (€)', pY0]
+            ['Componenti base Anno 1 (€)', pY0],
+            ['Azione 1 in piano (Core/Upside)', actionCoreExcel[1] ? 'Core' : 'Upside'],
+            ['Azione 2 in piano (Core/Upside)', actionCoreExcel[2] ? 'Core' : 'Upside'],
+            ['Azione 3 in piano (Core/Upside)', actionCoreExcel[3] ? 'Core' : 'Upside'],
+            ['Azione 4 in piano (Core/Upside)', actionCoreExcel[4] ? 'Core' : 'Upside'],
+            ['Azione 5 in piano (Core/Upside)', actionCoreExcel[5] ? 'Core' : 'Upside'],
+            ['Azione 6 in piano (Core/Upside)', actionCoreExcel[6] ? 'Core' : 'Upside']
         ];
-        const plat1 = greenParams.platforms[0] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0 };
-        const plat2 = greenParams.platforms[1] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0 };
-        assumpRows.push(
-            ['Plat A1: Anno lancio', plat1.launchYear],
-            ['Plat A1: Vol Anno 1', plat1.volYear1],
-            ['Plat A1: Vol Anno 2', plat1.volYear2],
-            ['Plat A1: Vol a regime', plat1.volRegime],
-            ['Plat A1: ASP Retail', plat1.retailASP],
-            ['Plat A1: ASP Wholesale', plat1.wholesaleASP],
-            ['Plat A1: Prezzo Moto', plat1.motoPrice],
-            ['Plat A2: Anno lancio', plat2.launchYear],
-            ['Plat A2: Vol Anno 1', plat2.volYear1],
-            ['Plat A2: Vol Anno 2', plat2.volYear2],
-            ['Plat A2: Vol a regime', plat2.volRegime],
-            ['Plat A2: ASP Retail', plat2.retailASP],
-            ['Plat A2: ASP Wholesale', plat2.wholesaleASP],
-            ['Plat A2: Prezzo Moto', plat2.motoPrice]
-        );
-        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, p1Launch: ASSUM_START+17, p1Vy1: ASSUM_START+18, p1Vy2: ASSUM_START+19, p1Reg: ASSUM_START+20, p1Asp: ASSUM_START+21, p1AspWs: ASSUM_START+22, p1Moto: ASSUM_START+23, p2Launch: ASSUM_START+24, p2Vy1: ASSUM_START+25, p2Vy2: ASSUM_START+26, p2Reg: ASSUM_START+27, p2Asp: ASSUM_START+28, p2AspWs: ASSUM_START+29, p2Moto: ASSUM_START+30 };
+        const excelMaxPlat = 10;
+        const platsForExcel = [];
+        const ROWS_PER_PLAT = 9;
+        for (let i = 0; i < excelMaxPlat; i++) {
+            const p = greenParams.platforms[i] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0, devCapex: 0, capexCapitalizePct: 0 };
+            platsForExcel.push(p);
+            const label = 'Plat ' + (i + 1) + ': ';
+            assumpRows.push(
+                [label + 'Anno lancio', p.launchYear],
+                [label + 'Vol Anno 1', p.volYear1],
+                [label + 'Vol Anno 2', p.volYear2],
+                [label + 'Vol a regime', p.volRegime],
+                [label + 'ASP Retail', p.retailASP],
+                [label + 'ASP Wholesale', p.wholesaleASP],
+                [label + 'Prezzo Moto', p.motoPrice],
+                [label + 'Capex sviluppo (€)', p.devCapex != null ? p.devCapex : 0],
+                [label + '% Capex capitalizzato (5 anni)', p.capexCapitalizePct != null ? p.capexCapitalizePct : 0]
+            );
+        }
+        const PLAT_ASSUM_BASE = ASSUM_START + 23;
+        const platR = (i, j) => PLAT_ASSUM_BASE + i * ROWS_PER_PLAT + j;
+        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, azione1: ASSUM_START+17, azione2: ASSUM_START+18, azione3: ASSUM_START+19, azione4: ASSUM_START+20, azione5: ASSUM_START+21, azione6: ASSUM_START+22 };
+        const nPlat = Math.min(excelMaxPlat, greenParams.platforms.length);
+        const rowRevTotalGreen = 15 + 2 * nPlat;
         const yearCols = ['2025', ...years.map(y => y.label)];
         const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
         const numCols = hdr.length;
@@ -2432,19 +2570,20 @@
         ws1.getRow(3).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
         for (let col = 2; col <= numCols; col++) {
             const colLetter = excelColLetter(col - 1);
+            const B = 'Assumptions!$B$';
             ws1.getCell(4, col).value = { formula: `SUM(${colLetter}5:${colLetter}11)` };
             ws1.getCell(4, col).numFmt = '"€"#,##0';
             ws1.getCell(5, col).value = { formula: `'Topline Officina'!${colLetter}3` };
             ws1.getCell(5, col).numFmt = '"€"#,##0';
-            ws1.getCell(6, col).value = { formula: `'Topline Fashion'!${colLetter}3` };
+            ws1.getCell(6, col).value = { formula: `IF(${B}${R.azione1}="Core",'Topline Fashion'!${colLetter}3,0)` };
             ws1.getCell(6, col).numFmt = '"€"#,##0';
-            ws1.getCell(7, col).value = { formula: `'Topline Componenti'!${colLetter}3` };
+            ws1.getCell(7, col).value = { formula: `IF(${B}${R.azione5}="Core",'Topline Componenti'!${colLetter}3,0)` };
             ws1.getCell(7, col).numFmt = '"€"#,##0';
-            ws1.getCell(8, col).value = { formula: `'Project Green P&L'!${colLetter}18` };
+            ws1.getCell(8, col).value = { formula: `IF(${B}${R.azione4}="Core",'Project Green P&L'!${colLetter}${rowRevTotalGreen},0)` };
             ws1.getCell(8, col).numFmt = '"€"#,##0';
-            ws1.getCell(9, col).value = { formula: `'Topline Sharing'!${colLetter}3` };
+            ws1.getCell(9, col).value = { formula: `IF(${B}${R.azione3}="Core",'Topline Sharing'!${colLetter}3,0)` };
             ws1.getCell(9, col).numFmt = '"€"#,##0';
-            ws1.getCell(10, col).value = { formula: `'Topline Ottodrom Care'!${colLetter}3` };
+            ws1.getCell(10, col).value = { formula: `IF(${B}${R.azione6}="Core",'Topline Ottodrom Care'!${colLetter}3,0)` };
             ws1.getCell(10, col).numFmt = '"€"#,##0';
             ws1.getCell(11, col).value = { formula: `'Topline Altro'!${colLetter}3` };
             ws1.getCell(11, col).numFmt = '"€"#,##0';
@@ -2617,6 +2756,18 @@
         ws2.addRow(greenHdr);
         ws2.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; if (colNumber > 1 && typeof c.value === 'number') c.numFmt = '0'; });
         const Rg = R;
+        const rowUb = 5;
+        const rowUPlat0 = 6;
+        const rowUTotal = 6 + nPlat;
+        const rowBmwRet = 8 + nPlat;
+        const rowBmwWs = 9 + nPlat;
+        const rowBmwMoto = 10 + nPlat;
+        const rowRevBmwRet = 12 + nPlat;
+        const rowRevBmwWs = 13 + nPlat;
+        const rowRevBmwMoto = 14 + nPlat;
+        const rowRevPlat0 = 15 + nPlat;
+        const rowRevTotal = 15 + 2 * nPlat;
+        const rowPLRevenue = 18 + 2 * nPlat;
         function platUnitsForm(yr, launchYear, vy1Row, vy2Row, regRow) {
             const d = yr - launchYear;
             if (d < 0) return '0';
@@ -2637,91 +2788,95 @@
             const d = yr - 2026;
             const colLetter = excelColLetter(col - 1);
             if (yr < 2026) {
-                [5,6,7,9,10,11,13,14,15,16,17].forEach(r => { ws2.getCell(r, col).value = 0; });
-                ws2.getCell(8, col).value = { formula: `=${colLetter}5+${colLetter}6+${colLetter}7` };
-                ws2.getCell(18, col).value = { formula: `=SUM(${colLetter}13:${colLetter}17)` };
+                for (let r = rowUb; r <= rowUTotal; r++) ws2.getCell(r, col).value = r === rowUTotal ? { formula: `=SUM(${colLetter}${rowUb}:${colLetter}${rowUTotal - 1})` } : 0;
+                for (let r = rowBmwRet; r <= rowBmwMoto; r++) ws2.getCell(r, col).value = 0;
+                for (let r = rowRevBmwRet; r <= rowRevPlat0 + nPlat - 1; r++) ws2.getCell(r, col).value = 0;
+                ws2.getCell(rowRevTotal, col).value = { formula: `=SUM(${colLetter}${rowRevBmwRet}:${colLetter}${rowRevPlat0 + nPlat - 1})` };
             } else {
                 const unitsBmw = d === 0 ? `Assumptions!$B$${Rg.greenVol2026}` : d === 1 ? `Assumptions!$B$${Rg.greenVol2027}` : `Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}`;
-                ws2.getCell(5, col).value = d < 0 ? 0 : { formula: `=${unitsBmw}` };
-                const u1 = platUnitsForm(yr, plat1.launchYear, Rg.p1Vy1, Rg.p1Vy2, Rg.p1Reg);
-                const u2 = platUnitsForm(yr, plat2.launchYear, Rg.p2Vy1, Rg.p2Vy2, Rg.p2Reg);
-                ws2.getCell(6, col).value = yr < plat1.launchYear ? 0 : { formula: `=${u1}` };
-                ws2.getCell(7, col).value = yr < plat2.launchYear ? 0 : { formula: `=${u2}` };
-                ws2.getCell(8, col).value = { formula: `=${colLetter}5+${colLetter}6+${colLetter}7` };
-                if (d === 0) {
-                    ws2.getCell(9, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}` };
-                    ws2.getCell(10, col).value = 0;
-                    ws2.getCell(11, col).value = 0;
-                    ws2.getCell(13, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}*Assumptions!$B$${Rg.greenAsp}` };
-                    ws2.getCell(14, col).value = 0;
-                    ws2.getCell(15, col).value = 0;
-                } else if (d === 1) {
-                    ws2.getCell(9, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5` };
-                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4` };
-                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1` };
-                    ws2.getCell(13, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5*Assumptions!$B$${Rg.greenAsp}*1.1` };
-                    ws2.getCell(14, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4*Assumptions!$B$${Rg.greenAspWs}*1.1` };
-                    ws2.getCell(15, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1*Assumptions!$B$${Rg.greenMoto}` };
-                } else {
-                    ws2.getCell(9, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3` };
-                    ws2.getCell(10, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6` };
-                    ws2.getCell(11, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1` };
-                    const esc = (1.1 * Math.pow(1.05, d - 1)).toFixed(4);
-                    ws2.getCell(13, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3*Assumptions!$B$${Rg.greenAsp}*${esc}` };
-                    ws2.getCell(14, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6*Assumptions!$B$${Rg.greenAspWs}*${esc}` };
-                    ws2.getCell(15, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                ws2.getCell(rowUb, col).value = d < 0 ? 0 : { formula: `=${unitsBmw}` };
+                for (let i = 0; i < nPlat; i++) {
+                    const plat = platsForExcel[i];
+                    const uForm = platUnitsForm(yr, plat.launchYear, platR(i,1), platR(i,2), platR(i,3));
+                    ws2.getCell(rowUPlat0 + i, col).value = yr < plat.launchYear ? 0 : { formula: `=${uForm}` };
                 }
-                const d1 = yr - plat1.launchYear;
-                const d2 = yr - plat2.launchYear;
-                const rev1Form = yr >= plat1.launchYear ? platRevForm(colLetter, 6, d1, Rg.p1Asp, Rg.p1AspWs, Rg.p1Moto) : '0';
-                const rev2Form = yr >= plat2.launchYear ? platRevForm(colLetter, 7, d2, Rg.p2Asp, Rg.p2AspWs, Rg.p2Moto) : '0';
-                ws2.getCell(16, col).value = rev1Form !== '0' ? { formula: `=${rev1Form}` } : 0;
-                ws2.getCell(17, col).value = rev2Form !== '0' ? { formula: `=${rev2Form}` } : 0;
-                ws2.getCell(18, col).value = { formula: `=SUM(${colLetter}13:${colLetter}17)` };
+                ws2.getCell(rowUTotal, col).value = nPlat === 0 ? { formula: `=${colLetter}${rowUb}` } : { formula: `=${colLetter}${rowUb}+${Array.from({ length: nPlat }, (_, i) => colLetter + (rowUPlat0 + i)).join('+')}` };
+                if (d === 0) {
+                    ws2.getCell(rowBmwRet, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}` };
+                    ws2.getCell(rowBmwWs, col).value = 0;
+                    ws2.getCell(rowBmwMoto, col).value = 0;
+                    ws2.getCell(rowRevBmwRet, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2026}*Assumptions!$B$${Rg.greenAsp}` };
+                    ws2.getCell(rowRevBmwWs, col).value = 0;
+                    ws2.getCell(rowRevBmwMoto, col).value = 0;
+                } else if (d === 1) {
+                    ws2.getCell(rowBmwRet, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5` };
+                    ws2.getCell(rowBmwWs, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4` };
+                    ws2.getCell(rowBmwMoto, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1` };
+                    ws2.getCell(rowRevBmwRet, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.5*Assumptions!$B$${Rg.greenAsp}*1.1` };
+                    ws2.getCell(rowRevBmwWs, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.4*Assumptions!$B$${Rg.greenAspWs}*1.1` };
+                    ws2.getCell(rowRevBmwMoto, col).value = { formula: `=Assumptions!$B$${Rg.greenVol2027}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                } else {
+                    ws2.getCell(rowBmwRet, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3` };
+                    ws2.getCell(rowBmwWs, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6` };
+                    ws2.getCell(rowBmwMoto, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1` };
+                    const esc = (1.1 * Math.pow(1.05, d - 1)).toFixed(4);
+                    ws2.getCell(rowRevBmwRet, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.3*Assumptions!$B$${Rg.greenAsp}*${esc}` };
+                    ws2.getCell(rowRevBmwWs, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.6*Assumptions!$B$${Rg.greenAspWs}*${esc}` };
+                    ws2.getCell(rowRevBmwMoto, col).value = { formula: `=Assumptions!$B$${Rg.greenVolReg}*1.03^${d - 2}*0.1*Assumptions!$B$${Rg.greenMoto}` };
+                }
+                for (let i = 0; i < nPlat; i++) {
+                    const plat = platsForExcel[i];
+                    const dPlat = yr - plat.launchYear;
+                    const revForm = yr >= plat.launchYear ? platRevForm(colLetter, rowUPlat0 + i, dPlat, platR(i,4), platR(i,5), platR(i,6)) : '0';
+                    ws2.getCell(rowRevPlat0 + i, col).value = revForm !== '0' ? { formula: `=${revForm}` } : 0;
+                }
+                const sumRevRange = `${colLetter}${rowRevBmwRet}:${colLetter}${rowRevPlat0 + nPlat - 1}`;
+                ws2.getCell(rowRevTotal, col).value = { formula: `=SUM(${sumRevRange})` };
             }
-            [5,6,7,8,9,10,11].forEach(r => { ws2.getCell(r, col).numFmt = '#,##0'; });
-            [13,14,15,16,17,18].forEach(r => { ws2.getCell(r, col).numFmt = '"€"#,##0'; });
+            for (let r = rowUb; r <= rowUTotal; r++) ws2.getCell(r, col).numFmt = '#,##0';
+            for (let r = rowBmwRet; r <= rowBmwMoto; r++) ws2.getCell(r, col).numFmt = '#,##0';
+            for (let r = rowRevBmwRet; r <= rowRevTotal; r++) ws2.getCell(r, col).numFmt = '"€"#,##0';
         }
-        ws2.getCell(5, 1).value = 'Unità BMW';
-        ws2.getCell(5, 1).font = { bold: true };
-        ws2.getCell(6, 1).value = 'Unità Piattaforma A1';
-        ws2.getCell(6, 1).font = { bold: true };
-        ws2.getCell(7, 1).value = 'Unità Piattaforma A2';
-        ws2.getCell(7, 1).font = { bold: true };
-        ws2.getCell(8, 1).value = 'Unità totali';
-        ws2.getCell(8, 1).font = { bold: true };
-        ws2.getCell(8, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
-        ws2.getCell(9, 1).value = '  di cui Retail (BMW)';
-        ws2.getCell(9, 1).font = { bold: true };
-        ws2.getCell(10, 1).value = '  di cui Wholesale (BMW)';
-        ws2.getCell(10, 1).font = { bold: true };
-        ws2.getCell(11, 1).value = '  di cui Moto (BMW)';
-        ws2.getCell(11, 1).font = { bold: true };
-        ws2.getCell(13, 1).value = 'Revenue Retail BMW (€)';
-        ws2.getCell(13, 1).font = { bold: true };
-        ws2.getCell(14, 1).value = 'Revenue Wholesale BMW (€)';
-        ws2.getCell(14, 1).font = { bold: true };
-        ws2.getCell(15, 1).value = 'Revenue Moto BMW (€)';
-        ws2.getCell(15, 1).font = { bold: true };
-        ws2.getCell(16, 1).value = 'Revenue Piattaforma A1 (€)';
-        ws2.getCell(16, 1).font = { bold: true };
-        ws2.getCell(17, 1).value = 'Revenue Piattaforma A2 (€)';
-        ws2.getCell(17, 1).font = { bold: true };
-        ws2.getCell(18, 1).value = 'Revenue totale (€)';
-        ws2.getCell(18, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
-        ws2.getCell(18, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        ws2.getCell(rowUb, 1).value = 'Unità BMW';
+        ws2.getCell(rowUb, 1).font = { bold: true };
+        for (let i = 0; i < nPlat; i++) {
+            ws2.getCell(rowUPlat0 + i, 1).value = 'Unità Piattaforma ' + (i + 1);
+            ws2.getCell(rowUPlat0 + i, 1).font = { bold: true };
+        }
+        ws2.getCell(rowUTotal, 1).value = 'Unità totali';
+        ws2.getCell(rowUTotal, 1).font = { bold: true };
+        ws2.getCell(rowUTotal, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
+        ws2.getCell(rowBmwRet, 1).value = '  di cui Retail (BMW)';
+        ws2.getCell(rowBmwRet, 1).font = { bold: true };
+        ws2.getCell(rowBmwWs, 1).value = '  di cui Wholesale (BMW)';
+        ws2.getCell(rowBmwWs, 1).font = { bold: true };
+        ws2.getCell(rowBmwMoto, 1).value = '  di cui Moto (BMW)';
+        ws2.getCell(rowBmwMoto, 1).font = { bold: true };
+        ws2.getCell(rowRevBmwRet, 1).value = 'Revenue Retail BMW (€)';
+        ws2.getCell(rowRevBmwRet, 1).font = { bold: true };
+        ws2.getCell(rowRevBmwWs, 1).value = 'Revenue Wholesale BMW (€)';
+        ws2.getCell(rowRevBmwWs, 1).font = { bold: true };
+        ws2.getCell(rowRevBmwMoto, 1).value = 'Revenue Moto BMW (€)';
+        ws2.getCell(rowRevBmwMoto, 1).font = { bold: true };
+        for (let i = 0; i < nPlat; i++) {
+            ws2.getCell(rowRevPlat0 + i, 1).value = 'Revenue Piattaforma ' + (i + 1) + ' (€)';
+            ws2.getCell(rowRevPlat0 + i, 1).font = { bold: true };
+        }
+        ws2.getCell(rowRevTotal, 1).value = 'Revenue totale (€)';
+        ws2.getCell(rowRevTotal, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
+        ws2.getCell(rowRevTotal, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
         ws2.addRow([]);
         ws2.addRow(['P&L (€)']);
-        ws2.getCell(20, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.getCell(rowRevTotal + 2, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
         ws2.addRow(['Revenue', ...Array(greenNumCols - 1).fill(0)]);
         for (let col = 2; col <= greenNumCols; col++) {
             const colLetter = excelColLetter(col - 1);
-            ws2.getCell(21, col).value = { formula: `=${colLetter}18` };
-            ws2.getCell(21, col).numFmt = '"€"#,##0';
+            ws2.getCell(rowPLRevenue, col).value = { formula: `=${colLetter}${rowRevTotal}` };
+            ws2.getCell(rowPLRevenue, col).numFmt = '"€"#,##0';
         }
-        ws2.getCell(21, 1).value = 'Revenue';
-        ws2.getCell(21, 1).font = { bold: true };
-        let plRow = 21;
+        ws2.getCell(rowPLRevenue, 1).value = 'Revenue';
+        ws2.getCell(rowPLRevenue, 1).font = { bold: true };
+        let plRow = rowPLRevenue;
         const greenPLRows = [
             ['(-) COGS', 0, ...greenYears.map(g=>-g.cogs)],
             ['Gross Profit', 0, ...greenYears.map(g=>g.grossProfit)],
@@ -2730,6 +2885,7 @@
             ['(-) Fixed Opex', 0, ...greenYears.map(g=>-g.fixedOpex)],
             ['EBITDA', 0, ...greenYears.map(g=>g.ebitda)],
             ['(-) D&A', 0, ...greenYears.map(g=>-g.da)],
+            ['  di cui D&A Capex sviluppo (5 anni)', 0, ...greenYears.map(g=>-(g.daCapex || 0))],
             ['EBIT', 0, ...greenYears.map(g=>g.ebit)],
             [],
             ['Total Units', 0, ...greenYears.map(g=>Math.round(g.totalUnits))],
@@ -2766,6 +2922,49 @@
         wsPlat.addRow(['Unità']).getCell(1).font = { bold: true };
         platUnitsRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); });
         wsPlat.getColumn(1).width = 28;
+
+        const wsUpside = wb.addWorksheet('Recap Upside', { views: [{ state: 'frozen', ySplit: 2 }] });
+        wsUpside.addRow(['Recap potenziali Upside (azioni non in piano)']);
+        wsUpside.mergeCells(1, 1, 1, 13);
+        wsUpside.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF59E0B' } };
+        wsUpside.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
+        wsUpside.addRow(['Azione', '2025', ...years.map(y => y.label), 'Totale']);
+        wsUpside.getRow(2).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+        const B = 'Assumptions!$B$';
+        const upsideSheetRows = [
+            { label: 'Fashion (Az.1)', sheet: 'Topline Fashion', row: 3, azione: R.azione1 },
+            { label: 'Sharing (Az.3)', sheet: 'Topline Sharing', row: 3, azione: R.azione3 },
+            { label: 'Kit & Moto Green (Az.4)', sheet: 'Project Green P&L', row: rowRevTotalGreen, azione: R.azione4 },
+            { label: 'Componenti (Az.5)', sheet: 'Topline Componenti', row: 3, azione: R.azione5 },
+            { label: 'Ottodrom Care (Az.6)', sheet: 'Topline Ottodrom Care', row: 3, azione: R.azione6 }
+        ];
+        upsideSheetRows.forEach((sr, i) => {
+            const r = wsUpside.addRow([sr.label].concat(Array(12).fill(0)));
+            r.getCell(1).font = { bold: true };
+            for (let col = 2; col <= 12; col++) {
+                const colLetter = excelColLetter(col - 1);
+                const ref = col === 2 ? `'${sr.sheet}'!$B$${sr.row}` : `'${sr.sheet}'!${colLetter}${sr.row}`;
+                r.getCell(col).value = { formula: `IF(${B}${sr.azione}="Upside",${ref},0)` };
+                r.getCell(col).numFmt = '"€"#,##0';
+            }
+            r.getCell(13).value = { formula: `SUM(${excelColLetter(1)}${i + 3}:${excelColLetter(11)}${i + 3})` };
+            r.getCell(13).numFmt = '"€"#,##0';
+            r.getCell(13).font = { bold: true };
+        });
+        const lastDataRow = 2 + upsideSheetRows.length;
+        const totRow = wsUpside.addRow(['Totale Upside'].concat(Array(12).fill(0)));
+        totRow.getCell(1).font = { bold: true };
+        for (let col = 2; col <= 12; col++) {
+            const colLetter = excelColLetter(col - 1);
+            totRow.getCell(col).value = { formula: `SUM(${colLetter}3:${colLetter}${lastDataRow})` };
+            totRow.getCell(col).numFmt = '"€"#,##0';
+            totRow.getCell(col).font = { bold: true };
+        }
+        totRow.getCell(13).value = { formula: `SUM(${excelColLetter(12)}3:${excelColLetter(12)}${lastDataRow})` };
+        totRow.getCell(13).numFmt = '"€"#,##0';
+        totRow.getCell(13).font = { bold: true };
+        wsUpside.getColumn(1).width = 26;
+        for (let c = 2; c <= 13; c++) wsUpside.getColumn(c).width = 12;
 
         wsAss.addRow([]);
         wsAss.addRow(['Dettaglio parametri (riferimento)', '']);
