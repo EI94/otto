@@ -2488,6 +2488,40 @@
         wb.creator = 'Ottodrom Piano Industriale';
         wb.created = new Date();
 
+        const wsReadMe = wb.addWorksheet('Istruzioni', { views: [{ state: 'frozen', ySplit: 0 }] });
+        wsReadMe.getColumn(1).width = 100;
+        const readMeRows = [
+            ['Piano Industriale Ottodrom 2026–2036 – Guida al file'],
+            [],
+            ['Struttura del file'],
+            ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions.'],
+            ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
+            ['• Topline Officina / Fashion / Componenti / Sharing / Ottodrom Care / Altro – Ricavi per voce e per anno, derivati da Assumptions.'],
+            ['• Project Green P&L – P&L completo Iconic Mobility Lab (unità, ricavi, COGS, D&A, EBITDA).'],
+            ['• Recap Upside – Ricavi potenziali delle azioni marcate come Upside (non inclusi nel CE).'],
+            ['• Metodologia P&L Green – Spiegazione formule e logica del P&L Project Green.'],
+            [],
+            ['Core vs Upside'],
+            ['• Core = l\'azione è inclusa nel Conto Economico e nel Business Plan. I suoi ricavi e costi entrano nei totali.'],
+            ['• Upside = l\'azione non è nel piano; i suoi numeri compaiono solo nel Recap Upside come potenziale.'],
+            ['• In Assumptions, per ogni Azione 1–6, il valore "Core" o "Upside" determina se quella voce è in piano o solo in recap.'],
+            [],
+            ['Come modificare il piano'],
+            ['1. Aprire il foglio Assumptions.'],
+            ['2. Modificare i valori nella colonna Valore (B) per i parametri che interessano (volumi, prezzi, overhead, scenario Fashion, Core/Upside delle azioni, ecc.).'],
+            ['3. Non eliminare righe né spostare le righe della sezione Parametri in alto: le formule degli altri fogli referenziano le celle per numero di riga.'],
+            ['4. I fogli BP Ottodrom, Topline e Project Green P&L si aggiornano automaticamente.'],
+            [],
+            ['File generato dal tool Ottodrom Piano Industriale. Per ulteriori scenari usare il tool online e riscaricare il file.']
+        ];
+        readMeRows.forEach((row, i) => {
+            const r = wsReadMe.addRow(row);
+            r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
+            if (i === 0) { r.getCell(1).font = { bold: true, size: 14, color: { argb: 'FF0F766E' } }; }
+            else if (row[0] && row[0].length < 50 && row[0].indexOf('•') !== 0 && row[0].indexOf('Struttura') === -1 && row[0].indexOf('Core') === -1 && row[0].indexOf('Come') === -1) r.getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
+            else if (row[0] && row[0].indexOf('•') === 0) r.getCell(1).font = { color: { argb: 'FF475569' } };
+        });
+
         syncConciergeFromDOM();
         const greenParams = getGreenParams();
         const mcMoto = parseInt(document.getElementById('mcMotoSlider').value) || 0;
@@ -2502,32 +2536,32 @@
         const fashionChoice = fashionRadio ? fashionRadio.value : 'combo';
         const pY0 = productsCatalog.reduce((s, p) => s + (p.price || 0) * (p.q1 || 0), 0);
 
-        const ASSUM_START = 4;
+        const ASSUM_START = 5;
         const actionCoreExcel = getActionCoreFlags();
         const assumpRows = [
-            ['Green Vol 2026', greenParams.bmw.vol2026],
-            ['Green Vol 2027', greenParams.bmw.vol2027],
-            ['Green Vol Regime', greenParams.bmw.volRegime],
-            ['Green ASP Retail', greenParams.bmw.retailASP],
-            ['Green ASP WS', greenParams.bmw.wholesaleASP],
-            ['Green Moto Price', greenParams.bmw.motoPrice],
-            ['Green Overhead 2026', greenParams.overheadY1],
-            ['Green Overhead 2027', greenParams.overheadY2],
-            ['Green Overhead dal 2028', greenParams.overheadFrom2028],
-            ['Care Moto gestite', mcMoto],
-            ['Care Prezzo medio/mese', mcPerMoto],
-            ['Sharing base (€)', costShared],
-            ['Sharing Markup %', Math.round(shMarkup * 100)],
-            ['Officina base (€)', BASE.ricavi_officina],
-            ['Fashion scenario', fashionChoice],
-            ['Altro base (€)', BASE.ricavi_altro],
-            ['Componenti base Anno 1 (€)', pY0],
-            ['Azione 1 in piano (Core/Upside)', actionCoreExcel[1] ? 'Core' : 'Upside'],
-            ['Azione 2 in piano (Core/Upside)', actionCoreExcel[2] ? 'Core' : 'Upside'],
-            ['Azione 3 in piano (Core/Upside)', actionCoreExcel[3] ? 'Core' : 'Upside'],
-            ['Azione 4 in piano (Core/Upside)', actionCoreExcel[4] ? 'Core' : 'Upside'],
-            ['Azione 5 in piano (Core/Upside)', actionCoreExcel[5] ? 'Core' : 'Upside'],
-            ['Azione 6 in piano (Core/Upside)', actionCoreExcel[6] ? 'Core' : 'Upside']
+            ['Iconic Mobility Lab – Volume BMW 2026 (unità)', greenParams.bmw.vol2026],
+            ['Iconic Mobility Lab – Volume BMW 2027 (unità)', greenParams.bmw.vol2027],
+            ['Iconic Mobility Lab – Volume BMW a regime (unità)', greenParams.bmw.volRegime],
+            ['Iconic Mobility Lab – Prezzo kit Retail (€/unità)', greenParams.bmw.retailASP],
+            ['Iconic Mobility Lab – Prezzo kit Wholesale (€/unità)', greenParams.bmw.wholesaleASP],
+            ['Iconic Mobility Lab – Prezzo moto chiavi in mano (€)', greenParams.bmw.motoPrice],
+            ['Iconic Mobility Lab – Overhead 2026 (€)', greenParams.overheadY1],
+            ['Iconic Mobility Lab – Overhead 2027 (€)', greenParams.overheadY2],
+            ['Iconic Mobility Lab – Overhead da 2028 (€)', greenParams.overheadFrom2028],
+            ['Ottodrom Care – Numero moto in gestione', mcMoto],
+            ['Ottodrom Care – Prezzo medio per moto al mese (€)', mcPerMoto],
+            ['Sharing – Costo base ore condivise (€)', costShared],
+            ['Sharing – Markup % sul costo', Math.round(shMarkup * 100)],
+            ['Officina e Service – Ricavi base 2025 (€)', BASE.ricavi_officina],
+            ['Fashion – Scenario (combo / piva / stocchista / nulla)', fashionChoice],
+            ['Altro – Ricavi base (€)', BASE.ricavi_altro],
+            ['Componenti – Ricavi Anno 1 (€)', pY0],
+            ['Azione 1 Fashion – In piano: Core o Upside', actionCoreExcel[1] ? 'Core' : 'Upside'],
+            ['Azione 2 Downsizing – In piano: Core o Upside', actionCoreExcel[2] ? 'Core' : 'Upside'],
+            ['Azione 3 Sharing – In piano: Core o Upside', actionCoreExcel[3] ? 'Core' : 'Upside'],
+            ['Azione 4 Iconic Mobility Lab – In piano: Core o Upside', actionCoreExcel[4] ? 'Core' : 'Upside'],
+            ['Azione 5 Componenti – In piano: Core o Upside', actionCoreExcel[5] ? 'Core' : 'Upside'],
+            ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside']
         ];
         const excelMaxPlat = 10;
         const platsForExcel = [];
@@ -2535,65 +2569,69 @@
         for (let i = 0; i < excelMaxPlat; i++) {
             const p = greenParams.platforms[i] || { launchYear: 2036, volYear1: 0, volYear2: 0, volRegime: 0, retailASP: 0, wholesaleASP: 0, motoPrice: 0, devCapex: 0, capexCapitalizePct: 0 };
             platsForExcel.push(p);
-            const label = 'Plat ' + (i + 1) + ': ';
+            const pre = 'Piattaforma ' + (i + 1) + ' – ';
             assumpRows.push(
-                [label + 'Anno lancio', p.launchYear],
-                [label + 'Vol Anno 1', p.volYear1],
-                [label + 'Vol Anno 2', p.volYear2],
-                [label + 'Vol a regime', p.volRegime],
-                [label + 'ASP Retail', p.retailASP],
-                [label + 'ASP Wholesale', p.wholesaleASP],
-                [label + 'Prezzo Moto', p.motoPrice],
-                [label + 'Capex sviluppo (€)', p.devCapex != null ? p.devCapex : 0],
-                [label + '% Capex capitalizzato (5 anni)', p.capexCapitalizePct != null ? p.capexCapitalizePct : 0]
+                [pre + 'Anno lancio', p.launchYear],
+                [pre + 'Volume Anno 1 (unità)', p.volYear1],
+                [pre + 'Volume Anno 2 (unità)', p.volYear2],
+                [pre + 'Volume a regime (unità)', p.volRegime],
+                [pre + 'Prezzo Retail (€/unità)', p.retailASP],
+                [pre + 'Prezzo Wholesale (€/unità)', p.wholesaleASP],
+                [pre + 'Prezzo moto (€)', p.motoPrice],
+                [pre + 'Capex sviluppo (€)', p.devCapex != null ? p.devCapex : 0],
+                [pre + '% Capex capitalizzato (D&A in 5 anni)', p.capexCapitalizePct != null ? p.capexCapitalizePct : 0]
             );
         }
         const PLAT_ASSUM_BASE = ASSUM_START + 23;
         const platR = (i, j) => PLAT_ASSUM_BASE + i * ROWS_PER_PLAT + j;
         const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenOh1: ASSUM_START+6, greenOh2: ASSUM_START+7, greenOh8: ASSUM_START+8, careMoto: ASSUM_START+9, carePrezzo: ASSUM_START+10, shareBase: ASSUM_START+11, shareMark: ASSUM_START+12, offBase: ASSUM_START+13, fashion: ASSUM_START+14, altro: ASSUM_START+15, compBase: ASSUM_START+16, azione1: ASSUM_START+17, azione2: ASSUM_START+18, azione3: ASSUM_START+19, azione4: ASSUM_START+20, azione5: ASSUM_START+21, azione6: ASSUM_START+22 };
         const nPlat = Math.min(excelMaxPlat, greenParams.platforms.length);
-        const rowRevTotalGreen = 15 + 2 * nPlat;
+        const rowRevTotalGreen = 16 + 2 * nPlat;
         const yearCols = ['2025', ...years.map(y => y.label)];
         const hdr = ['Voce', '2025 (Base)', ...years.map(y => y.label)];
         const numCols = hdr.length;
         const colForYear = (yr) => 2 + years.findIndex(y => y.label === String(yr));
         const yearForCol = (col) => col <= 2 ? 2025 : parseInt(yearCols[col - 1]);
 
-        const ws1 = wb.addWorksheet('BP Ottodrom 2026-2036', { views: [{ state: 'frozen', ySplit: 3 }] });
+        const ws1 = wb.addWorksheet('BP Ottodrom 2026-2036', { views: [{ state: 'frozen', ySplit: 4 }] });
         ws1.addRow(['Piano industriale Ottodrom – Conto economico (€)']);
         ws1.mergeCells(1, 1, 1, numCols);
         ws1.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         ws1.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
         ws1.getCell(1, 1).alignment = { horizontal: 'center' };
+        ws1.addRow(['Ricavi per voce da fogli Topline; costi e strutture da Assumptions. Solo le azioni Core sono incluse nei totali.']);
+        ws1.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
+        ws1.mergeCells(2, 1, 2, numCols);
+        ws1.getRow(2).getCell(1).alignment = { wrapText: true };
         ws1.addRow([]);
         ws1.addRow(hdr);
-        ws1.getRow(3).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+        ws1.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
         for (let col = 2; col <= numCols; col++) {
             const colLetter = excelColLetter(col - 1);
             const B = 'Assumptions!$B$';
-            ws1.getCell(4, col).value = { formula: `SUM(${colLetter}5:${colLetter}11)` };
-            ws1.getCell(4, col).numFmt = '"€"#,##0';
-            ws1.getCell(5, col).value = { formula: `'Topline Officina'!${colLetter}3` };
+            ws1.getCell(5, col).value = { formula: `SUM(${colLetter}6:${colLetter}12)` };
             ws1.getCell(5, col).numFmt = '"€"#,##0';
-            ws1.getCell(6, col).value = { formula: `IF(${B}${R.azione1}="Core",'Topline Fashion'!${colLetter}3,0)` };
+            ws1.getCell(6, col).value = { formula: `'Topline Officina'!${colLetter}3` };
             ws1.getCell(6, col).numFmt = '"€"#,##0';
-            ws1.getCell(7, col).value = { formula: `IF(${B}${R.azione5}="Core",'Topline Componenti'!${colLetter}3,0)` };
+            ws1.getCell(7, col).value = { formula: `IF(${B}${R.azione1}="Core",'Topline Fashion'!${colLetter}3,0)` };
             ws1.getCell(7, col).numFmt = '"€"#,##0';
-            ws1.getCell(8, col).value = { formula: `IF(${B}${R.azione4}="Core",'Project Green P&L'!${colLetter}${rowRevTotalGreen},0)` };
+            ws1.getCell(8, col).value = { formula: `IF(${B}${R.azione5}="Core",'Topline Componenti'!${colLetter}3,0)` };
             ws1.getCell(8, col).numFmt = '"€"#,##0';
-            ws1.getCell(9, col).value = { formula: `IF(${B}${R.azione3}="Core",'Topline Sharing'!${colLetter}3,0)` };
+            ws1.getCell(9, col).value = { formula: `IF(${B}${R.azione4}="Core",'Project Green P&L'!${colLetter}${rowRevTotalGreen},0)` };
             ws1.getCell(9, col).numFmt = '"€"#,##0';
-            ws1.getCell(10, col).value = { formula: `IF(${B}${R.azione6}="Core",'Topline Ottodrom Care'!${colLetter}3,0)` };
+            ws1.getCell(10, col).value = { formula: `IF(${B}${R.azione3}="Core",'Topline Sharing'!${colLetter}3,0)` };
             ws1.getCell(10, col).numFmt = '"€"#,##0';
-            ws1.getCell(11, col).value = { formula: `'Topline Altro'!${colLetter}3` };
+            ws1.getCell(11, col).value = { formula: `IF(${B}${R.azione6}="Core",'Topline Ottodrom Care'!${colLetter}3,0)` };
             ws1.getCell(11, col).numFmt = '"€"#,##0';
+            ws1.getCell(12, col).value = { formula: `'Topline Altro'!${colLetter}3` };
+            ws1.getCell(12, col).numFmt = '"€"#,##0';
         }
-        ws1.getCell(4, 1).value = 'RICAVI';
-        ws1.getCell(4, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
-        ws1.getCell(4, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        ws1.getCell(5, 1).value = 'RICAVI';
+        ws1.getCell(5, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } };
+        ws1.getCell(5, 1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
         ['  Officina & Service', '  Fashion', '  Componenti (Az.5)', '  Kit & Moto Retrofit (Az.4)', '  Sharing (Az.3)', '  Ottodrom Care (Az.6)', '  Altro'].forEach((label, i) => {
-            ws1.getCell(5 + i, 1).value = label;
-            ws1.getCell(5 + i, 1).font = { bold: true };
+            ws1.getCell(6 + i, 1).value = label;
+            ws1.getCell(6 + i, 1).font = { bold: true };
         });
         const ceRest = [
             [],
@@ -2616,7 +2654,7 @@
             ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
             ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
         ];
-        let bpRow = 12;
+        let bpRow = 13;
         const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, EBITDA: 1, EBIT: 1 };
         const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, EBITDA: 1, EBIT: 1 };
         ceRest.forEach((row) => {
@@ -2628,39 +2666,55 @@
             if (resultRows[firstLabel]) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
             else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
-        ws1.getColumn(1).width = 34;
+        ws1.getColumn(1).width = 42;
         for (let c = 2; c <= numCols; c++) ws1.getColumn(c).width = 14;
+        for (let r = 5; r <= 12; r++) ws1.getCell(r, 1).alignment = { wrapText: true };
 
-        const wsAss = wb.addWorksheet('Assumptions', { views: [{ state: 'frozen', ySplit: 3 }] });
+        const wsAss = wb.addWorksheet('Assumptions', { views: [{ state: 'frozen', ySplit: 4 }] });
         wsAss.addRow(['Assunzioni – Piano Industriale Ottodrom']);
         wsAss.mergeCells(1, 1, 1, 2);
         wsAss.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         wsAss.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
-        wsAss.addRow([]);
-        wsAss.addRow(['Inputs per formule (modificabili – topline e BP dipendono da questi)', '']);
+        wsAss.getCell(1, 1).alignment = { wrapText: true };
+        wsAss.addRow(['Istruzioni: modificare solo la colonna Valore (B). Core = azione inclusa nel CE/BP; Upside = potenziale solo in Recap. I fogli Topline e Conto Economico si aggiornano automaticamente.', '']);
+        wsAss.getRow(2).getCell(1).alignment = { wrapText: true, vertical: 'top' };
+        wsAss.getRow(2).getCell(1).font = { italic: true, color: { argb: 'FF475569' }, size: 10 };
+        wsAss.mergeCells(2, 1, 2, 2);
+        wsAss.addRow(['Parametro', 'Valore']);
         wsAss.getRow(3).font = { bold: true };
+        wsAss.getRow(3).eachCell(c => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF64748B' } }; c.font = { bold: true, color: { argb: 'FFFFFFFF' } }; });
         assumpRows.forEach((row, i) => {
             const r = wsAss.addRow(row);
+            r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
             applyAssumptionParamStyle(r.getCell(1));
-            r.getCell(2).numFmt = row[0].indexOf('%') >= 0 || row[0].indexOf('€') >= 0 ? '"€"#,##0' : '#,##0';
+            const isPct = row[0].indexOf('%') >= 0;
+            const isEuro = row[0].indexOf('€') >= 0 || row[0].indexOf('Prezzo') >= 0 || row[0].indexOf('Overhead') >= 0 || row[0].indexOf('Capex') >= 0 || row[0].indexOf('Ricavi') >= 0 || row[0].indexOf('Costo') >= 0;
+            if (typeof row[1] === 'number' && (isPct || isEuro)) r.getCell(2).numFmt = isPct ? '0"%"' : '"€"#,##0';
+            else if (typeof row[1] === 'number') r.getCell(2).numFmt = '#,##0';
         });
         wsAss.addRow([]);
-        wsAss.addRow(['Altri parametri', '']);
+        wsAss.addRow(['Altri parametri (riferimento – non usati dalle formule)', '']);
+        wsAss.getRow(wsAss.rowCount).getCell(1).font = { bold: true };
+        wsAss.getRow(wsAss.rowCount).getCell(1).alignment = { wrapText: true };
         const otherAss = [
-            ['Downsizing P41', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
-            ['Downsizing P44', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
-            ['Downsizing Adige', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
-            ['Riduzione % P41', parseInt(document.getElementById('redP41').value) || 0],
-            ['Riduzione % P44', parseInt(document.getElementById('redP44').value) || 0],
-            ['Riduzione % Adige', parseInt(document.getElementById('redAdige').value) || 0],
-            ['Nuovo Affitto (€)', parseInt(document.getElementById('newRentSlider').value) || 0],
-            ['Green: Cina da anno', greenParams.chinaYear <= 2036 ? greenParams.chinaYear : ''],
-            ['Green: Cina riduzione %', greenParams.chinaPct * 100],
-            ['Generato il', new Date().toLocaleString('it-IT')]
+            ['Downsizing – Via Pinciana 41 (Store Fashion)', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
+            ['Downsizing – Via Pinciana 44 (Atelier)', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
+            ['Downsizing – Via Adige (Officina)', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
+            ['Riduzione affitto % – Pinciana 41', parseInt(document.getElementById('redP41').value) || 0],
+            ['Riduzione affitto % – Pinciana 44', parseInt(document.getElementById('redP44').value) || 0],
+            ['Riduzione affitto % – Via Adige', parseInt(document.getElementById('redAdige').value) || 0],
+            ['Nuovo affitto sede unica (€/anno)', parseInt(document.getElementById('newRentSlider').value) || 0],
+            ['Iconic Mobility Lab – Opzione Cina da anno', greenParams.chinaYear <= 2036 ? greenParams.chinaYear : ''],
+            ['Iconic Mobility Lab – Riduzione % BOM da Cina', greenParams.chinaPct * 100],
+            ['File generato il', new Date().toLocaleString('it-IT')]
         ];
-        otherAss.forEach(row => { const r = wsAss.addRow(row); applyAssumptionParamStyle(r.getCell(1)); });
-        wsAss.getColumn(1).width = 32;
-        wsAss.getColumn(2).width = 18;
+        otherAss.forEach(row => {
+            const r = wsAss.addRow(row);
+            r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
+            applyAssumptionParamStyle(r.getCell(1));
+        });
+        wsAss.getColumn(1).width = 52;
+        wsAss.getColumn(2).width = 22;
 
         function addToplineSheet(name, title) {
             const ws = wb.addWorksheet(name, { views: [{ state: 'frozen', ySplit: 2 }] });
@@ -2741,33 +2795,37 @@
         }
 
         const greenYears = years.map(y => calcGreenPL(parseInt(y.label), greenParams));
-        const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 5 }] });
+        const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 6 }] });
         ws2.addRow(['Iconic Mobility Lab – Project Green']);
         ws2.mergeCells(1, 1, 1, years.length + 3);
         ws2.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         ws2.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
         ws2.getCell(1, 1).alignment = { horizontal: 'center' };
+        ws2.addRow(['Unità, ricavi (Retail/Wholesale/Moto), COGS, D&A e EBITDA. Formule da Assumptions.']);
+        ws2.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
+        ws2.mergeCells(2, 1, 2, years.length + 3);
+        ws2.getRow(2).getCell(1).alignment = { wrapText: true };
         ws2.addRow([]);
         const greenHdr = ['Voce', 2025, ...years.map(y => parseInt(y.label))];
         const greenNumCols = greenHdr.length;
         ws2.addRow(['TOPLINE – Unità e Ricavi (formule da Assumptions)']);
-        ws2.mergeCells(3, 1, 3, greenNumCols);
-        ws2.getCell(3, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.mergeCells(4, 1, 4, greenNumCols);
+        ws2.getCell(4, 1).font = { bold: true, color: { argb: 'FF0F766E' } };
         ws2.addRow(greenHdr);
-        ws2.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; if (colNumber > 1 && typeof c.value === 'number') c.numFmt = '0'; });
+        ws2.getRow(5).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; if (colNumber > 1 && typeof c.value === 'number') c.numFmt = '0'; });
         const Rg = R;
-        const rowUb = 5;
-        const rowUPlat0 = 6;
-        const rowUTotal = 6 + nPlat;
-        const rowBmwRet = 8 + nPlat;
-        const rowBmwWs = 9 + nPlat;
-        const rowBmwMoto = 10 + nPlat;
-        const rowRevBmwRet = 12 + nPlat;
-        const rowRevBmwWs = 13 + nPlat;
-        const rowRevBmwMoto = 14 + nPlat;
-        const rowRevPlat0 = 15 + nPlat;
-        const rowRevTotal = 15 + 2 * nPlat;
-        const rowPLRevenue = 18 + 2 * nPlat;
+        const rowUb = 6;
+        const rowUPlat0 = 7;
+        const rowUTotal = 7 + nPlat;
+        const rowBmwRet = 9 + nPlat;
+        const rowBmwWs = 10 + nPlat;
+        const rowBmwMoto = 11 + nPlat;
+        const rowRevBmwRet = 13 + nPlat;
+        const rowRevBmwWs = 14 + nPlat;
+        const rowRevBmwMoto = 15 + nPlat;
+        const rowRevPlat0 = 16 + nPlat;
+        const rowRevTotal = 16 + 2 * nPlat;
+        const rowPLRevenue = 19 + 2 * nPlat;
         function platUnitsForm(yr, launchYear, vy1Row, vy2Row, regRow) {
             const d = yr - launchYear;
             if (d < 0) return '0';
@@ -2898,7 +2956,7 @@
             if (row[0] === 'EBITDA' || row[0] === 'EBIT' || row[0] === 'Gross Profit') r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
             else r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
-        ws2.getColumn(1).width = 28;
+        ws2.getColumn(1).width = 34;
         for (let c = 2; c <= greenNumCols; c++) ws2.getColumn(c).width = 14;
 
         const allNames = [];
@@ -2923,13 +2981,17 @@
         platUnitsRows.forEach((row, i) => { const r = wsPlat.addRow(row); if (i === 0) r.eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); else r.eachCell((c, colNumber) => { if (colNumber > 1) c.alignment = { horizontal: 'right' }; }); });
         wsPlat.getColumn(1).width = 28;
 
-        const wsUpside = wb.addWorksheet('Recap Upside', { views: [{ state: 'frozen', ySplit: 2 }] });
+        const wsUpside = wb.addWorksheet('Recap Upside', { views: [{ state: 'frozen', ySplit: 3 }] });
         wsUpside.addRow(['Recap potenziali Upside (azioni non in piano)']);
         wsUpside.mergeCells(1, 1, 1, 13);
         wsUpside.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF59E0B' } };
         wsUpside.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
+        wsUpside.addRow(['Ricavi potenziali delle azioni marcate come Upside in Assumptions: non inclusi nel Conto Economico.', '']);
+        wsUpside.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
+        wsUpside.mergeCells(2, 1, 2, 13);
+        wsUpside.getRow(2).getCell(1).alignment = { wrapText: true };
         wsUpside.addRow(['Azione', '2025', ...years.map(y => y.label), 'Totale']);
-        wsUpside.getRow(2).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
+        wsUpside.getRow(3).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
         const B = 'Assumptions!$B$';
         const upsideSheetRows = [
             { label: 'Fashion (Az.1)', sheet: 'Topline Fashion', row: 3, azione: R.azione1 },
@@ -2947,96 +3009,105 @@
                 r.getCell(col).value = { formula: `IF(${B}${sr.azione}="Upside",${ref},0)` };
                 r.getCell(col).numFmt = '"€"#,##0';
             }
-            r.getCell(13).value = { formula: `SUM(${excelColLetter(1)}${i + 3}:${excelColLetter(11)}${i + 3})` };
+            r.getCell(13).value = { formula: `SUM(${excelColLetter(1)}${i + 4}:${excelColLetter(11)}${i + 4})` };
             r.getCell(13).numFmt = '"€"#,##0';
             r.getCell(13).font = { bold: true };
         });
-        const lastDataRow = 2 + upsideSheetRows.length;
+        const lastDataRow = 3 + upsideSheetRows.length;
         const totRow = wsUpside.addRow(['Totale Upside'].concat(Array(12).fill(0)));
         totRow.getCell(1).font = { bold: true };
         for (let col = 2; col <= 12; col++) {
             const colLetter = excelColLetter(col - 1);
-            totRow.getCell(col).value = { formula: `SUM(${colLetter}3:${colLetter}${lastDataRow})` };
+            totRow.getCell(col).value = { formula: `SUM(${colLetter}4:${colLetter}${lastDataRow})` };
             totRow.getCell(col).numFmt = '"€"#,##0';
             totRow.getCell(col).font = { bold: true };
         }
-        totRow.getCell(13).value = { formula: `SUM(${excelColLetter(12)}3:${excelColLetter(12)}${lastDataRow})` };
+        totRow.getCell(13).value = { formula: `SUM(${excelColLetter(12)}4:${excelColLetter(12)}${lastDataRow})` };
         totRow.getCell(13).numFmt = '"€"#,##0';
         totRow.getCell(13).font = { bold: true };
         wsUpside.getColumn(1).width = 26;
         for (let c = 2; c <= 13; c++) wsUpside.getColumn(c).width = 12;
 
         wsAss.addRow([]);
-        wsAss.addRow(['Dettaglio parametri (riferimento)', '']);
+        wsAss.addRow(['Dettaglio parametri (solo riferimento – non modificare per le formule)', '']);
         wsAss.getRow(wsAss.rowCount).getCell(1).font = { bold: true };
+        wsAss.getRow(wsAss.rowCount).getCell(1).alignment = { wrapText: true };
         const assRowsDetail = [
             ['Parametro', 'Valore'],
-            ['Fashion Scenario', fashionChoice],
-            ['Downsizing Via Pinciana 41', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
-            ['Downsizing Via Pinciana 44', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
-            ['Downsizing Via Adige', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
-            ['Riduzione % P41', parseInt(document.getElementById('redP41').value) || 0],
-            ['Riduzione % P44', parseInt(document.getElementById('redP44').value) || 0],
-            ['Riduzione % Adige', parseInt(document.getElementById('redAdige').value) || 0],
-            ['Nuovo Affitto (se cessione)', parseInt(document.getElementById('newRentSlider').value) || 0],
-            ['Sharing Op1 % 42', parseInt(document.getElementById('shOp1_42').value) || 0],
-            ['Sharing Op1 % Nardi', parseInt(document.getElementById('shOp1_Nardi').value) || 0],
-            ['Sharing Op2 % 42', parseInt(document.getElementById('shOp2_42').value) || 0],
-            ['Sharing Op2 % Nardi', parseInt(document.getElementById('shOp2_Nardi').value) || 0],
-            ['Sharing Markup %', parseInt(document.getElementById('shMarkupSlider').value) || 0],
-            ['Green BMW: Volume 2026', greenParams.bmw.vol2026],
-            ['Green BMW: Volume 2027', greenParams.bmw.vol2027],
-            ['Green BMW: Volume a Regime', greenParams.bmw.volRegime],
-            ['Green BMW: Kit Retail ASP', greenParams.bmw.retailASP],
-            ['Green BMW: Kit Wholesale ASP', greenParams.bmw.wholesaleASP],
-            ['Green BMW: Moto chiavi-in-mano', greenParams.bmw.motoPrice],
-            ['Green BMW: BOM Kit', greenParams.bmw.bomKit],
-            ['Green BMW: BOM Moto', greenParams.bmw.bomMoto],
-            ['Green BMW: MdO Retail Anno 1/2/3+', greenParams.bmw.mdoY1 + '/' + greenParams.bmw.mdoY2 + '/' + greenParams.bmw.mdoY3],
-            ['Green BMW: Omologa solo retail', greenParams.bmw.omologaRetail],
-            ['Green BMW: Logistica WS Anno 1/2/3+', greenParams.bmw.logWsY1 + '/' + greenParams.bmw.logWsY2 + '/' + greenParams.bmw.logWsY3],
-            ['Green: Cina da anno / riduzione %', (greenParams.chinaYear <= 2036 ? greenParams.chinaYear : '') + ' / ' + (greenParams.chinaPct * 100)],
-            ['Green: Overheads 2026 (€)', greenParams.overheadY1],
-            ['Green: Overheads 2027 (€)', greenParams.overheadY2],
-            ['Green: Overheads dal 2028 (€)', greenParams.overheadFrom2028],
-            ['Green: Piattaforme Aggiuntive', greenParams.platforms.map(p => p.name).join(', ') || 'Nessuna'],
+            ['Fashion – Scenario selezionato', fashionChoice],
+            ['Downsizing – Via Pinciana 41 (Store)', document.getElementById('togPinciana41').checked ? 'SI' : 'NO'],
+            ['Downsizing – Via Pinciana 44 (Atelier)', document.getElementById('togPinciana44').checked ? 'SI' : 'NO'],
+            ['Downsizing – Via Adige (Officina)', document.getElementById('togAdige').checked ? 'SI' : 'NO'],
+            ['Riduzione % affitto – Pinciana 41', parseInt(document.getElementById('redP41').value) || 0],
+            ['Riduzione % affitto – Pinciana 44', parseInt(document.getElementById('redP44').value) || 0],
+            ['Riduzione % affitto – Via Adige', parseInt(document.getElementById('redAdige').value) || 0],
+            ['Nuovo affitto sede unica (€/anno)', parseInt(document.getElementById('newRentSlider').value) || 0],
+            ['Sharing – % tempo Officina 42 (Anno 1)', parseInt(document.getElementById('shOp1_42').value) || 0],
+            ['Sharing – % tempo Nardi (Anno 1)', parseInt(document.getElementById('shOp1_Nardi').value) || 0],
+            ['Sharing – % tempo Officina 42 (Anno 2+)', parseInt(document.getElementById('shOp2_42').value) || 0],
+            ['Sharing – % tempo Nardi (Anno 2+)', parseInt(document.getElementById('shOp2_Nardi').value) || 0],
+            ['Sharing – Markup %', parseInt(document.getElementById('shMarkupSlider').value) || 0],
+            ['Iconic Mobility Lab – Volume BMW 2026', greenParams.bmw.vol2026],
+            ['Iconic Mobility Lab – Volume BMW 2027', greenParams.bmw.vol2027],
+            ['Iconic Mobility Lab – Volume a regime', greenParams.bmw.volRegime],
+            ['Iconic Mobility Lab – Prezzo kit Retail (€)', greenParams.bmw.retailASP],
+            ['Iconic Mobility Lab – Prezzo kit Wholesale (€)', greenParams.bmw.wholesaleASP],
+            ['Iconic Mobility Lab – Prezzo moto (€)', greenParams.bmw.motoPrice],
+            ['Iconic Mobility Lab – BOM Kit (€/unità)', greenParams.bmw.bomKit],
+            ['Iconic Mobility Lab – BOM Moto (€/unità)', greenParams.bmw.bomMoto],
+            ['Iconic Mobility Lab – Manodopera Retail (€/kit Anno 1/2/3+)', greenParams.bmw.mdoY1 + ' / ' + greenParams.bmw.mdoY2 + ' / ' + greenParams.bmw.mdoY3],
+            ['Iconic Mobility Lab – Omologa solo retail', greenParams.bmw.omologaRetail],
+            ['Iconic Mobility Lab – Logistica Wholesale (€/kit Anno 1/2/3+)', greenParams.bmw.logWsY1 + ' / ' + greenParams.bmw.logWsY2 + ' / ' + greenParams.bmw.logWsY3],
+            ['Iconic Mobility Lab – Cina: da anno / riduzione %', (greenParams.chinaYear <= 2036 ? greenParams.chinaYear : '') + ' / ' + (greenParams.chinaPct * 100)],
+            ['Iconic Mobility Lab – Overhead 2026 (€)', greenParams.overheadY1],
+            ['Iconic Mobility Lab – Overhead 2027 (€)', greenParams.overheadY2],
+            ['Iconic Mobility Lab – Overhead da 2028 (€)', greenParams.overheadFrom2028],
+            ['Iconic Mobility Lab – Piattaforme aggiuntive', greenParams.platforms.map(p => p.name).join(', ') || 'Nessuna'],
             ...greenParams.platforms.flatMap((p, i) => [
-                ['Green Plat ' + (i+1) + ' ' + p.name + ' Anno lancio', p.launchYear],
-                ['Green Plat ' + (i+1) + ' Volume Anno 1', p.volYear1],
-                ['Green Plat ' + (i+1) + ' Volume Anno 2', p.volYear2],
-                ['Green Plat ' + (i+1) + ' Volume a Regime', p.volRegime],
-                ['Green Plat ' + (i+1) + ' Retail ASP', p.retailASP],
-                ['Green Plat ' + (i+1) + ' Wholesale ASP', p.wholesaleASP],
-                ['Green Plat ' + (i+1) + ' Moto Price', p.motoPrice],
-                ['Green Plat ' + (i+1) + ' BOM Kit', p.bomKit],
-                ['Green Plat ' + (i+1) + ' BOM Moto', p.bomMoto]
+                ['P' + (i+1) + ' ' + p.name + ' – Anno lancio', p.launchYear],
+                ['P' + (i+1) + ' ' + p.name + ' – Volume Anno 1', p.volYear1],
+                ['P' + (i+1) + ' ' + p.name + ' – Volume Anno 2', p.volYear2],
+                ['P' + (i+1) + ' ' + p.name + ' – Volume a regime', p.volRegime],
+                ['P' + (i+1) + ' ' + p.name + ' – Prezzo Retail (€)', p.retailASP],
+                ['P' + (i+1) + ' ' + p.name + ' – Prezzo Wholesale (€)', p.wholesaleASP],
+                ['P' + (i+1) + ' ' + p.name + ' – Prezzo moto (€)', p.motoPrice],
+                ['P' + (i+1) + ' ' + p.name + ' – BOM Kit (€)', p.bomKit],
+                ['P' + (i+1) + ' ' + p.name + ' – BOM Moto (€)', p.bomMoto]
             ]),
-            ['Ottodrom Care: Moto Gestite', parseInt(document.getElementById('mcMotoSlider').value) || 0],
+            ['Ottodrom Care – Moto in gestione', parseInt(document.getElementById('mcMotoSlider').value) || 0],
             [],
-            ['Componenti (Catalogo)', 'Prezzo', 'Margine %', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3', 'Q Anno 4', 'Q Anno 5', 'Q Anno 6', 'Q Anno 7', 'Q Anno 8', 'Q Anno 9', 'Q Anno 10'],
+            ['Componenti – Catalogo (nome, prezzo, margine %, quantità per anno)', ''],
+            ['Componenti – Tabella', 'Prezzo', 'Margine %', 'Q Anno 1', 'Q Anno 2', 'Q Anno 3', 'Q Anno 4', 'Q Anno 5', 'Q Anno 6', 'Q Anno 7', 'Q Anno 8', 'Q Anno 9', 'Q Anno 10'],
             ...productsCatalog.map(p => [p.name || '', p.price, (p.margin !== undefined ? p.margin : 75), p.q1, p.q2, p.q3, p.q4, p.q5, p.q6, p.q7, p.q8, p.q9, p.q10]),
             [],
-            ['Nota', 'Componenti e Concierge crescono al 5% annuo dopo Anno 3.'],
-            ['Nota', 'Green: Overheads modificabili (default 200k/500k/600k). Var Opex: MdO solo retail, Omologa solo retail, Logistica solo WS. Opzione Cina: riduzione % BOM Kit da anno.'],
-            ['Nota', 'Service Ottodrom: crescita 3%/anno (cap +15%).'],
-            ['Generato il', new Date().toLocaleString('it-IT')]
+            ['Nota metodologia', 'Componenti e Ottodrom Care: crescita +5% annuo dopo Anno 3.'],
+            ['Nota metodologia', 'Iconic Mobility Lab: Overheads modificabili. Var Opex = MdO (solo retail), Omologa (solo retail), Logistica (solo WS). Opzione Cina = riduzione % su BOM Kit da anno indicato.'],
+            ['Nota metodologia', 'Officina e Service: crescita +3%/anno (tetto +15% cumulato).'],
+            [],
+            ['Come usare questo file: BP Ottodrom è il Conto Economico; le formule leggono da Assumptions e dai fogli Topline. Core = azione inclusa nel piano; Upside = potenziale solo in Recap. Modificare solo la colonna Valore nella sezione Parametri in alto.', ''],
+            ['File generato il', new Date().toLocaleString('it-IT')]
         ];
         assRowsDetail.forEach((row, i) => {
             const r = wsAss.addRow(row);
+            r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
             if (row[0] === '' && row[1] === undefined) return;
-            if (row[0] === 'Parametro' && row[1] === 'Valore') r.eachCell(c => applyHeaderStyle(c, SLATE));
-            else if (String(row[0]).indexOf('Nota') === 0) { r.getCell(1).font = { italic: true, color: { argb: 'FF64748B' } }; r.getCell(2).font = { italic: true, color: { argb: 'FF64748B' } }; }
-            else if (row[0] === 'Generato il') { r.getCell(1).font = { bold: true }; r.getCell(2).font = { color: { argb: 'FF64748B' } }; }
+            if (row[0] === 'Parametro' && row[1] === 'Valore') r.eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { wrapText: true }; });
+            else if (String(row[0]).indexOf('Nota') === 0) { r.getCell(1).font = { italic: true, color: { argb: 'FF64748B' } }; r.getCell(2).font = { italic: true, color: { argb: 'FF64748B' } }; r.getCell(2).alignment = { wrapText: true }; }
+            else if (String(row[0]).indexOf('Come usare questo file') === 0) { r.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } }; r.getCell(1).alignment = { wrapText: true }; wsAss.mergeCells(r.number, 1, r.number, 2); }
+            else if (row[0] === 'File generato il') { r.getCell(1).font = { bold: true }; r.getCell(2).font = { color: { argb: 'FF64748B' } }; }
             else { applyAssumptionParamStyle(r.getCell(1)); if (row[1] !== undefined) r.getCell(2).font = { bold: true }; }
         });
-        wsAss.getColumn(1).width = 38;
-        wsAss.getColumn(2).width = 18;
+        wsAss.getColumn(1).width = 52;
+        wsAss.getColumn(2).width = 22;
 
         const wsMeta = wb.addWorksheet('Metodologia P&L Green');
         wsMeta.addRow(['Metodologia e assunzioni P&L Project Green (per CFO)']);
         wsMeta.mergeCells(1, 1, 1, 1);
         wsMeta.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         wsMeta.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
+        wsMeta.addRow(['Documentazione delle formule e della logica del P&L Iconic Mobility Lab. Per modificare i numeri usare il foglio Assumptions.']);
+        wsMeta.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
+        wsMeta.getRow(2).getCell(1).alignment = { wrapText: true };
         wsMeta.addRow([]);
         const metodologia = [
             ['Revenue'],
