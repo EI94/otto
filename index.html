@@ -2770,13 +2770,13 @@
         function addToplineSheet(name, title) {
             const ws = wb.addWorksheet(name, { views: [{ state: 'frozen', ySplit: 2 }] });
             ws.addRow([title]);
-            ws.mergeCells(1, 1, 1, yearCols.length);
+            ws.mergeCells(1, 1, 1, yearCols.length + 1);
             ws.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
             ws.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
             ws.addRow(['Anno', ...yearCols]);
             ws.getRow(2).eachCell(c => { applyHeaderStyle(c, SLATE); if (c.col > 1) c.alignment = { horizontal: 'right' }; });
             ws.getColumn(1).width = 22;
-            for (let c = 2; c <= yearCols.length; c++) ws.getColumn(c).width = 12;
+            for (let c = 2; c <= yearCols.length + 1; c++) ws.getColumn(c).width = 12;
             return ws;
         }
 
@@ -2851,13 +2851,13 @@
         const greenYears = years.map(y => calcGreenPL(parseInt(y.label), greenParams));
         const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 6 }] });
         ws2.addRow(['Iconic Mobility Lab – Project Green']);
-        ws2.mergeCells(1, 1, 1, years.length + 3);
+        ws2.mergeCells(1, 1, 1, years.length + 2);
         ws2.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         ws2.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
         ws2.getCell(1, 1).alignment = { horizontal: 'center' };
         ws2.addRow(['Unità, ricavi (Retail/Wholesale/Moto), COGS, D&A e EBITDA. Formule da Assumptions.']);
         ws2.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
-        ws2.mergeCells(2, 1, 2, years.length + 3);
+        ws2.mergeCells(2, 1, 2, years.length + 2);
         ws2.getRow(2).getCell(1).alignment = { wrapText: true };
         ws2.addRow([]);
         const greenHdr = ['Voce', 2025, ...years.map(y => parseInt(y.label))];
@@ -3020,7 +3020,7 @@
                 } else if (pr.type === 'gp') formula = `=${colLetter}${rowPLRevenue}-${colLetter}${rowPLRevenue + 1}`;
                 else if (pr.type === 'margin') formula = `=IF(${colLetter}${rowPLRevenue}=0,"",${colLetter}${plRow - 1}/${colLetter}${rowPLRevenue}*100)&"%"`;
                 else if (pr.type === 'ebitda') formula = `=${colLetter}${plRow - 4}-${colLetter}${plRow - 2}-${colLetter}${plRow - 1}`;
-                else if (pr.type === 'ebit') formula = `=${colLetter}${plRow - 1}-${colLetter}${plRow - 2}`;
+                else if (pr.type === 'ebit') formula = `=${colLetter}${plRow - 3}-${colLetter}${plRow - 2}`;
                 else if (pr.type === 'units') formula = `=${colLetter}${rowUTotal}`;
                 else if (pr.type === 'bmwUnits') formula = `=${colLetter}${rowUb}`;
                 else if (pr.type === 'platUnits') formula = nPlat === 0 ? '=0' : `=${colLetter}${rowUTotal}-${colLetter}${rowUb}`;
