@@ -2720,8 +2720,9 @@
             ['Piano Industriale Ottodrom 2026–2036 – Guida al file'],
             [],
             ['Struttura del file'],
+            ['• Dati Finanziari – Executive summary: KPI (Revenue, EBITDA, EBIT, margini), Revenue Mix attuale e target, confronto scenari Solo Core vs Inclusi Upside. Tab dedicato per presentazioni e report.'],
             ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions.'],
-            ['• Highlights – Sintesi KPI (Revenue, EBITDA, EBIT, margini) e Revenue Mix 2025 vs target. Solo valori di riferimento.'],
+            ['• Highlights – Sintesi KPI e Revenue Mix (stessi contenuti del tab Dati Finanziari, formato compatto).'],
             ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
             ['• Topline – Fogli ricavi per voce e per anno (Officina, Altro, Fashion, Componenti, Sharing, Ottodrom Care). Ordinamento: prima i tab Core (inclusi nel BP), poi i tab Upside.'],
             ['• Project Green P&L – P&L completo Iconic Mobility Lab (unità, ricavi, COGS, D&A, EBITDA).'],
@@ -2764,6 +2765,99 @@
         const curManut = totBase > 0 ? Math.round((offBase * 0.30) / totBase * 100) : 18;
         const curFash = totBase > 0 ? Math.round(((BASE.ricavi_fashion || 0) / totBase) * 100) : 30;
         const curAltro = Math.max(0, 100 - curCustom - curManut - curFash);
+        const revCore2025Early = safeNum(BASE.totale_ricavi);
+        const revCoreTgtEarly = safeNum(yrTarget.totale_ricavi);
+        const upsideTgtEarly = safeNum(yrTarget.upside_totale);
+        const revFullTgtEarly = revCoreTgtEarly + upsideTgtEarly;
+        const mdcRatioTgtEarly = (yrTarget.totale_ricavi > 0 && yrTarget.mdc != null) ? yrTarget.mdc / yrTarget.totale_ricavi : 0;
+        const ebitdaCore2025Early = safeNum(BASE.ebitda);
+        const ebitdaCoreTgtEarly = safeNum(yrTarget.ebitda);
+        const ebitdaFullTgtEarly = ebitdaCoreTgtEarly + (upsideTgtEarly * mdcRatioTgtEarly);
+        const ebitCore2025Early = safeNum((BASE.ebitda != null && BASE.da != null) ? BASE.ebitda - BASE.da : 0);
+        const ebitCoreTgtEarly = safeNum(yrTarget.ebit);
+        const ebitFullTgtEarly = ebitCoreTgtEarly + (upsideTgtEarly * mdcRatioTgtEarly);
+
+        const wsDati = wb.addWorksheet('Dati Finanziari', { views: [{ state: 'frozen', ySplit: 2 }] });
+        wsDati.getColumn(1).width = 38;
+        wsDati.getColumn(2).width = 20;
+        wsDati.getColumn(3).width = 20;
+        wsDati.getColumn(4).width = 8;
+        const datiRow1 = wsDati.addRow(['DATI FINANZIARI – EXECUTIVE SUMMARY']);
+        datiRow1.getCell(1).font = { bold: true, size: 16, color: { argb: 'FF0F766E' } };
+        wsDati.mergeCells(1, 1, 1, 4);
+        const datiRow2 = wsDati.addRow(['Piano Industriale Ottodrom 2026–2036 · Sintesi indicatori e revenue mix · Generato il ' + new Date().toLocaleDateString('it-IT')]);
+        datiRow2.getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
+        wsDati.mergeCells(2, 1, 2, 4);
+        wsDati.addRow([]);
+        const datiHdr = wsDati.addRow(['Indicatore', '2025 (Base)', (yrTarget.label || 'Target'), 'Unità']);
+        datiHdr.eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; c.border = { top: { style: 'thin' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } }; });
+        const kpiRows = [
+            ['Revenue', safeNum(BASE.totale_ricavi), safeNum(yrTarget.totale_ricavi), '€'],
+            ['EBITDA', safeNum(BASE.ebitda), safeNum(yrTarget.ebitda), '€'],
+            ['EBIT', safeNum((BASE.ebitda != null && BASE.da != null) ? BASE.ebitda - BASE.da : 0), safeNum(yrTarget.ebit), '€'],
+            ['Margine di contribuzione', safeNum((BASE.totale_ricavi != null && BASE.totale_cv != null) ? BASE.totale_ricavi - BASE.totale_cv : 0), safeNum(yrTarget.mdc), '€'],
+            ['Margine contrib. %', totBase > 0 ? (safeNum((BASE.totale_ricavi != null && BASE.totale_cv != null) ? BASE.totale_ricavi - BASE.totale_cv : 0) / totBase * 100).toFixed(1) : '–', (yrTarget.totale_ricavi > 0 && yrTarget.mdc != null) ? (yrTarget.mdc / yrTarget.totale_ricavi * 100).toFixed(1) : '–', '%'],
+            ['Costi fissi', safeNum(BASE.totale_cf), safeNum(yrTarget.totale_cf), '€'],
+            ['D&A', safeNum(BASE.da), safeNum(yrTarget.da), '€']
+        ];
+        kpiRows.forEach((row, i) => {
+            const r = wsDati.addRow([row[0], row[1], row[2], row[3]]);
+            r.getCell(1).font = { bold: true };
+            r.getCell(1).border = { bottom: { style: 'thin' } };
+            if (typeof row[1] === 'number') { r.getCell(2).numFmt = '"€"#,##0'; r.getCell(2).alignment = { horizontal: 'right' }; }
+            if (typeof row[2] === 'number') { r.getCell(3).numFmt = '"€"#,##0'; r.getCell(3).alignment = { horizontal: 'right' }; }
+            if (row[3] === '%') { r.getCell(2).numFmt = '0.0'; r.getCell(3).numFmt = '0.0'; r.getCell(2).alignment = { horizontal: 'right' }; r.getCell(3).alignment = { horizontal: 'right' }; }
+            r.getCell(4).font = { color: { argb: 'FF64748B' }, size: 9 };
+        });
+        wsDati.addRow([]);
+        const mixTitle1 = wsDati.addRow(['Revenue Mix – Situazione attuale (2025)']);
+        mixTitle1.getCell(1).font = { bold: true, size: 12, color: { argb: 'FF0F766E' } };
+        wsDati.mergeCells(wsDati.rowCount, 1, wsDati.rowCount, 4);
+        const mixHdr1 = wsDati.addRow(['Voce', '%', '', '']);
+        mixHdr1.eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        [['Custom / Officina', curCustom], ['Manutenzione', curManut], ['Fashion', curFash], ['Altro', curAltro]].forEach(row => {
+            const r = wsDati.addRow([row[0], row[1], '', '%']);
+            r.getCell(2).numFmt = '0"%"';
+            r.getCell(2).alignment = { horizontal: 'right' };
+        });
+        wsDati.addRow([]);
+        const mixTitle2 = wsDati.addRow(['Revenue Mix – Target (' + (yrTarget.label || '–') + ')']);
+        mixTitle2.getCell(1).font = { bold: true, size: 12, color: { argb: 'FF0F766E' } };
+        wsDati.mergeCells(wsDati.rowCount, 1, wsDati.rowCount, 4);
+        const mixHdr2 = wsDati.addRow(['Voce', '%', '', '']);
+        mixHdr2.eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        [['Prodotti Scalabili (Kit + Parts + E-commerce)', pScal], ['Ricorrenti (Concierge + Sharing + Service)', pRic], ['Hero Custom / Altro', pHero]].forEach(row => {
+            const r = wsDati.addRow([row[0], row[1], '', '%']);
+            r.getCell(2).numFmt = '0"%"';
+            r.getCell(2).alignment = { horizontal: 'right' };
+        });
+        wsDati.addRow([]);
+        const scenarioTitle = wsDati.addRow(['Confronto scenari – Solo Core (BP) vs Inclusi Upside']);
+        scenarioTitle.getCell(1).font = { bold: true, size: 12, color: { argb: 'FF0F766E' } };
+        wsDati.mergeCells(wsDati.rowCount, 1, wsDati.rowCount, 4);
+        const scenarioNote = wsDati.addRow(['Core = revenue nel Business Plan; Inclusi Upside = Core + ricavi azioni Upside (EBITDA/EBIT stimati con stesso margine).']);
+        scenarioNote.getCell(1).font = { italic: true, size: 9, color: { argb: 'FF64748B' } };
+        wsDati.mergeCells(wsDati.rowCount, 1, wsDati.rowCount, 4);
+        wsDati.addRow([]);
+        const scenarioHdr = wsDati.addRow(['', 'Solo Core (nel BP)', 'Inclusi Upside (stima)', '']);
+        scenarioHdr.eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        const sr2025_1 = wsDati.addRow(['2025 – Revenue (€)', revCore2025Early, revCore2025Early, '']);
+        const sr2025_2 = wsDati.addRow(['2025 – EBITDA (€)', ebitdaCore2025Early, ebitdaCore2025Early, '']);
+        const sr2025_3 = wsDati.addRow(['2025 – EBIT (€)', ebitCore2025Early, ebitCore2025Early, '']);
+        [sr2025_1, sr2025_2, sr2025_3].forEach(r => { r.getCell(2).numFmt = '"€"#,##0'; r.getCell(2).alignment = { horizontal: 'right' }; r.getCell(3).numFmt = '"€"#,##0'; r.getCell(3).alignment = { horizontal: 'right' }; });
+        wsDati.addRow([]);
+        const tgtLabel = (yrTarget.label || 'Target') + ' –';
+        wsDati.addRow([tgtLabel, 'Solo Core (nel BP)', 'Inclusi Upside (stima)', '']);
+        wsDati.getRow(wsDati.rowCount).eachCell((c, cn) => { if (cn > 1) applyHeaderStyle(c, SLATE); });
+        const dr1 = wsDati.addRow([tgtLabel + ' Revenue (€)', revCoreTgtEarly, revFullTgtEarly, '']);
+        const dr2 = wsDati.addRow([tgtLabel + ' EBITDA (€)', ebitdaCoreTgtEarly, ebitdaFullTgtEarly, '']);
+        const dr3 = wsDati.addRow([tgtLabel + ' EBIT (€)', ebitCoreTgtEarly, ebitFullTgtEarly, '']);
+        [dr1, dr2, dr3].forEach(r => { r.getCell(2).numFmt = '"€"#,##0'; r.getCell(2).alignment = { horizontal: 'right' }; r.getCell(3).numFmt = '"€"#,##0'; r.getCell(3).alignment = { horizontal: 'right' }; });
+        wsDati.addRow([]);
+        const fonteRow = wsDati.addRow(['Fonte: Piano Finanziario Dinamico Ottodrom. Valori coerenti con il foglio Highlights e con il Conto Economico (BP).']);
+        fonteRow.getCell(1).font = { italic: true, size: 9, color: { argb: 'FF94A3B8' } };
+        wsDati.mergeCells(wsDati.rowCount, 1, wsDati.rowCount, 4);
+
         const wsHigh = wb.addWorksheet('Highlights', { views: [{ state: 'frozen', ySplit: 1 }] });
         wsHigh.getColumn(1).width = 32;
         wsHigh.getColumn(2).width = 18;
