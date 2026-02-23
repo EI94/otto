@@ -1031,9 +1031,81 @@
             </button>
         </div>
 
+        <!-- HIGHLIGHTS FINANZIARI -->
+        <div class="mt-12 mb-6 border-l-4 border-teal-500 pl-4">
+            <h3 class="text-2xl font-bold uppercase text-slate-800">Highlights finanziari</h3>
+            <p class="mt-2 text-slate-500">KPI e composizione ricavi: si aggiornano in tempo reale al variare del piano.</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 mb-8">
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <div class="text-[10px] uppercase text-slate-400 tracking-wide">Revenue 2025</div>
+                <div id="kpiRev2025" class="text-lg font-bold text-white tabular-nums">–</div>
+            </div>
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <div class="text-[10px] uppercase text-slate-400 tracking-wide">Revenue target</div>
+                <div id="kpiRevTarget" class="text-lg font-bold text-teal-400 tabular-nums">–</div>
+            </div>
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <div class="text-[10px] uppercase text-slate-400 tracking-wide">EBITDA 2025</div>
+                <div id="kpiEbitda2025" class="text-lg font-bold tabular-nums">–</div>
+            </div>
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <div class="text-[10px] uppercase text-slate-400 tracking-wide">EBITDA target</div>
+                <div id="kpiEbitdaTarget" class="text-lg font-bold tabular-nums">–</div>
+            </div>
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <div class="text-[10px] uppercase text-slate-400 tracking-wide">EBIT target</div>
+                <div id="kpiEbitTarget" class="text-lg font-bold tabular-nums">–</div>
+            </div>
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <div class="text-[10px] uppercase text-slate-400 tracking-wide">Margine contrib. %</div>
+                <div id="kpiMdcPct" class="text-lg font-bold text-amber-400 tabular-nums">–</div>
+            </div>
+        </div>
+
+        <!-- RECAP SOLO CORE VS INCLUSI UPSIDE -->
+        <div class="mt-8 mb-6 border-l-4 border-amber-500 pl-4">
+            <h3 class="text-lg font-bold uppercase text-slate-800">Risultati Solo Core vs Inclusi Upside</h3>
+            <p class="mt-1 text-sm text-slate-500">Core = revenue stream nel BP; Inclusi Upside = Core + revenue delle azioni marcate Upside (EBITDA/EBIT stima con stesso margine).</p>
+        </div>
+        <div class="overflow-x-auto mb-8">
+            <table class="w-full max-w-2xl border border-slate-200 rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-slate-700 text-slate-200 text-left">
+                        <th class="p-3 text-xs uppercase font-bold">Scenario</th>
+                        <th class="p-3 text-xs uppercase font-bold text-right">Revenue (€)</th>
+                        <th class="p-3 text-xs uppercase font-bold text-right">EBITDA (€)</th>
+                        <th class="p-3 text-xs uppercase font-bold text-right">EBIT (€)</th>
+                    </tr>
+                </thead>
+                <tbody class="text-slate-700 bg-white">
+                    <tr class="border-b border-slate-100"><td class="p-3 font-semibold text-slate-600">2025</td><td colspan="3" class="p-3 text-sm text-slate-500">Base di partenza (tutti i ricavi in piano)</td></tr>
+                    <tr class="border-b border-slate-100">
+                        <td class="p-3 font-medium text-teal-700">Solo Core (nel BP)</td>
+                        <td id="recapCoreRev2025" class="p-3 text-right tabular-nums font-semibold">–</td>
+                        <td id="recapCoreEbitda2025" class="p-3 text-right tabular-nums font-semibold">–</td>
+                        <td id="recapCoreEbit2025" class="p-3 text-right tabular-nums font-semibold">–</td>
+                    </tr>
+                    <tr class="border-b border-slate-200"><td class="p-3 font-semibold text-slate-600" id="recapTargetLabel">Target</td><td colspan="3" class="p-3 text-sm text-slate-500"></td></tr>
+                    <tr class="border-b border-slate-100">
+                        <td class="p-3 font-medium text-teal-700">Solo Core (nel BP)</td>
+                        <td id="recapCoreRevTgt" class="p-3 text-right tabular-nums font-semibold">–</td>
+                        <td id="recapCoreEbitdaTgt" class="p-3 text-right tabular-nums font-semibold">–</td>
+                        <td id="recapCoreEbitTgt" class="p-3 text-right tabular-nums font-semibold">–</td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 font-medium text-amber-700">Inclusi Upside (stima)</td>
+                        <td id="recapFullRevTgt" class="p-3 text-right tabular-nums font-semibold">–</td>
+                        <td id="recapFullEbitdaTgt" class="p-3 text-right tabular-nums font-semibold">–</td>
+                        <td id="recapFullEbitTgt" class="p-3 text-right tabular-nums font-semibold">–</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <!-- REVENUE MIX SHIFT -->
-        <div class="mt-12 mb-4 border-l-4 border-indigo-500 pl-4">
-            <h3 class="text-2xl font-bold uppercase">Revenue Mix Shift</h3>
+        <div class="mt-8 mb-4 border-l-4 border-indigo-500 pl-4">
+            <h3 class="text-xl font-bold uppercase text-slate-700">Revenue Mix Shift</h3>
             <p class="mt-2 text-slate-400">Come cambia la composizione dei ricavi: da oggi (2025) al target a regime, in base alle scelte selezionate.</p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 items-center">
@@ -2276,6 +2348,7 @@
         }
 
         lastYearsData = years;
+        updateHighlightsKpis(years);
         renderCETable(years);
         renderGreenDetailTable(years);
         renderRecapUpside(years);
@@ -2478,15 +2551,74 @@
         });
     }
 
+    function updateHighlightsKpis(years) {
+        const rev2025 = BASE.totale_ricavi || 0;
+        const ebitda2025 = BASE.ebitda != null ? BASE.ebitda : 0;
+        const regimeIdx = Math.min(years.length - 1, 4);
+        const yr = years[regimeIdx];
+        const targetLabel = yr ? yr.label : '–';
+        const revTarget = yr ? (yr.totale_ricavi || 0) : 0;
+        const ebitdaTarget = yr ? (yr.ebitda != null ? yr.ebitda : 0) : 0;
+        const ebitTarget = yr ? (yr.ebit != null ? yr.ebit : 0) : 0;
+        const mdcPct = yr && yr.totale_ricavi > 0 ? ((yr.mdc || 0) / yr.totale_ricavi * 100).toFixed(1) + '%' : '–';
+        const el = (id, v, isNeg) => {
+            const n = document.getElementById(id);
+            if (!n) return;
+            if (v === '–' || v === undefined) { n.textContent = '–'; return; }
+            if (typeof v === 'number') {
+                n.textContent = '\u20ac' + Math.round(v).toLocaleString('it-IT');
+                n.className = 'text-lg font-bold tabular-nums ' + (isNeg && v < 0 ? 'text-rose-400' : v >= 0 ? 'text-teal-400' : '');
+            } else n.textContent = v;
+        };
+        el('kpiRev2025', rev2025, false);
+        el('kpiRevTarget', revTarget, false);
+        document.getElementById('kpiRevTarget') && (document.getElementById('kpiRevTarget').previousElementSibling.textContent = 'Revenue ' + targetLabel);
+        el('kpiEbitda2025', ebitda2025, true);
+        el('kpiEbitdaTarget', ebitdaTarget, true);
+        el('kpiEbitTarget', ebitTarget, true);
+        const mdcEl = document.getElementById('kpiMdcPct');
+        if (mdcEl) mdcEl.textContent = mdcPct;
+
+        const setRecap = (id, v) => {
+            const n = document.getElementById(id);
+            if (!n) return;
+            n.textContent = (typeof v === 'number' && !isNaN(v)) ? '\u20ac' + Math.round(v).toLocaleString('it-IT') : (v != null ? v : '–');
+        };
+        setRecap('recapCoreRev2025', rev2025);
+        setRecap('recapCoreEbitda2025', ebitda2025);
+        setRecap('recapCoreEbit2025', (BASE.ebitda != null && BASE.da != null) ? BASE.ebitda - BASE.da : null);
+        const lbl = document.getElementById('recapTargetLabel');
+        if (lbl) lbl.textContent = targetLabel;
+        setRecap('recapCoreRevTgt', revTarget);
+        setRecap('recapCoreEbitdaTgt', ebitdaTarget);
+        setRecap('recapCoreEbitTgt', ebitTarget);
+        const upsideTgt = yr ? (yr.upside_totale || 0) : 0;
+        const mdcRatio = yr && yr.totale_ricavi > 0 && yr.mdc != null ? yr.mdc / yr.totale_ricavi : 0;
+        setRecap('recapFullRevTgt', revTarget + upsideTgt);
+        setRecap('recapFullEbitdaTgt', ebitdaTarget + (upsideTgt * mdcRatio));
+        setRecap('recapFullEbitTgt', ebitTarget + (upsideTgt * mdcRatio));
+    }
+
     // --- REVENUE MIX SHIFT CHARTS ---
     let mixCurrentChart, mixTargetChart;
 
     function renderMixCharts(years) {
+        const tot = BASE.totale_ricavi || 0;
+        let customPct, manutPct, fashionPct, altroPct;
+        if (tot > 0) {
+            const officina = BASE.ricavi_officina || 0;
+            customPct = Math.round((officina * 0.70) / tot * 100);
+            manutPct = Math.round((officina * 0.30) / tot * 100);
+            fashionPct = Math.round(((BASE.ricavi_fashion || 0) / tot) * 100);
+            altroPct = Math.max(0, 100 - customPct - manutPct - fashionPct);
+        } else {
+            customPct = 42; manutPct = 18; fashionPct = 30; altroPct = 10;
+        }
         const currentData = [
-            { label: 'Custom / Officina', value: 42, color: '#0f766e' },
-            { label: 'Manutenzione', value: 18, color: '#0ea5e9' },
-            { label: 'Fashion', value: 30, color: '#8b5cf6' },
-            { label: 'Altro', value: 10, color: '#94a3b8' }
+            { label: 'Custom / Officina', value: customPct, color: '#0f766e' },
+            { label: 'Manutenzione', value: manutPct, color: '#0ea5e9' },
+            { label: 'Fashion', value: fashionPct, color: '#8b5cf6' },
+            { label: 'Altro', value: altroPct, color: '#94a3b8' }
         ];
 
         if (mixCurrentChart) mixCurrentChart.destroy();
@@ -2504,8 +2636,9 @@
 
         const regimeIdx = Math.min(years.length - 1, 4);
         const yr = years[regimeIdx];
+        const mixTargetYearEl = document.getElementById('mixTargetYear');
+        if (mixTargetYearEl) mixTargetYearEl.innerText = yr ? '(' + yr.label + ')' : '(–)';
         if (!yr) return;
-        document.getElementById('mixTargetYear').innerText = '(' + yr.label + ')';
         const tot = yr.totale_ricavi;
         if (tot <= 0) return;
 
@@ -2588,8 +2721,9 @@
             [],
             ['Struttura del file'],
             ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions.'],
+            ['• Highlights – Sintesi KPI (Revenue, EBITDA, EBIT, margini) e Revenue Mix 2025 vs target. Solo valori di riferimento.'],
             ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
-            ['• Topline Officina / Fashion / Componenti / Sharing / Ottodrom Care / Altro – Ricavi per voce e per anno, derivati da Assumptions.'],
+            ['• Topline – Fogli ricavi per voce e per anno (Officina, Altro, Fashion, Componenti, Sharing, Ottodrom Care). Ordinamento: prima i tab Core (inclusi nel BP), poi i tab Upside.'],
             ['• Project Green P&L – P&L completo Iconic Mobility Lab (unità, ricavi, COGS, D&A, EBITDA).'],
             ['• Recap Upside – Ricavi potenziali delle azioni marcate come Upside (non inclusi nel CE).'],
             ['• Metodologia P&L Green – Spiegazione formule e logica del P&L Project Green.'],
@@ -2614,6 +2748,94 @@
             else if (row[0] && row[0].length < 50 && row[0].indexOf('•') !== 0 && row[0].indexOf('Struttura') === -1 && row[0].indexOf('Core') === -1 && row[0].indexOf('Come') === -1) r.getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
             else if (row[0] && row[0].indexOf('•') === 0) r.getCell(1).font = { color: { argb: 'FF475569' } };
         });
+
+        const safeNum = (v) => (typeof v === 'number' && !isNaN(v)) ? v : 0;
+        const regimeIdx = Math.min(years.length - 1, 4);
+        const yrTarget = years[regimeIdx] || {};
+        const totTarget = safeNum(yrTarget.totale_ricavi) || 1;
+        const scalTarget = safeNum(yrTarget.ricavi_kit) + safeNum(yrTarget.ricavi_componenti);
+        const ricTarget = safeNum(yrTarget.ricavi_concierge) + safeNum(yrTarget.ricavi_sharing) + safeNum(yrTarget.ricavi_officina) * 0.5;
+        const pScal = totTarget > 0 ? Math.round(scalTarget / totTarget * 100) : 0;
+        const pRic = totTarget > 0 ? Math.round(ricTarget / totTarget * 100) : 0;
+        const pHero = Math.max(0, 100 - pScal - pRic);
+        const totBase = BASE.totale_ricavi || 1;
+        const offBase = BASE.ricavi_officina || 0;
+        const curCustom = totBase > 0 ? Math.round((offBase * 0.70) / totBase * 100) : 42;
+        const curManut = totBase > 0 ? Math.round((offBase * 0.30) / totBase * 100) : 18;
+        const curFash = totBase > 0 ? Math.round(((BASE.ricavi_fashion || 0) / totBase) * 100) : 30;
+        const curAltro = Math.max(0, 100 - curCustom - curManut - curFash);
+        const wsHigh = wb.addWorksheet('Highlights', { views: [{ state: 'frozen', ySplit: 1 }] });
+        wsHigh.getColumn(1).width = 32;
+        wsHigh.getColumn(2).width = 18;
+        wsHigh.getColumn(3).width = 18;
+        wsHigh.addRow(['Highlights finanziari – Sintesi KPI e Revenue Mix']);
+        wsHigh.mergeCells(1, 1, 1, 3);
+        wsHigh.getCell(1, 1).font = { bold: true, size: 14, color: { argb: 'FF0F766E' } };
+        wsHigh.addRow([]);
+        wsHigh.addRow(['KPI', '2025', (yrTarget.label || 'Target')]);
+        wsHigh.getRow(3).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        [
+            ['Revenue (€)', safeNum(BASE.totale_ricavi), safeNum(yrTarget.totale_ricavi)],
+            ['EBITDA (€)', safeNum(BASE.ebitda), safeNum(yrTarget.ebitda)],
+            ['EBIT (€)', safeNum((BASE.ebitda != null && BASE.da != null) ? BASE.ebitda - BASE.da : 0), safeNum(yrTarget.ebit)],
+            ['Margine di contribuzione (€)', safeNum((BASE.totale_ricavi != null && BASE.totale_cv != null) ? BASE.totale_ricavi - BASE.totale_cv : 0), safeNum(yrTarget.mdc)],
+            ['Margine contrib. %', totBase > 0 ? (safeNum((BASE.totale_ricavi != null && BASE.totale_cv != null) ? BASE.totale_ricavi - BASE.totale_cv : 0) / totBase * 100).toFixed(1) + '%' : '–', (yrTarget.totale_ricavi > 0 && yrTarget.mdc != null) ? (yrTarget.mdc / yrTarget.totale_ricavi * 100).toFixed(1) + '%' : '–'],
+            ['Costi fissi (€)', safeNum(BASE.totale_cf), safeNum(yrTarget.totale_cf)],
+            ['D&A (€)', safeNum(BASE.da), safeNum(yrTarget.da)]
+        ].forEach((row, i) => {
+            const r = wsHigh.addRow(row);
+            r.getCell(1).font = { bold: true };
+            if (typeof row[1] === 'number') r.getCell(2).numFmt = '"€"#,##0';
+            if (typeof row[2] === 'number') r.getCell(3).numFmt = '"€"#,##0';
+        });
+        wsHigh.addRow([]);
+        wsHigh.addRow(['Revenue Mix 2025 (Current)', '%', '']);
+        wsHigh.getRow(wsHigh.rowCount).getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        [['Custom / Officina', curCustom], ['Manutenzione', curManut], ['Fashion', curFash], ['Altro', curAltro]].forEach(row => {
+            const r = wsHigh.addRow([row[0], row[1], '']);
+            r.getCell(2).numFmt = '0"%"';
+        });
+        wsHigh.addRow([]);
+        wsHigh.addRow(['Revenue Mix Target (' + (yrTarget.label || '–') + ')', '%', '']);
+        wsHigh.getRow(wsHigh.rowCount).getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        [['Prodotti Scalabili (Kit + Parts + E-commerce)', pScal], ['Ricorrenti (Concierge + Sharing + Service)', pRic], ['Hero Custom / Altro', pHero]].forEach(row => {
+            const r = wsHigh.addRow([row[0], row[1], '']);
+            r.getCell(2).numFmt = '0"%"';
+        });
+
+        const revCore2025 = safeNum(BASE.totale_ricavi);
+        const revCoreTgt = safeNum(yrTarget.totale_ricavi);
+        const upsideTgt = safeNum(yrTarget.upside_totale);
+        const revFullTgt = revCoreTgt + upsideTgt;
+        const mdcRatioTgt = (yrTarget.totale_ricavi > 0 && yrTarget.mdc != null) ? yrTarget.mdc / yrTarget.totale_ricavi : 0;
+        const ebitdaCore2025 = safeNum(BASE.ebitda);
+        const ebitdaCoreTgt = safeNum(yrTarget.ebitda);
+        const ebitdaFullTgt = ebitdaCoreTgt + (upsideTgt * mdcRatioTgt);
+        const ebitCore2025 = safeNum((BASE.ebitda != null && BASE.da != null) ? BASE.ebitda - BASE.da : 0);
+        const ebitCoreTgt = safeNum(yrTarget.ebit);
+        const ebitFullTgt = ebitCoreTgt + (upsideTgt * mdcRatioTgt);
+        wsHigh.addRow([]);
+        wsHigh.addRow(['Risultati Solo Core vs Inclusi Upside']);
+        wsHigh.mergeCells(wsHigh.rowCount, 1, wsHigh.rowCount, 3);
+        wsHigh.getCell(wsHigh.rowCount, 1).font = { bold: true, size: 12, color: { argb: 'FF0F766E' } };
+        wsHigh.addRow(['Scenario Core = revenue stream nel BP; Inclusi Upside = Core + revenue delle azioni marcate Upside (EBITDA/EBIT stima con stesso margine).', '', '']);
+        wsHigh.mergeCells(wsHigh.rowCount, 1, wsHigh.rowCount, 3);
+        wsHigh.getCell(wsHigh.rowCount, 1).font = { italic: true, size: 9, color: { argb: 'FF64748B' } };
+        wsHigh.addRow([]);
+        wsHigh.addRow(['', 'Solo Core (nel BP)', 'Inclusi Upside (stima)']);
+        wsHigh.getRow(wsHigh.rowCount).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        let r2025_1 = wsHigh.addRow(['2025 – Revenue (€)', revCore2025, revCore2025]);
+        let r2025_2 = wsHigh.addRow(['2025 – EBITDA (€)', ebitdaCore2025, ebitdaCore2025]);
+        let r2025_3 = wsHigh.addRow(['2025 – EBIT (€)', ebitCore2025, ebitCore2025]);
+        [r2025_1, r2025_2, r2025_3].forEach(row => { row.getCell(2).numFmt = '"€"#,##0'; row.getCell(3).numFmt = '"€"#,##0'; });
+        wsHigh.addRow([]);
+        wsHigh.addRow(['', 'Solo Core (nel BP)', 'Inclusi Upside (stima)']);
+        wsHigh.getRow(wsHigh.rowCount).getCell(1).value = (yrTarget.label || 'Target') + ' –';
+        wsHigh.getRow(wsHigh.rowCount).eachCell((c, cn) => { if (cn > 1) applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        let rTgt_1 = wsHigh.addRow([(yrTarget.label || 'Target') + ' – Revenue (€)', revCoreTgt, revFullTgt]);
+        let rTgt_2 = wsHigh.addRow([(yrTarget.label || 'Target') + ' – EBITDA (€)', ebitdaCoreTgt, ebitdaFullTgt]);
+        let rTgt_3 = wsHigh.addRow([(yrTarget.label || 'Target') + ' – EBIT (€)', ebitCoreTgt, ebitFullTgt]);
+        [rTgt_1, rTgt_2, rTgt_3].forEach(row => { row.getCell(2).numFmt = '"€"#,##0'; row.getCell(3).numFmt = '"€"#,##0'; });
 
         syncConciergeFromDOM();
         const greenParams = getGreenParams();
@@ -2750,19 +2972,19 @@
         ws1.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
         for (let col = 2; col <= numCols; col++) {
             const colLetter = excelColLetter(col - 1);
-            ws1.getCell(5, col).value = { formula: `SUM(${colLetter}6:${colLetter}12)` };
+            ws1.getCell(5, col).value = { formula: `=SUM(${colLetter}6:${colLetter}12)` };
             ws1.getCell(5, col).numFmt = '"€"#,##0';
             ws1.getCell(6, col).value = { formula: `'Topline Officina'!${colLetter}3` };
             ws1.getCell(6, col).numFmt = '"€"#,##0';
-            ws1.getCell(7, col).value = { formula: `IF(${B}${R.azione1}="Core",'Topline Fashion'!${colLetter}3,0)` };
+            ws1.getCell(7, col).value = { formula: `=IF(${B}${R.azione1}="Core",'Topline Fashion'!${colLetter}3,0)` };
             ws1.getCell(7, col).numFmt = '"€"#,##0';
-            ws1.getCell(8, col).value = { formula: `IF(${B}${R.azione5}="Core",'Topline Componenti'!${colLetter}3,0)` };
+            ws1.getCell(8, col).value = { formula: `=IF(${B}${R.azione5}="Core",'Topline Componenti'!${colLetter}3,0)` };
             ws1.getCell(8, col).numFmt = '"€"#,##0';
-            ws1.getCell(9, col).value = { formula: `IF(${B}${R.azione4}="Core",'Project Green P&L'!${colLetter}${rowRevTotalGreen},0)` };
+            ws1.getCell(9, col).value = { formula: `=IF(${B}${R.azione4}="Core",'Project Green P&L'!${colLetter}${rowRevTotalGreen},0)` };
             ws1.getCell(9, col).numFmt = '"€"#,##0';
-            ws1.getCell(10, col).value = { formula: `IF(${B}${R.azione3}="Core",'Topline Sharing'!${colLetter}3,0)` };
+            ws1.getCell(10, col).value = { formula: `=IF(${B}${R.azione3}="Core",'Topline Sharing'!${colLetter}3,0)` };
             ws1.getCell(10, col).numFmt = '"€"#,##0';
-            ws1.getCell(11, col).value = { formula: `IF(${B}${R.azione6}="Core",'Topline Ottodrom Care'!${colLetter}3,0)` };
+            ws1.getCell(11, col).value = { formula: `=IF(${B}${R.azione6}="Core",'Topline Ottodrom Care'!${colLetter}3,0)` };
             ws1.getCell(11, col).numFmt = '"€"#,##0';
             ws1.getCell(12, col).value = { formula: `'Topline Altro'!${colLetter}3` };
             ws1.getCell(12, col).numFmt = '"€"#,##0';
@@ -2839,13 +3061,14 @@
         wsAss.getRow(3).font = { bold: true };
         wsAss.getRow(3).eachCell(c => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF64748B' } }; c.font = { bold: true, color: { argb: 'FFFFFFFF' } }; });
         assumpRows.forEach((row, i) => {
-            const r = wsAss.addRow(row);
+            const val = (typeof row[1] === 'number' && !isNaN(row[1])) ? row[1] : (row[1] != null && row[1] !== '' ? row[1] : '');
+            const r = wsAss.addRow([row[0], val]);
             r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
             applyAssumptionParamStyle(r.getCell(1));
-            const isPct = row[0].indexOf('%') >= 0;
-            const isEuro = row[0].indexOf('€') >= 0 || row[0].indexOf('Prezzo') >= 0 || row[0].indexOf('Overhead') >= 0 || row[0].indexOf('Capex') >= 0 || row[0].indexOf('Ricavi') >= 0 || row[0].indexOf('Costo') >= 0;
-            if (typeof row[1] === 'number' && (isPct || isEuro)) r.getCell(2).numFmt = isPct ? '0"%"' : '"€"#,##0';
-            else if (typeof row[1] === 'number') r.getCell(2).numFmt = '#,##0';
+            const isPct = String(row[0]).indexOf('%') >= 0;
+            const isEuro = String(row[0]).indexOf('€') >= 0 || String(row[0]).indexOf('Prezzo') >= 0 || String(row[0]).indexOf('Overhead') >= 0 || String(row[0]).indexOf('Capex') >= 0 || String(row[0]).indexOf('Ricavi') >= 0 || String(row[0]).indexOf('Costo') >= 0;
+            if (typeof val === 'number' && (isPct || isEuro)) r.getCell(2).numFmt = isPct ? '0"%"' : '"€"#,##0';
+            else if (typeof val === 'number') r.getCell(2).numFmt = '#,##0';
         });
         wsAss.addRow([]);
         wsAss.addRow(['Altri parametri (riferimento – non usati dalle formule)', '']);
@@ -2883,73 +3106,80 @@
             for (let c = 2; c <= yearCols.length + 1; c++) ws.getColumn(c).width = 12;
             return ws;
         }
-
-        const wsCare = addToplineSheet('Topline Ottodrom Care', 'Ottodrom Care – Revenue (€)');
-        wsCare.getCell(3, 1).value = 'Revenue (€)';
-        wsCare.getCell(3, 1).font = { bold: true };
-        wsCare.getCell(3, 2).value = { formula: '=0' };
-        for (let c = 3; c <= yearCols.length + 1; c++) {
-            const yr = yearForCol(c);
-            const ramp = yr === 2026 ? 0.5 : yr === 2027 ? 0.85 : 1;
-            const growth = yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
-            wsCare.getCell(3, c).value = { formula: `=Assumptions!$B$${R.careMoto}*Assumptions!$B$${R.carePrezzo}*12*${ramp}*${growth}` };
-            wsCare.getCell(3, c).numFmt = '"€"#,##0';
-        }
-
-        const wsShare = addToplineSheet('Topline Sharing', 'Sharing (Az.3) – Revenue (€)');
-        wsShare.getCell(3, 1).value = 'Revenue (€)';
-        wsShare.getCell(3, 1).font = { bold: true };
-        for (let c = 2; c <= yearCols.length + 1; c++) {
-            wsShare.getCell(3, c).value = c === 2 ? { formula: '=0' } : { formula: `=Assumptions!$B$${R.shareBase}*(1+Assumptions!$B$${R.shareMark}/100)` };
-            wsShare.getCell(3, c).numFmt = '"€"#,##0';
-        }
-
-        const wsOff = addToplineSheet('Topline Officina', 'Officina & Service – Revenue (€)');
-        wsOff.getCell(3, 1).value = 'Revenue (€)';
-        wsOff.getCell(3, 1).font = { bold: true };
-        wsOff.getCell(3, 2).value = { formula: `=Assumptions!$B$${R.offBase}` };
-        for (let c = 3; c <= yearCols.length + 1; c++) {
-            wsOff.getCell(3, c).value = { formula: `=Assumptions!$B$${R.offBase}*(1+0.03*MIN(COLUMN()-2,5))` };
-            wsOff.getCell(3, c).numFmt = '"€"#,##0';
-        }
-
-        const wsAltro = addToplineSheet('Topline Altro', 'Altro – Revenue (€)');
-        wsAltro.getCell(3, 1).value = 'Revenue (€)';
-        wsAltro.getCell(3, 1).font = { bold: true };
-        for (let c = 2; c <= yearCols.length + 1; c++) {
-            wsAltro.getCell(3, c).value = { formula: `=Assumptions!$B$${R.altro}` };
-            wsAltro.getCell(3, c).numFmt = '"€"#,##0';
-        }
-
-        const wsFash = addToplineSheet('Topline Fashion', 'Fashion – Revenue (€)');
-        wsFash.getCell(3, 1).value = 'Revenue (€)';
-        wsFash.getCell(3, 1).font = { bold: true };
-        const fashVals = { combo: [42000,14000,6000,3000], piva: [25000,18000,10000,5000], stocchista: [30000,0,0,0], nulla: [Math.round(BASE.ricavi_fashion*0.8),0,0,0] };
-        for (let c = 2; c <= yearCols.length + 1; c++) {
-            const idx = Math.min(c - 2, 9);
-            const vCombo = [42000,14000,6000,3000,3000,3000,3000,3000,3000,3000][idx];
-            const vPiva = [25000,18000,10000,5000,5000,5000,5000,5000,5000,5000][idx];
-            const vStoc = idx === 0 ? 30000 : 0;
-            const vNulla = idx === 0 ? Math.round(BASE.ricavi_fashion*0.8) : 0;
-            wsFash.getCell(3, c).value = { formula: `=IF(Assumptions!$B$${R.fashion}="combo",${vCombo},IF(Assumptions!$B$${R.fashion}="piva",${vPiva},IF(Assumptions!$B$${R.fashion}="stocchista",${vStoc},${vNulla})))` };
-            wsFash.getCell(3, c).numFmt = '"€"#,##0';
-        }
-
-        const wsComp = addToplineSheet('Topline Componenti', 'Componenti (Az.5) – Revenue (€)');
-        wsComp.getCell(3, 1).value = 'Revenue (€)';
-        wsComp.getCell(3, 1).font = { bold: true };
-        wsComp.getCell(3, 2).value = { formula: '=0' };
-        wsComp.getCell(3, 2).numFmt = '"€"#,##0';
-        for (let c = 3; c <= yearCols.length + 1; c++) {
-            const yr = yearForCol(c);
-            const idx = Math.min(c - 1, 10);
-            if (idx <= 0) continue;
-            const compRow = [0, R.compY1, R.compY2, R.compY3, R.compY4, R.compY5, R.compY6, R.compY7, R.compY8, R.compY9, R.compY10][idx];
-            const growth = yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
-            const formula = growth === 1 ? `=Assumptions!$B$${compRow}` : `=Assumptions!$B$${compRow}*${growth.toFixed(4)}`;
-            wsComp.getCell(3, c).value = { formula };
-            wsComp.getCell(3, c).numFmt = '"€"#,##0';
-        }
+        const toplineCore = { Fashion: actionCoreExcel[1], Componenti: actionCoreExcel[5], Sharing: actionCoreExcel[3], Care: actionCoreExcel[6] };
+        const toplineCoreFirst = ['Officina', 'Altro'].concat(
+            ['Fashion', 'Componenti', 'Sharing', 'Care'].filter(k => toplineCore[k]),
+            ['Fashion', 'Componenti', 'Sharing', 'Care'].filter(k => !toplineCore[k])
+        );
+        toplineCoreFirst.forEach((key) => {
+            if (key === 'Officina') {
+                const ws = addToplineSheet('Topline Officina', 'Officina & Service – Revenue (€)');
+                ws.getCell(3, 1).value = 'Revenue (€)';
+                ws.getCell(3, 1).font = { bold: true };
+                ws.getCell(3, 2).value = { formula: `=Assumptions!$B$${R.offBase}` };
+                for (let c = 3; c <= yearCols.length + 1; c++) {
+                    ws.getCell(3, c).value = { formula: `=Assumptions!$B$${R.offBase}*(1+0.03*MIN(COLUMN()-2,5))` };
+                    ws.getCell(3, c).numFmt = '"€"#,##0';
+                }
+            } else if (key === 'Altro') {
+                const ws = addToplineSheet('Topline Altro', 'Altro – Revenue (€)');
+                ws.getCell(3, 1).value = 'Revenue (€)';
+                ws.getCell(3, 1).font = { bold: true };
+                for (let c = 2; c <= yearCols.length + 1; c++) {
+                    ws.getCell(3, c).value = { formula: `=Assumptions!$B$${R.altro}` };
+                    ws.getCell(3, c).numFmt = '"€"#,##0';
+                }
+            } else if (key === 'Fashion') {
+                const ws = addToplineSheet('Topline Fashion', 'Fashion – Revenue (€)');
+                ws.getCell(3, 1).value = 'Revenue (€)';
+                ws.getCell(3, 1).font = { bold: true };
+                for (let c = 2; c <= yearCols.length + 1; c++) {
+                    const idx = Math.min(c - 2, 9);
+                    const vCombo = [42000,14000,6000,3000,3000,3000,3000,3000,3000,3000][idx];
+                    const vPiva = [25000,18000,10000,5000,5000,5000,5000,5000,5000,5000][idx];
+                    const vStoc = idx === 0 ? 30000 : 0;
+                    const vNulla = idx === 0 ? Math.round(BASE.ricavi_fashion*0.8) : 0;
+                    ws.getCell(3, c).value = { formula: `=IF(Assumptions!$B$${R.fashion}="combo",${vCombo},IF(Assumptions!$B$${R.fashion}="piva",${vPiva},IF(Assumptions!$B$${R.fashion}="stocchista",${vStoc},${vNulla})))` };
+                    ws.getCell(3, c).numFmt = '"€"#,##0';
+                }
+            } else if (key === 'Componenti') {
+                const ws = addToplineSheet('Topline Componenti', 'Componenti (Az.5) – Revenue (€)');
+                ws.getCell(3, 1).value = 'Revenue (€)';
+                ws.getCell(3, 1).font = { bold: true };
+                ws.getCell(3, 2).value = { formula: '=0' };
+                ws.getCell(3, 2).numFmt = '"€"#,##0';
+                for (let c = 3; c <= yearCols.length + 1; c++) {
+                    const yr = yearForCol(c);
+                    const idx = Math.min(c - 2, 10);
+                    if (idx < 1) continue;
+                    const compRow = [0, R.compY1, R.compY2, R.compY3, R.compY4, R.compY5, R.compY6, R.compY7, R.compY8, R.compY9, R.compY10][idx];
+                    const growth = yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
+                    const formula = growth === 1 ? `=Assumptions!$B$${compRow}` : `=Assumptions!$B$${compRow}*${growth.toFixed(4)}`;
+                    ws.getCell(3, c).value = { formula };
+                    ws.getCell(3, c).numFmt = '"€"#,##0';
+                }
+            } else if (key === 'Sharing') {
+                const ws = addToplineSheet('Topline Sharing', 'Sharing (Az.3) – Revenue (€)');
+                ws.getCell(3, 1).value = 'Revenue (€)';
+                ws.getCell(3, 1).font = { bold: true };
+                for (let c = 2; c <= yearCols.length + 1; c++) {
+                    ws.getCell(3, c).value = c === 2 ? { formula: '=0' } : { formula: `=Assumptions!$B$${R.shareBase}*(1+Assumptions!$B$${R.shareMark}/100)` };
+                    ws.getCell(3, c).numFmt = '"€"#,##0';
+                }
+            } else if (key === 'Care') {
+                const ws = addToplineSheet('Topline Ottodrom Care', 'Ottodrom Care – Revenue (€)');
+                ws.getCell(3, 1).value = 'Revenue (€)';
+                ws.getCell(3, 1).font = { bold: true };
+                ws.getCell(3, 2).value = { formula: '=0' };
+                for (let c = 3; c <= yearCols.length + 1; c++) {
+                    const yr = yearForCol(c);
+                    const ramp = yr === 2026 ? 0.5 : yr === 2027 ? 0.85 : 1;
+                    const growth = yr >= 2028 ? Math.pow(1.05, yr - 2028) : 1;
+                    ws.getCell(3, c).value = { formula: `=Assumptions!$B$${R.careMoto}*Assumptions!$B$${R.carePrezzo}*12*${ramp}*${growth}` };
+                    ws.getCell(3, c).numFmt = '"€"#,##0';
+                }
+            }
+        });
 
         const greenYears = years.map(y => calcGreenPL(parseInt(y.label), greenParams));
         const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 6 }] });
@@ -3211,10 +3441,10 @@
             for (let col = 2; col <= upsideNumYears + 1; col++) {
                 const colLetter = excelColLetter(col - 1);
                 const ref = col === 2 ? `'${sr.sheet}'!$B$${sr.row}` : `'${sr.sheet}'!${colLetter}${sr.row}`;
-                r.getCell(col).value = { formula: `IF(${B}${sr.azione}="Upside",${ref},0)` };
+                r.getCell(col).value = { formula: `=IF(${B}${sr.azione}="Upside",${ref},0)` };
                 r.getCell(col).numFmt = '"€"#,##0';
             }
-            r.getCell(upsideNumYears + 2).value = { formula: `SUM(${excelColLetter(1)}${i + 4}:${excelColLetter(upsideNumYears)}${i + 4})` };
+            r.getCell(upsideNumYears + 2).value = { formula: `=SUM(${excelColLetter(1)}${i + 4}:${excelColLetter(upsideNumYears)}${i + 4})` };
             r.getCell(upsideNumYears + 2).numFmt = '"€"#,##0';
             r.getCell(upsideNumYears + 2).font = { bold: true };
         });
@@ -3223,11 +3453,11 @@
         totRow.getCell(1).font = { bold: true };
         for (let col = 2; col <= upsideNumYears + 1; col++) {
             const colLetter = excelColLetter(col - 1);
-            totRow.getCell(col).value = { formula: `SUM(${colLetter}4:${colLetter}${lastDataRow})` };
+            totRow.getCell(col).value = { formula: `=SUM(${colLetter}4:${colLetter}${lastDataRow})` };
             totRow.getCell(col).numFmt = '"€"#,##0';
             totRow.getCell(col).font = { bold: true };
         }
-        totRow.getCell(upsideNumYears + 2).value = { formula: `SUM(${excelColLetter(1)}${lastDataRow + 1}:${excelColLetter(upsideNumYears)}${lastDataRow + 1})` };
+        totRow.getCell(upsideNumYears + 2).value = { formula: `=SUM(${excelColLetter(1)}${lastDataRow + 1}:${excelColLetter(upsideNumYears)}${lastDataRow + 1})` };
         totRow.getCell(upsideNumYears + 2).numFmt = '"€"#,##0';
         totRow.getCell(upsideNumYears + 2).font = { bold: true };
         wsUpside.getColumn(1).width = 26;
