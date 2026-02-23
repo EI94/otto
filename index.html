@@ -2750,7 +2750,8 @@
             else if (row[0] && row[0].indexOf('•') === 0) r.getCell(1).font = { color: { argb: 'FF475569' } };
         });
 
-        const safeNum = (v) => (typeof v === 'number' && !isNaN(v)) ? v : 0;
+        const safeNum = (v) => (typeof v === 'number' && !isNaN(v) && isFinite(v)) ? v : 0;
+        const safeVal = (v) => (v != null && v !== '' && (typeof v !== 'number' || (!isNaN(v) && isFinite(v)))) ? v : '';
         const regimeIdx = Math.min(years.length - 1, 4);
         const yrTarget = years[regimeIdx] || {};
         const totTarget = safeNum(yrTarget.totale_ricavi) || 1;
@@ -3068,19 +3069,19 @@
             const colLetter = excelColLetter(col - 1);
             ws1.getCell(5, col).value = { formula: `=SUM(${colLetter}6:${colLetter}12)` };
             ws1.getCell(5, col).numFmt = '"€"#,##0';
-            ws1.getCell(6, col).value = { formula: `'Topline Officina'!${colLetter}3` };
+            ws1.getCell(6, col).value = { formula: `='Topline Officina'!${colLetter}3` };
             ws1.getCell(6, col).numFmt = '"€"#,##0';
             ws1.getCell(7, col).value = { formula: `=IF(${B}${R.azione1}="Core",'Topline Fashion'!${colLetter}3,0)` };
             ws1.getCell(7, col).numFmt = '"€"#,##0';
             ws1.getCell(8, col).value = { formula: `=IF(${B}${R.azione5}="Core",'Topline Componenti'!${colLetter}3,0)` };
             ws1.getCell(8, col).numFmt = '"€"#,##0';
-            ws1.getCell(9, col).value = { formula: `=IF(${B}${R.azione4}="Core",'Project Green P&L'!${colLetter}${rowRevTotalGreen},0)` };
+            ws1.getCell(9, col).value = { formula: `=IF(${B}${R.azione4}="Core",'Project Green PL'!${colLetter}${rowRevTotalGreen},0)` };
             ws1.getCell(9, col).numFmt = '"€"#,##0';
             ws1.getCell(10, col).value = { formula: `=IF(${B}${R.azione3}="Core",'Topline Sharing'!${colLetter}3,0)` };
             ws1.getCell(10, col).numFmt = '"€"#,##0';
             ws1.getCell(11, col).value = { formula: `=IF(${B}${R.azione6}="Core",'Topline Ottodrom Care'!${colLetter}3,0)` };
             ws1.getCell(11, col).numFmt = '"€"#,##0';
-            ws1.getCell(12, col).value = { formula: `'Topline Altro'!${colLetter}3` };
+            ws1.getCell(12, col).value = { formula: `='Topline Altro'!${colLetter}3` };
             ws1.getCell(12, col).numFmt = '"€"#,##0';
         }
         ws1.getCell(5, 1).value = 'RICAVI';
@@ -3155,8 +3156,8 @@
         wsAss.getRow(3).font = { bold: true };
         wsAss.getRow(3).eachCell(c => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF64748B' } }; c.font = { bold: true, color: { argb: 'FFFFFFFF' } }; });
         assumpRows.forEach((row, i) => {
-            const val = (typeof row[1] === 'number' && !isNaN(row[1])) ? row[1] : (row[1] != null && row[1] !== '' ? row[1] : '');
-            const r = wsAss.addRow([row[0], val]);
+            const val = (typeof row[1] === 'number' && !isNaN(row[1]) && isFinite(row[1])) ? row[1] : (row[1] != null && row[1] !== '' && (typeof row[1] !== 'number' || (!isNaN(row[1]) && isFinite(row[1]))) ? row[1] : '');
+            const r = wsAss.addRow([String(row[0] != null ? row[0] : ''), val]);
             r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
             applyAssumptionParamStyle(r.getCell(1));
             const isPct = String(row[0]).indexOf('%') >= 0;
@@ -3276,7 +3277,7 @@
         });
 
         const greenYears = years.map(y => calcGreenPL(parseInt(y.label), greenParams));
-        const ws2 = wb.addWorksheet('Project Green P&L', { views: [{ state: 'frozen', ySplit: 6 }] });
+        const ws2 = wb.addWorksheet('Project Green PL', { views: [{ state: 'frozen', ySplit: 6 }] });
         ws2.addRow(['Iconic Mobility Lab – Project Green']);
         ws2.mergeCells(1, 1, 1, years.length + 2);
         ws2.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
@@ -3489,7 +3490,7 @@
             r.getCell(1).font = { bold: true };
             for (let col = 2; col <= greenNumCols; col++) {
                 const colLetter = excelColLetter(col - 1);
-                r.getCell(col).value = { formula: `='Project Green P&L'!${colLetter}${rowRevPlat0 + i}` };
+                r.getCell(col).value = { formula: `='Project Green PL'!${colLetter}${rowRevPlat0 + i}` };
                 r.getCell(col).numFmt = '"€"#,##0';
                 r.getCell(col).alignment = { horizontal: 'right' };
             }
@@ -3503,7 +3504,7 @@
             r.getCell(1).font = { bold: true };
             for (let col = 2; col <= greenNumCols; col++) {
                 const colLetter = excelColLetter(col - 1);
-                r.getCell(col).value = { formula: `='Project Green P&L'!${colLetter}${rowUPlat0 + i}` };
+                r.getCell(col).value = { formula: `='Project Green PL'!${colLetter}${rowUPlat0 + i}` };
                 r.getCell(col).numFmt = '#,##0';
                 r.getCell(col).alignment = { horizontal: 'right' };
             }
@@ -3524,7 +3525,7 @@
         const upsideSheetRows = [
             { label: 'Fashion (Az.1)', sheet: 'Topline Fashion', row: 3, azione: R.azione1 },
             { label: 'Sharing (Az.3)', sheet: 'Topline Sharing', row: 3, azione: R.azione3 },
-            { label: 'Kit & Moto Green (Az.4)', sheet: 'Project Green P&L', row: rowRevTotalGreen, azione: R.azione4 },
+            { label: 'Kit & Moto Green (Az.4)', sheet: 'Project Green PL', row: rowRevTotalGreen, azione: R.azione4 },
             { label: 'Componenti (Az.5)', sheet: 'Topline Componenti', row: 3, azione: R.azione5 },
             { label: 'Ottodrom Care (Az.6)', sheet: 'Topline Ottodrom Care', row: 3, azione: R.azione6 }
         ];
