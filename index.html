@@ -2603,13 +2603,13 @@
     let mixCurrentChart, mixTargetChart;
 
     function renderMixCharts(years) {
-        const tot = BASE.totale_ricavi || 0;
+        const totBase = BASE.totale_ricavi || 0;
         let customPct, manutPct, fashionPct, altroPct;
-        if (tot > 0) {
+        if (totBase > 0) {
             const officina = BASE.ricavi_officina || 0;
-            customPct = Math.round((officina * 0.70) / tot * 100);
-            manutPct = Math.round((officina * 0.30) / tot * 100);
-            fashionPct = Math.round(((BASE.ricavi_fashion || 0) / tot) * 100);
+            customPct = Math.round((officina * 0.70) / totBase * 100);
+            manutPct = Math.round((officina * 0.30) / totBase * 100);
+            fashionPct = Math.round(((BASE.ricavi_fashion || 0) / totBase) * 100);
             altroPct = Math.max(0, 100 - customPct - manutPct - fashionPct);
         } else {
             customPct = 42; manutPct = 18; fashionPct = 30; altroPct = 10;
@@ -2639,15 +2639,15 @@
         const mixTargetYearEl = document.getElementById('mixTargetYear');
         if (mixTargetYearEl) mixTargetYearEl.innerText = yr ? '(' + yr.label + ')' : '(–)';
         if (!yr) return;
-        const tot = yr.totale_ricavi;
-        if (tot <= 0) return;
+        const totTarget = yr.totale_ricavi;
+        if (totTarget <= 0) return;
 
         const scalabili = yr.ricavi_kit + yr.ricavi_componenti;
         const ricorrenti = yr.ricavi_concierge + yr.ricavi_sharing + yr.ricavi_officina * 0.5;
-        const hero = tot - scalabili - ricorrenti;
+        const hero = totTarget - scalabili - ricorrenti;
 
-        const pScal = Math.round(scalabili / tot * 100);
-        const pRic = Math.round(ricorrenti / tot * 100);
+        const pScal = Math.round(scalabili / totTarget * 100);
+        const pRic = Math.round(ricorrenti / totTarget * 100);
         const pHero = 100 - pScal - pRic;
 
         const targetData = [
