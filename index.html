@@ -196,23 +196,48 @@
                 <canvas id="scenarioChart"></canvas>
             </div>
             <div class="space-y-3">
+                <div class="mb-2">
+                    <label for="mesePartenzaTagli" class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Mese partenza tagli 2026</label>
+                    <select id="mesePartenzaTagli" class="text-xs rounded border border-slate-200 px-2 py-1 bg-white w-full">
+                        <option value="1">Gennaio</option>
+                        <option value="2">Febbraio</option>
+                        <option value="3" selected>Marzo</option>
+                        <option value="4">Aprile</option>
+                        <option value="5">Maggio</option>
+                        <option value="6">Giugno</option>
+                        <option value="7">Luglio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Settembre</option>
+                        <option value="10">Ottobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Dicembre</option>
+                    </select>
+                </div>
                 <div class="bg-rose-50 p-3 rounded border border-rose-200">
                     <span class="text-[10px] uppercase font-bold text-rose-500">Scenario Hard</span>
-                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;302.7k</p>
-                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;106.9k</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli (anno pieno) <span id="scenarioHardTagli">&euro;302.7k</span></p>
+                    <span class="text-sm font-bold text-rose-700" id="scenarioHardEbitda">EBITDA -&euro;106.9k</span>
+                    <p class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-rose-200">Battente 2026: Tagli <span id="scenarioHardBattenteTagli">–</span> EBITDA <span id="scenarioHardBattenteEbitda">–</span></p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">FY 2027 (pieno): Tagli <span id="scenarioHardFy27Tagli">–</span> EBITDA <span id="scenarioHardFy27Ebitda">–</span></p>
                 </div>
                 <div class="bg-rose-50 p-3 rounded border border-rose-200">
                     <span class="text-[10px] uppercase font-bold text-rose-400">Scenario Medio</span>
-                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;190.4k</p>
-                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;219.3k</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli (anno pieno) <span id="scenarioMedioTagli">&euro;190.4k</span></p>
+                    <span class="text-sm font-bold text-rose-700" id="scenarioMedioEbitda">EBITDA -&euro;219.3k</span>
+                    <p class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-rose-200">Battente 2026: Tagli <span id="scenarioMedioBattenteTagli">–</span> EBITDA <span id="scenarioMedioBattenteEbitda">–</span></p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">FY 2027 (pieno): Tagli <span id="scenarioMedioFy27Tagli">–</span> EBITDA <span id="scenarioMedioFy27Ebitda">–</span></p>
                 </div>
                 <div class="bg-rose-50 p-3 rounded border border-rose-200">
                     <span class="text-[10px] uppercase font-bold text-rose-300">Scenario Soft</span>
-                    <p class="text-xs text-slate-600 mt-1">Tagli &euro;170.0k</p>
-                    <span class="text-lg font-bold text-rose-700">EBITDA -&euro;239.6k</span>
+                    <p class="text-xs text-slate-600 mt-1">Tagli (anno pieno) <span id="scenarioSoftTagli">&euro;170.0k</span></p>
+                    <span class="text-sm font-bold text-rose-700" id="scenarioSoftEbitda">EBITDA -&euro;239.6k</span>
+                    <p class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-rose-200">Battente 2026: Tagli <span id="scenarioSoftBattenteTagli">–</span> EBITDA <span id="scenarioSoftBattenteEbitda">–</span></p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">FY 2027 (pieno): Tagli <span id="scenarioSoftFy27Tagli">–</span> EBITDA <span id="scenarioSoftFy27Ebitda">–</span></p>
                 </div>
             </div>
         </div>
+        <p class="text-xs text-slate-500 mt-3 mb-2">Seleziona il mese da cui partono i tagli; per ogni voce indica i &quot;mesi per conseguire&quot; il taglio (es. 6 per preavviso affitto). Battente 2026 = effetto nel FY 2026; FY 2027 = tagli tutti operativi.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2" id="scenari2026VociContainer"></div>
     </div>
 </section>
 
@@ -1259,6 +1284,47 @@
           impact: "MRR", subImpact: "Flusso Cassa Fisso Mensile" }
     ];
 
+    // --- Scenari 2026: voci di taglio (default da piano 2026) ---
+    // Verifica matematica: Hard 120+90+48+28+16.7=302.7 | Medio 75+58+32+18+7.4=190.4 | Soft 65+50+28+15+12=170
+    // EBITDA = BASE_EBITDA_2026 + tagli → -409.6+302.7=-106.9, -409.6+190.4=-219.2, -409.6+170=-239.6
+    const BASE_EBITDA_2026 = -409.6;
+    const SCENARI_2026_TAGLI_DEFAULT = [302.7, 190.4, 170.0];
+    const SCENARI_2026_EBITDA_DEFAULT = [-106.9, -219.3, -239.6];
+    const MESI_NOMI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+    const roundScenari10 = (x) => Math.round((Number(x) || 0) * 10) / 10;
+
+    function getScenari2026Defaults() {
+        return {
+            hard: [
+                { id: 'personale', label: 'Personale', amount: 120, mesiPerConseguire: 0 },
+                { id: 'sedi', label: 'Sedi', amount: 90, mesiPerConseguire: 6 },
+                { id: 'ga_it', label: 'G&A e IT', amount: 48, mesiPerConseguire: 0 },
+                { id: 'marketing', label: 'Marketing', amount: 28, mesiPerConseguire: 0 },
+                { id: 'altro', label: 'Altro', amount: 16.7, mesiPerConseguire: 0 }
+            ],
+            medio: [
+                { id: 'personale', label: 'Personale', amount: 75, mesiPerConseguire: 0 },
+                { id: 'sedi', label: 'Sedi', amount: 58, mesiPerConseguire: 6 },
+                { id: 'ga_it', label: 'G&A e IT', amount: 32, mesiPerConseguire: 0 },
+                { id: 'marketing', label: 'Marketing', amount: 18, mesiPerConseguire: 0 },
+                { id: 'altro', label: 'Altro', amount: 7.4, mesiPerConseguire: 0 }
+            ],
+            soft: [
+                { id: 'personale', label: 'Personale', amount: 65, mesiPerConseguire: 0 },
+                { id: 'sedi', label: 'Sedi', amount: 50, mesiPerConseguire: 6 },
+                { id: 'ga_it', label: 'G&A e IT', amount: 28, mesiPerConseguire: 0 },
+                { id: 'marketing', label: 'Marketing', amount: 15, mesiPerConseguire: 0 },
+                { id: 'altro', label: 'Altro', amount: 12, mesiPerConseguire: 0 }
+            ]
+        };
+    }
+    const SCENARI_2026_KEYS = ['hard', 'medio', 'soft'];
+    let scenari2026Voci = SCENARI_2026_KEYS.reduce((acc, k) => {
+        acc[k] = getScenari2026Defaults()[k].map(v => ({ ...v, selected: true, mesiPerConseguire: v.mesiPerConseguire ?? 0 }));
+        return acc;
+    }, {});
+    let mesePartenzaTagli2026 = 3;
+
     // --- STATIC CHARTS (Sections 1-3) ---
 
     new Chart(document.getElementById('macroChart').getContext('2d'), {
@@ -1268,12 +1334,7 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw+'%' } } }, scales: { y: { max: 0, min: -25, grid: { color: '#e2e8f0' } } } }
     });
 
-    let finChart = new Chart(document.getElementById('financialChart').getContext('2d'), {
-        type: 'bar',
-        data: { labels: ['Officina','Fashion','Altro','C.Variabili','Personale','Sedi','IT/Servizi'],
-            datasets: [{ label: 'P&L 2025 (\u20ack)', data: [116.2,57.4,17.0,-205.7,-218.4,-87.7,-27.4], backgroundColor: ctx => ctx.raw >= 0 ? '#94a3b8':'#be123c', borderRadius: 4 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Ricavi vs Costi Dettagliati (\u20ack)', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => '\u20ac '+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
-    });
+    let finChart;
 
     function toggleFinancialView() {
         const lbl = finChart.data.datasets[0].label;
@@ -1284,9 +1345,10 @@
             finChart.data.datasets[0].label = 'Sintesi (\u20ack)';
             finChart.options.plugins.title.text = 'Il "Buco" Operativo: EBITDA -\u20ac350.9k';
         } else {
-            finChart.data.labels = ['Officina','Fashion','Altro','C.Variabili','Personale','Sedi','IT/Servizi'];
-            finChart.data.datasets[0].data = [116.2,57.4,17.0,-205.7,-218.4,-87.7,-27.4];
-            finChart.data.datasets[0].backgroundColor = finChart.data.datasets[0].data.map(v => v >= 0 ? '#94a3b8':'#be123c');
+            const pnl = getPnl2025ChartData();
+            finChart.data.labels = pnl.labels;
+            finChart.data.datasets[0].data = pnl.data;
+            finChart.data.datasets[0].backgroundColor = pnl.data.map(v => v >= 0 ? '#94a3b8' : '#be123c');
             finChart.data.datasets[0].label = 'P&L 2025 (\u20ack)';
             finChart.options.plugins.title.text = 'Ricavi vs Costi Dettagliati (\u20ack)';
         }
@@ -1317,7 +1379,7 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
     });
 
-    new Chart(document.getElementById('scenarioChart').getContext('2d'), {
+    let scenarioChart = new Chart(document.getElementById('scenarioChart').getContext('2d'), {
         type: 'bar',
         data: { labels: ['Scenario Hard','Scenario Medio','Scenario Soft'],
             datasets: [
@@ -1326,6 +1388,121 @@
             ] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Anche i tagli massimi non bastano: servono nuovi ricavi', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
     });
+
+    function getScenari2026TagliEbitda() {
+        const tagli = SCENARI_2026_KEYS.map(k =>
+            scenari2026Voci[k].filter(v => v.selected).reduce((s, v) => s + (Number(v.amount) || 0), 0)
+        );
+        const ebitda = tagli.map(t => roundScenari10(BASE_EBITDA_2026 + t));
+        return { tagli, ebitda };
+    }
+
+    function tagliBattente2026PerScenario(mesePartenza, vociByScenario) {
+        return SCENARI_2026_KEYS.map(k => {
+            const voci = (vociByScenario || scenari2026Voci)[k].filter(v => v.selected);
+            let battente = 0;
+            voci.forEach(v => {
+                const amt = Number(v.amount) || 0;
+                const mesi = Math.max(0, parseInt(v.mesiPerConseguire, 10) || 0);
+                const effectiveStartMonth = mesePartenza + mesi;
+                const mesiEffettivi2026 = effectiveStartMonth <= 12 ? Math.max(0, 13 - effectiveStartMonth) : 0;
+                battente += (mesiEffettivi2026 / 12) * amt;
+            });
+            return roundScenari10(battente);
+        });
+    }
+
+    function getScenari2026BattenteEFy2027() {
+        const mese = Math.min(12, Math.max(1, mesePartenzaTagli2026 || 3));
+        const battente2026 = tagliBattente2026PerScenario(mese, scenari2026Voci);
+        const { tagli } = getScenari2026TagliEbitda();
+        const ebitdaBattente2026 = battente2026.map(t => roundScenari10(BASE_EBITDA_2026 + t));
+        const ebitdaFy2027 = tagli.map(t => roundScenari10(BASE_EBITDA_2026 + t));
+        return { battente2026, tagliFy2027: tagli, ebitdaBattente2026, ebitdaFy2027 };
+    }
+
+    function updateScenari2026() {
+        const { tagli, ebitda } = getScenari2026TagliEbitda();
+        const { battente2026, tagliFy2027, ebitdaBattente2026, ebitdaFy2027 } = getScenari2026BattenteEFy2027();
+        scenarioChart.data.datasets[0].data = tagli;
+        scenarioChart.data.datasets[1].data = ebitda;
+        scenarioChart.update();
+        const fmt = (v) => v.toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        const boxIds = { hard: 'scenarioHard', medio: 'scenarioMedio', soft: 'scenarioSoft' };
+        SCENARI_2026_KEYS.forEach((k, i) => {
+            const tagliEl = document.getElementById(boxIds[k] + 'Tagli');
+            const ebitdaEl = document.getElementById(boxIds[k] + 'Ebitda');
+            if (tagliEl) tagliEl.textContent = '\u20ac' + fmt(tagli[i]) + 'k';
+            if (ebitdaEl) ebitdaEl.textContent = 'EBITDA -\u20ac' + fmt(Math.abs(ebitda[i])) + 'k';
+            const battTagliEl = document.getElementById(boxIds[k] + 'BattenteTagli');
+            const battEbitdaEl = document.getElementById(boxIds[k] + 'BattenteEbitda');
+            const fy27TagliEl = document.getElementById(boxIds[k] + 'Fy27Tagli');
+            const fy27EbitdaEl = document.getElementById(boxIds[k] + 'Fy27Ebitda');
+            if (battTagliEl) battTagliEl.textContent = '\u20ac' + fmt(battente2026[i]) + 'k';
+            if (battEbitdaEl) battEbitdaEl.textContent = '-\u20ac' + fmt(Math.abs(ebitdaBattente2026[i])) + 'k';
+            if (fy27TagliEl) fy27TagliEl.textContent = '\u20ac' + fmt(tagliFy2027[i]) + 'k';
+            if (fy27EbitdaEl) fy27EbitdaEl.textContent = '-\u20ac' + fmt(Math.abs(ebitdaFy2027[i])) + 'k';
+        });
+    }
+
+    function renderScenari2026Voci() {
+        const titles = { hard: 'Scenario Hard', medio: 'Scenario Medio', soft: 'Scenario Soft' };
+        const container = document.getElementById('scenari2026VociContainer');
+        if (!container) return;
+        container.innerHTML = SCENARI_2026_KEYS.map(k => {
+            const voci = scenari2026Voci[k];
+            const rows = voci.map((v, i) => {
+                const cbId = 'sc2026_' + k + '_' + i;
+                const inpId = 'sc2026_inp_' + k + '_' + i;
+                const mesiId = 'sc2026_mesi_' + k + '_' + i;
+                const mesiVal = Math.max(0, parseInt(v.mesiPerConseguire, 10) || 0);
+                return `
+                <div class="flex items-center gap-1 py-1 border-b border-slate-100 text-xs flex-wrap">
+                    <input type="checkbox" id="${cbId}" data-scenario="${k}" data-index="${i}" ${v.selected ? 'checked' : ''} class="accent-rose-500 rounded">
+                    <label for="${cbId}" class="flex-1 min-w-[4rem] text-slate-600">${v.label}</label>
+                    <input type="number" id="${inpId}" data-scenario="${k}" data-index="${i}" value="${v.amount}" step="0.1" min="0" class="w-12 text-right rounded border border-slate-200 px-1 py-0.5 text-[11px]" title="Importo €k">
+                    <span class="text-slate-400 w-5">€k</span>
+                    <input type="number" id="${mesiId}" data-scenario="${k}" data-index="${i}" value="${mesiVal}" min="0" max="24" class="w-10 text-right rounded border border-slate-200 px-1 py-0.5 text-[11px]" title="Mesi per conseguire">
+                    <span class="text-slate-400 text-[10px]">mesi</span>
+                </div>`;
+            }).join('');
+            return `<div class="bg-slate-50 rounded p-3 border border-slate-200">
+                <p class="text-[10px] uppercase font-bold text-slate-500 mb-2">${titles[k]}</p>
+                ${rows}
+            </div>`;
+        }).join('');
+        const meseSel = document.getElementById('mesePartenzaTagli');
+        if (meseSel) {
+            meseSel.value = String(mesePartenzaTagli2026);
+            meseSel.addEventListener('change', function() {
+                mesePartenzaTagli2026 = Math.min(12, Math.max(1, parseInt(this.value, 10) || 3));
+                updateScenari2026();
+            });
+        }
+        SCENARI_2026_KEYS.forEach(k => {
+            scenari2026Voci[k].forEach((v, i) => {
+                const cb = document.getElementById('sc2026_' + k + '_' + i);
+                const inp = document.getElementById('sc2026_inp_' + k + '_' + i);
+                const mesiInp = document.getElementById('sc2026_mesi_' + k + '_' + i);
+                if (cb) cb.addEventListener('change', function() {
+                    scenari2026Voci[k][i].selected = this.checked;
+                    updateScenari2026();
+                });
+                if (inp) inp.addEventListener('input', function() {
+                    const n = parseFloat(this.value);
+                    scenari2026Voci[k][i].amount = isNaN(n) || n < 0 ? 0 : n;
+                    updateScenari2026();
+                });
+                if (mesiInp) mesiInp.addEventListener('input', function() {
+                    const n = parseInt(this.value, 10);
+                    scenari2026Voci[k][i].mesiPerConseguire = isNaN(n) || n < 0 ? 0 : Math.min(24, n);
+                    updateScenari2026();
+                });
+            });
+        });
+        updateScenari2026();
+    }
+    renderScenari2026Voci();
 
     new Chart(document.getElementById('aftermarketChart').getContext('2d'), {
         type: 'bar',
@@ -2212,6 +2389,73 @@
     BASE.totale_cf = BASE.cf_locali + BASE.cf_personale + BASE.cf_ga_altro;
     BASE.ebitda = BASE.totale_ricavi - BASE.totale_cv - BASE.totale_cf;
 
+    function getPnl2025Breakdown(dataIndex) {
+        const k = v => (v / 1000).toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        const fmt = (label, val) => '  ' + label + ': € ' + k(val) + 'k';
+        switch (dataIndex) {
+            case 3:
+                return [fmt('Operativi', BASE.cv_operativi), fmt('Commerciali', BASE.cv_commerciali), '  Totale: € ' + k(BASE.totale_cv) + 'k'];
+            case 4:
+                return [fmt('Personale e oneri', BASE.cf_personale), '  Totale: € ' + k(BASE.cf_personale) + 'k'];
+            case 5: {
+                const p41 = BASE.cf_locali_pinciana41_aff + BASE.cf_locali_pinciana41_ut;
+                const p44 = BASE.cf_locali_pinciana44_aff + BASE.cf_locali_pinciana44_ut;
+                const adige = BASE.cf_locali_adige_aff + BASE.cf_locali_adige_ut;
+                return [fmt('Pinciana 41 (affitto + utenze)', p41), fmt('Pinciana 44 (affitto + utenze)', p44), fmt('Via Adige (affitto + utenze)', adige), fmt('Overhead sedi', BASE.cf_locali_overhead), '  Totale: € ' + k(BASE.cf_locali) + 'k'];
+            }
+            case 6:
+                return [fmt('G&A e Altro', BASE.cf_ga_altro), '  Totale: € ' + k(BASE.cf_ga_altro) + 'k'];
+            default:
+                return null;
+        }
+    }
+
+    function getPnl2025ChartData() {
+        const k = v => Math.round(v / 1000 * 10) / 10;
+        return {
+            labels: ['Officina', 'Fashion', 'Altro', 'C.Variabili', 'Personale', 'Sedi', 'IT/Servizi'],
+            data: [k(BASE.ricavi_officina), k(BASE.ricavi_fashion), k(BASE.ricavi_altro), -k(BASE.totale_cv), -k(BASE.cf_personale), -k(BASE.cf_locali), -k(BASE.cf_ga_altro)]
+        };
+    }
+
+    function initFinancialChart() {
+        const pnl = getPnl2025ChartData();
+        finChart = new Chart(document.getElementById('financialChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: pnl.labels,
+                datasets: [{
+                    label: 'P&L 2025 (\u20ack)',
+                    data: pnl.data,
+                    backgroundColor: pnl.data.map(v => v >= 0 ? '#94a3b8' : '#be123c'),
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Ricavi vs Costi Dettagliati (\u20ack)', font: { size: 11 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const idx = ctx.dataIndex;
+                                const val = ctx.raw;
+                                const absVal = (v => (Math.abs(v)).toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 }))(val);
+                                const lines = [ctx.label + '  € ' + absVal + 'k'];
+                                const breakdown = getPnl2025Breakdown(idx);
+                                if (breakdown && breakdown.length) return lines.concat(breakdown);
+                                return lines[0];
+                            }
+                        }
+                    }
+                },
+                scales: { y: { grid: { color: '#e2e8f0' } } }
+            }
+        });
+    }
+    initFinancialChart();
+
     let ebitdaChart;
     let lastYearsData = [];
 
@@ -2721,6 +2965,7 @@
             [],
             ['Struttura del file'],
             ['• Dati Finanziari – Executive summary: KPI (Revenue, EBITDA, EBIT, margini), Revenue Mix attuale e target, confronto scenari Solo Core vs Inclusi Upside. Tab dedicato per presentazioni e report.'],
+            ['• Tagli e Battente 2026 – Situazione 2025, battente FY 2026 (in base al mese di partenza e ai mesi per conseguire per voce) e FY 2027 con tagli tutti operativi. Dettaglio voci per scenario Hard, Medio, Soft.'],
             ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions.'],
             ['• Highlights – Sintesi KPI e Revenue Mix (stessi contenuti del tab Dati Finanziari, formato compatto).'],
             ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
@@ -2931,6 +3176,71 @@
         let rTgt_2 = wsHigh.addRow([(yrTarget.label || 'Target') + ' – EBITDA (€)', ebitdaCoreTgt, ebitdaFullTgt]);
         let rTgt_3 = wsHigh.addRow([(yrTarget.label || 'Target') + ' – EBIT (€)', ebitCoreTgt, ebitFullTgt]);
         [rTgt_1, rTgt_2, rTgt_3].forEach(row => { row.getCell(2).numFmt = '"€"#,##0'; row.getCell(3).numFmt = '"€"#,##0'; });
+
+        const wsTagli = wb.addWorksheet('Tagli e Battente 2026', { views: [{ state: 'frozen', ySplit: 5 }] });
+        wsTagli.getColumn(1).width = 28;
+        for (let c = 2; c <= 7; c++) wsTagli.getColumn(c).width = 12;
+        wsTagli.addRow(['Tagli e Battente 2026 – Dettaglio scenari e fasi']);
+        wsTagli.mergeCells(1, 1, 1, 4);
+        wsTagli.getCell(1, 1).font = { bold: true, size: 14, color: { argb: 'FF0F766E' } };
+        wsTagli.addRow(['Situazione 2025 (baseline), battente FY 2026 in base al mese di partenza e ai mesi per conseguire, FY 2027 con tagli tutti operativi.', '', '', '']);
+        wsTagli.mergeCells(2, 1, 2, 4);
+        wsTagli.getCell(2, 1).font = { italic: true, size: 9, color: { argb: 'FF64748B' } };
+        wsTagli.addRow([]);
+        wsTagli.addRow(['SITUAZIONE 2025 (BASE)', '', '', '']);
+        wsTagli.getRow(4).getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
+        const r2025_ric = wsTagli.addRow(['Ricavi (€)', safeNum(BASE.totale_ricavi), '', '']);
+        const r2025_cv = wsTagli.addRow(['Costi variabili (€)', safeNum(BASE.totale_cv), '', '']);
+        const r2025_cf = wsTagli.addRow(['Costi fissi (€)', safeNum(BASE.totale_cf), '', '']);
+        const r2025_ebitda = wsTagli.addRow(['EBITDA (€)', safeNum(BASE.ebitda), '', '']);
+        [r2025_ric, r2025_cv, r2025_cf, r2025_ebitda].forEach(r => { r.getCell(2).numFmt = '"€"#,##0'; });
+        wsTagli.addRow([]);
+        const mesePartenza = Math.min(12, Math.max(1, mesePartenzaTagli2026 || 3));
+        const meseNome = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'][mesePartenza - 1];
+        wsTagli.addRow(['Parametro', 'Valore', '', '']);
+        wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { bold: true };
+        wsTagli.addRow(['Mese partenza tagli 2026', meseNome + ' (' + mesePartenza + ')', '', '']);
+        wsTagli.addRow([]);
+        const { tagli: tagliPieni, ebitda: ebitdaPieni } = getScenari2026TagliEbitda();
+        const { battente2026, tagliFy2027, ebitdaBattente2026, ebitdaFy2027 } = getScenari2026BattenteEFy2027();
+        wsTagli.addRow(['', 'Scenario Hard', 'Scenario Medio', 'Scenario Soft']);
+        wsTagli.getRow(wsTagli.rowCount).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'center' }; });
+        wsTagli.addRow(['Tagli (anno pieno, €k)', roundScenari10(tagliPieni[0]), roundScenari10(tagliPieni[1]), roundScenari10(tagliPieni[2])]);
+        wsTagli.addRow(['EBITDA (anno pieno, €k)', roundScenari10(ebitdaPieni[0]), roundScenari10(ebitdaPieni[1]), roundScenari10(ebitdaPieni[2])]);
+        wsTagli.addRow(['Tagli battente 2026 (€k)', roundScenari10(battente2026[0]), roundScenari10(battente2026[1]), roundScenari10(battente2026[2])]);
+        wsTagli.addRow(['EBITDA battente 2026 (€k)', roundScenari10(ebitdaBattente2026[0]), roundScenari10(ebitdaBattente2026[1]), roundScenari10(ebitdaBattente2026[2])]);
+        wsTagli.addRow(['Tagli FY 2027 (€k)', roundScenari10(tagliFy2027[0]), roundScenari10(tagliFy2027[1]), roundScenari10(tagliFy2027[2])]);
+        wsTagli.addRow(['EBITDA FY 2027 (€k)', roundScenari10(ebitdaFy2027[0]), roundScenari10(ebitdaFy2027[1]), roundScenari10(ebitdaFy2027[2])]);
+        for (let r = wsTagli.rowCount - 6; r <= wsTagli.rowCount; r++) {
+            for (let c = 2; c <= 4; c++) wsTagli.getCell(r, c).numFmt = '#,##0.0';
+        }
+        wsTagli.addRow([]);
+        wsTagli.addRow(['Dettaglio voci per scenario (importo €k, mesi per conseguire, inclusa)']);
+        wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
+        wsTagli.mergeCells(wsTagli.rowCount, 1, wsTagli.rowCount, 7);
+        wsTagli.addRow(['Voce', 'Hard €k', 'Hard mesi', 'Medio €k', 'Medio mesi', 'Soft €k', 'Soft mesi']);
+        wsTagli.getRow(wsTagli.rowCount).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'center' }; });
+        const labelOrder = scenari2026Voci.hard.map(v => v.label);
+        for (let i = 0; i < labelOrder.length; i++) {
+            const h = scenari2026Voci.hard[i] || {};
+            const m = scenari2026Voci.medio[i] || {};
+            const s = scenari2026Voci.soft[i] || {};
+            wsTagli.addRow([
+                h.label || labelOrder[i],
+                h.selected ? roundScenari10(Number(h.amount) || 0) : '',
+                h.selected ? (parseInt(h.mesiPerConseguire, 10) || 0) : '',
+                m.selected ? roundScenari10(Number(m.amount) || 0) : '',
+                m.selected ? (parseInt(m.mesiPerConseguire, 10) || 0) : '',
+                s.selected ? roundScenari10(Number(s.amount) || 0) : '',
+                s.selected ? (parseInt(s.mesiPerConseguire, 10) || 0) : ''
+            ]);
+            const row = wsTagli.rowCount;
+            for (let c = 2; c <= 7; c++) if (c % 2 === 0) wsTagli.getCell(row, c).numFmt = '#,##0.0';
+        }
+        wsTagli.addRow([]);
+        wsTagli.addRow(['Fonte: Proiezioni 2026 – Tool Ottodrom. Battente 2026 = effetto tagli nel FY 2026 in base al mese di partenza e ai mesi per conseguire per ogni voce.']);
+        wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { italic: true, size: 9, color: { argb: 'FF94A3B8' } };
+        wsTagli.mergeCells(wsTagli.rowCount, 1, wsTagli.rowCount, 7);
 
         syncConciergeFromDOM();
         const greenParams = getGreenParams();
