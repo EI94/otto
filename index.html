@@ -785,6 +785,7 @@
                             <div><label class="text-slate-400 block mb-0.5">2027 (&euro;)</label><input type="number" min="0" max="800000" step="10000" value="500000" id="greenOverheadY2" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                             <div><label class="text-slate-400 block mb-0.5">Dal 2028 (&euro;)</label><input type="number" min="0" max="1000000" step="10000" value="600000" id="greenOverheadFrom2028" class="w-full bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white" onchange="updateGreenSim(); recalcFinancialPlan();"></div>
                         </div>
+                        <p class="text-slate-400 mt-1.5 text-[9px]">Include allocazione personale stimata (Edoardo/Alessio/Carlo) per sviluppo e operativit&agrave; Green: ~10% personale lordo in 2026, ~20% in 2027, ~25% dal 2028. Coerente con struttura 3 persone e tempo dedicato a Green.</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center mt-3">
                         <div class="bg-slate-900 p-2 rounded border border-slate-700">
@@ -2379,6 +2380,8 @@
         cf_locali_adige_aff: 17448, cf_locali_adige_ut: 2876,
         cf_locali_overhead: 12000,
         cf_personale: 218447,
+        cf_personale_dirigenti: 73091,
+        cf_personale_operai: 145356,
         cf_ga_altro: 29637,
         da: 79705, proventi_oneri: 14342,
         costi_fashion_prod: 24537, costi_fashion_emporio: 16792,
@@ -2389,22 +2392,99 @@
     BASE.totale_cf = BASE.cf_locali + BASE.cf_personale + BASE.cf_ga_altro;
     BASE.ebitda = BASE.totale_ricavi - BASE.totale_cv - BASE.totale_cf;
 
+    // Voci CE Analitico (foglio CE ANALITICO, colonna AB YTD dic 2025) – somme = totali barra
+    const CE_ANALITICO_CV_OPERATIVI = [
+        { label: 'Acquisto parti di ricambio per moto', val: 50534 },
+        { label: 'Acquisto parti di ricambio per moto (di cui)', val: 11019 },
+        { label: 'Lavorazioni terzi per moto', val: 17942 },
+        { label: 'Lavorazioni terzi per moto (di cui)', val: 3046 },
+        { label: 'Acquisti generici officina', val: 7948 },
+        { label: 'Acquisto moto/vespe', val: 4000 },
+        { label: 'Acquisti per produzione fashion', val: 24537 }
+    ];
+    const CE_ANALITICO_CV_COMMERCIALI = [
+        { label: 'Consulenze', val: 7975 },
+        { label: 'Consulenze (di cui)', val: 455 },
+        { label: 'Consulenze (marketing)', val: 31241 },
+        { label: 'Consulenze (emporio)', val: 16792 },
+        { label: 'Consulenze (varie)', val: 771 },
+        { label: 'Fiere e convegni', val: 188 },
+        { label: 'Spese relative a trasferte', val: 952 },
+        { label: 'Servizi informatici', val: 27439 },
+        { label: 'Spedizioni', val: 838 }
+    ];
+    const CE_ANALITICO_LOCALI = [
+        { label: 'Affitti – Via Pinciana 45', val: 23221 },
+        { label: 'Affitti – Via Pinciana 41', val: 26741 },
+        { label: 'Affitti – Via Adige', val: 17448 },
+        { label: 'Utenze – Via Pinciana 45', val: 2647 },
+        { label: 'Utenze – Via Pinciana 41', val: 1103 },
+        { label: 'Utenze – Via Adige', val: 2876 },
+        { label: 'Spese accessorie locali', val: 10127 },
+        { label: 'Spese per telefonia', val: 3574 },
+        { label: 'Assicurazione Varie', val: 6697 }
+    ];
+    const CE_ANALITICO_PERSONALE = [
+        { label: 'Personale dirigenti – competenze', val: 54084 },
+        { label: 'Personale dirigenti – oneri sociali', val: 15525 },
+        { label: 'Personale dirigenti – TFR', val: 3482 },
+        { label: 'Personale operai – competenze', val: 76174 },
+        { label: 'Personale operai – oneri sociali', val: 25665 },
+        { label: 'Personale operai – TFR', val: 5465 },
+        { label: 'Personale impiegati – competenze', val: 26712 },
+        { label: 'Personale impiegati – oneri sociali', val: 8021 },
+        { label: 'Personale impiegati – TFR', val: 2119 },
+        { label: 'Spese accessorie personale', val: 1200 }
+    ];
+    const CE_ANALITICO_GA = [
+        { label: 'G&A – noleggi fotocopiatrici', val: 1720 },
+        { label: 'G&A – noleggio auto aziendale', val: 9578 },
+        { label: 'G&A Other', val: 3714 },
+        { label: 'Oneri vari gestione', val: 7929 }
+    ];
+
+    function scaleVociToTotal(voci, targetTotal) {
+        const sum = voci.reduce((s, x) => s + x.val, 0);
+        if (sum <= 0) return voci.map(v => ({ ...v, val: 0 }));
+        const scale = targetTotal / sum;
+        const scaled = voci.map(v => ({ label: v.label, val: Math.round(v.val * scale) }));
+        const diff = targetTotal - scaled.reduce((s, x) => s + x.val, 0);
+        if (diff !== 0 && scaled.length) scaled[0].val += diff;
+        return scaled;
+    }
+
     function getPnl2025Breakdown(dataIndex) {
         const k = v => (v / 1000).toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
         const fmt = (label, val) => '  ' + label + ': € ' + k(val) + 'k';
         switch (dataIndex) {
-            case 3:
-                return [fmt('Operativi', BASE.cv_operativi), fmt('Commerciali', BASE.cv_commerciali), '  Totale: € ' + k(BASE.totale_cv) + 'k'];
-            case 4:
-                return [fmt('Personale e oneri', BASE.cf_personale), '  Totale: € ' + k(BASE.cf_personale) + 'k'];
-            case 5: {
-                const p41 = BASE.cf_locali_pinciana41_aff + BASE.cf_locali_pinciana41_ut;
-                const p44 = BASE.cf_locali_pinciana44_aff + BASE.cf_locali_pinciana44_ut;
-                const adige = BASE.cf_locali_adige_aff + BASE.cf_locali_adige_ut;
-                return [fmt('Pinciana 41 (affitto + utenze)', p41), fmt('Pinciana 44 (affitto + utenze)', p44), fmt('Via Adige (affitto + utenze)', adige), fmt('Overhead sedi', BASE.cf_locali_overhead), '  Totale: € ' + k(BASE.cf_locali) + 'k'];
+            case 3: {
+                const op = CE_ANALITICO_CV_OPERATIVI;
+                const comm = CE_ANALITICO_CV_COMMERCIALI;
+                const totOp = op.reduce((s, x) => s + x.val, 0);
+                const totComm = comm.reduce((s, x) => s + x.val, 0);
+                const totaleCV = totOp + totComm;
+                const lines = op.map(v => fmt(v.label, v.val)).concat(comm.map(v => fmt(v.label, v.val)));
+                lines.push('  Totale: € ' + k(totaleCV) + 'k');
+                return lines;
             }
-            case 6:
-                return [fmt('G&A e Altro', BASE.cf_ga_altro), '  Totale: € ' + k(BASE.cf_ga_altro) + 'k'];
+            case 4: {
+                const voci = CE_ANALITICO_PERSONALE;
+                const lines = voci.map(v => fmt(v.label, v.val));
+                lines.push('  Totale: € ' + k(voci.reduce((s, x) => s + x.val, 0)) + 'k');
+                return lines;
+            }
+            case 5: {
+                const voci = scaleVociToTotal(CE_ANALITICO_LOCALI, BASE.cf_locali);
+                const lines = voci.map(v => fmt(v.label, v.val));
+                lines.push('  Totale: € ' + k(BASE.cf_locali) + 'k');
+                return lines;
+            }
+            case 6: {
+                const voci = scaleVociToTotal(CE_ANALITICO_GA, BASE.cf_ga_altro);
+                const lines = voci.map(v => fmt(v.label, v.val));
+                lines.push('  Totale: € ' + k(BASE.cf_ga_altro) + 'k');
+                return lines;
+            }
             default:
                 return null;
         }
@@ -2584,7 +2664,7 @@
                 label, ricavi_officina, ricavi_fashion, ricavi_componenti, ricavi_kit,
                 ricavi_sharing, ricavi_concierge, ricavi_altro, totale_ricavi,
                 cv_operativi: Math.max(cv_operativi,0), cv_commerciali: Math.max(cv_commerciali,0), totale_cv,
-                mdc, cf_locali, cf_personale, cf_ga, cf_green, totale_cf, ebitda, da, ebit,
+                mdc, cf_locali, cf_personale, cf_personale_dirigenti: BASE.cf_personale_dirigenti, cf_personale_operai: BASE.cf_personale_operai, cf_ga, cf_green, totale_cf, ebitda, da, ebit,
                 green_ebitda: green_ebitda_plan, green_units: green_units_plan,
                 greenPerPlatform: greenPerPlatformPlan,
                 upside_fashion, upside_kit, upside_sharing, upside_componenti, upside_concierge, upside_totale
@@ -2686,7 +2766,8 @@
             { sep: true },
             { label: 'COSTI FISSI', bold: true, cls: 'text-white bg-slate-800', vals: [BASE.totale_cf, ...years.map(y=>y.totale_cf)], neg: true },
             { label: '  Locali (Affitti + Utenze)', vals: [BASE.cf_locali, ...years.map(y=>y.cf_locali)], neg: true },
-            { label: '  Personale Ottodrom', vals: [BASE.cf_personale, ...years.map(y=>y.cf_personale)], neg: true },
+            { label: '  Personale lordo – Dirigenti (Edoardo)', vals: [BASE.cf_personale_dirigenti, ...years.map(y=>y.cf_personale_dirigenti)], neg: true },
+            { label: '  Personale lordo – Operai (Alessio e Carlo)', vals: [BASE.cf_personale_operai, ...years.map(y=>y.cf_personale_operai)], neg: true },
             { label: '  G&A e Altro', vals: [BASE.cf_ga_altro, ...years.map(y=>y.cf_ga)], neg: true },
             { label: '  Project Green Team & Opex', vals: [0, ...years.map(y=>y.cf_green)], neg: true, accent: true },
             { sep: true },
@@ -3411,7 +3492,8 @@
             [],
             ['COSTI FISSI', BASE.totale_cf, ...years.map(y=>y.totale_cf)],
             ['  Locali (Affitti + Utenze)', BASE.cf_locali, ...years.map(y=>y.cf_locali)],
-            ['  Personale Ottodrom', BASE.cf_personale, ...years.map(y=>y.cf_personale)],
+            ['  Personale lordo – Dirigenti (Edoardo)', BASE.cf_personale_dirigenti, ...years.map(y=>y.cf_personale_dirigenti)],
+            ['  Personale lordo – Operai (Alessio e Carlo)', BASE.cf_personale_operai, ...years.map(y=>y.cf_personale_operai)],
             ['  G&A e Altro', BASE.cf_ga_altro, ...years.map(y=>y.cf_ga)],
             ['  Project Green Team & Opex', 0, ...years.map(y=>y.cf_green)],
             [],
@@ -3754,10 +3836,10 @@
                 if (pr.metric !== undefined) {
                     const rowNum = greenPLRow(yr, pr.metric);
                     formula = pr.neg ? `=-${B}${rowNum}` : `=${B}${rowNum}`;
-                } else if (pr.type === 'gp') formula = `=${colLetter}${rowPLRevenue}-${colLetter}${rowPLRevenue + 1}`;
+                } else if (pr.type === 'gp') formula = `=${colLetter}${rowPLRevenue}+${colLetter}${rowPLRevenue + 1}`;
                 else if (pr.type === 'margin') formula = `=IF(${colLetter}${rowPLRevenue}=0,"",${colLetter}${plRow - 1}/${colLetter}${rowPLRevenue}*100)&"%"`;
-                else if (pr.type === 'ebitda') formula = `=${colLetter}${plRow - 4}-${colLetter}${plRow - 2}-${colLetter}${plRow - 1}`;
-                else if (pr.type === 'ebit') formula = `=${colLetter}${plRow - 3}-${colLetter}${plRow - 2}`;
+                else if (pr.type === 'ebitda') formula = `=${colLetter}${plRow - 4}+${colLetter}${plRow - 2}+${colLetter}${plRow - 1}`;
+                else if (pr.type === 'ebit') formula = `=${colLetter}${plRow - 3}+${colLetter}${plRow - 2}`;
                 else if (pr.type === 'units') formula = `=${colLetter}${rowUTotal}`;
                 else if (pr.type === 'bmwUnits') formula = `=${colLetter}${rowUb}`;
                 else if (pr.type === 'platUnits') formula = nPlat === 0 ? '=0' : `=${colLetter}${rowUTotal}-${colLetter}${rowUb}`;
@@ -3971,7 +4053,10 @@
             ['Valori modificabili dall\'utente (default da BP): 2026, 2027, dal 2028. Con piattaforme aggiuntive: base × (1 + 20% per piattaforma oltre la prima). Riducendo i fissi l\'EBITDA migliora a parità di volumi.'],
             [],
             ['EBITDA'],
-            ['Gross Profit = Revenue − COGS. EBITDA Green = Gross Profit − Var Opex − Overheads. D&A: 2026 €75k, 2027 €91k, da 2028 in crescita.']
+            ['Gross Profit = Revenue − COGS. EBITDA Green = Gross Profit − Var Opex − Overheads. D&A: 2026 €75k, 2027 €91k, da 2028 in crescita.'],
+            [],
+            ['Nota formule Excel'],
+            ['Nel foglio Project Green PL le voci COGS, Var Opex, Fixed Opex e D&A sono scritte come valori negativi (costo in rosso). Le formule usano la SOMMA: Gross Profit = Revenue + COGS; EBITDA = Gross Profit + Var Opex + Fixed Opex; EBIT = EBITDA + D&A. Così i costi (negativi) vengono sottratti correttamente.']
         ];
         metodologia.forEach((row, i) => {
             const r = wsMeta.addRow(row);
