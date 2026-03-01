@@ -1285,37 +1285,64 @@
           impact: "MRR", subImpact: "Flusso Cassa Fisso Mensile" }
     ];
 
-    // --- Scenari 2026: voci di taglio (default da piano 2026) ---
-    // Verifica matematica: Hard 120+90+48+28+16.7=302.7 | Medio 75+58+32+18+7.4=190.4 | Soft 65+50+28+15+12=170
-    // EBITDA = BASE_EBITDA_2026 + tagli → -409.6+302.7=-106.9, -409.6+190.4=-219.2, -409.6+170=-239.6
+    // --- Scenari 2026: voci di taglio granulari (allineate al CE/Excel) ---
+    // Totali: Hard ~302.7 | Medio ~190.4 | Soft ~170. EBITDA = BASE_EBITDA_2026 + tagli
     const BASE_EBITDA_2026 = -409.6;
     const SCENARI_2026_TAGLI_DEFAULT = [302.7, 190.4, 170.0];
     const SCENARI_2026_EBITDA_DEFAULT = [-106.9, -219.3, -239.6];
     const MESI_NOMI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
     const roundScenari10 = (x) => Math.round((Number(x) || 0) * 10) / 10;
 
+    // Voci granulari come da Excel/CE: personale per ruolo (1 dirigente, 2 operai), sedi per sede, G&A/IT/Marketing/Altro
     function getScenari2026Defaults() {
         return {
             hard: [
-                { id: 'personale', label: 'Personale', amount: 120, mesiPerConseguire: 0 },
-                { id: 'sedi', label: 'Sedi', amount: 90, mesiPerConseguire: 6 },
-                { id: 'ga_it', label: 'G&A e IT', amount: 48, mesiPerConseguire: 0 },
-                { id: 'marketing', label: 'Marketing', amount: 28, mesiPerConseguire: 0 },
-                { id: 'altro', label: 'Altro', amount: 16.7, mesiPerConseguire: 0 }
+                { id: 'pers_dirigenti', label: 'Personale Dirigenti (Edoardo)', amount: 73.1, mesiPerConseguire: 0 },
+                { id: 'pers_operaio1', label: 'Personale Operaio 1 (Alessio/Carlo)', amount: 72.7, mesiPerConseguire: 0 },
+                { id: 'pers_operaio2', label: 'Personale Operaio 2 (Alessio/Carlo)', amount: 0.5, mesiPerConseguire: 0 },
+                { id: 'sedi_p41', label: 'Affitti e utenze Pinciana 41', amount: 27.8, mesiPerConseguire: 6 },
+                { id: 'sedi_p44', label: 'Affitti e utenze Pinciana 44', amount: 27.6, mesiPerConseguire: 6 },
+                { id: 'sedi_adige', label: 'Affitti e utenze Adige', amount: 18, mesiPerConseguire: 6 },
+                { id: 'sedi_accessorie', label: 'Spese accessorie locali', amount: 8, mesiPerConseguire: 0 },
+                { id: 'sedi_telefonia', label: 'Telefonia', amount: 3, mesiPerConseguire: 0 },
+                { id: 'sedi_assicurazioni', label: 'Assicurazioni', amount: 5, mesiPerConseguire: 0 },
+                { id: 'ga_noleggi', label: 'G&A noleggi e auto', amount: 10, mesiPerConseguire: 0 },
+                { id: 'ga_other', label: 'G&A other e oneri', amount: 10, mesiPerConseguire: 0 },
+                { id: 'it', label: 'Servizi informatici', amount: 17, mesiPerConseguire: 0 },
+                { id: 'marketing', label: 'Marketing', amount: 22, mesiPerConseguire: 0 },
+                { id: 'consulenze_altro', label: 'Consulenze e altro', amount: 8, mesiPerConseguire: 0 }
             ],
             medio: [
-                { id: 'personale', label: 'Personale', amount: 75, mesiPerConseguire: 0 },
-                { id: 'sedi', label: 'Sedi', amount: 58, mesiPerConseguire: 6 },
-                { id: 'ga_it', label: 'G&A e IT', amount: 32, mesiPerConseguire: 0 },
-                { id: 'marketing', label: 'Marketing', amount: 18, mesiPerConseguire: 0 },
-                { id: 'altro', label: 'Altro', amount: 7.4, mesiPerConseguire: 0 }
+                { id: 'pers_dirigenti', label: 'Personale Dirigenti (Edoardo)', amount: 46, mesiPerConseguire: 0 },
+                { id: 'pers_operaio1', label: 'Personale Operaio 1 (Alessio/Carlo)', amount: 30, mesiPerConseguire: 0 },
+                { id: 'pers_operaio2', label: 'Personale Operaio 2 (Alessio/Carlo)', amount: 5, mesiPerConseguire: 0 },
+                { id: 'sedi_p41', label: 'Affitti e utenze Pinciana 41', amount: 17.5, mesiPerConseguire: 6 },
+                { id: 'sedi_p44', label: 'Affitti e utenze Pinciana 44', amount: 17.4, mesiPerConseguire: 6 },
+                { id: 'sedi_adige', label: 'Affitti e utenze Adige', amount: 11.3, mesiPerConseguire: 6 },
+                { id: 'sedi_accessorie', label: 'Spese accessorie locali', amount: 5, mesiPerConseguire: 0 },
+                { id: 'sedi_telefonia', label: 'Telefonia', amount: 1.9, mesiPerConseguire: 0 },
+                { id: 'sedi_assicurazioni', label: 'Assicurazioni', amount: 3.2, mesiPerConseguire: 0 },
+                { id: 'ga_noleggi', label: 'G&A noleggi e auto', amount: 6.3, mesiPerConseguire: 0 },
+                { id: 'ga_other', label: 'G&A other e oneri', amount: 6.3, mesiPerConseguire: 0 },
+                { id: 'it', label: 'Servizi informatici', amount: 15.1, mesiPerConseguire: 0 },
+                { id: 'marketing', label: 'Marketing', amount: 17.6, mesiPerConseguire: 0 },
+                { id: 'consulenze_altro', label: 'Consulenze e altro', amount: 7.8, mesiPerConseguire: 0 }
             ],
             soft: [
-                { id: 'personale', label: 'Personale', amount: 65, mesiPerConseguire: 0 },
-                { id: 'sedi', label: 'Sedi', amount: 50, mesiPerConseguire: 6 },
-                { id: 'ga_it', label: 'G&A e IT', amount: 28, mesiPerConseguire: 0 },
-                { id: 'marketing', label: 'Marketing', amount: 15, mesiPerConseguire: 0 },
-                { id: 'altro', label: 'Altro', amount: 12, mesiPerConseguire: 0 }
+                { id: 'pers_dirigenti', label: 'Personale Dirigenti (Edoardo)', amount: 41, mesiPerConseguire: 0 },
+                { id: 'pers_operaio1', label: 'Personale Operaio 1 (Alessio/Carlo)', amount: 26, mesiPerConseguire: 0 },
+                { id: 'pers_operaio2', label: 'Personale Operaio 2 (Alessio/Carlo)', amount: 4.5, mesiPerConseguire: 0 },
+                { id: 'sedi_p41', label: 'Affitti e utenze Pinciana 41', amount: 15.6, mesiPerConseguire: 6 },
+                { id: 'sedi_p44', label: 'Affitti e utenze Pinciana 44', amount: 15.5, mesiPerConseguire: 6 },
+                { id: 'sedi_adige', label: 'Affitti e utenze Adige', amount: 10.1, mesiPerConseguire: 6 },
+                { id: 'sedi_accessorie', label: 'Spese accessorie locali', amount: 4.5, mesiPerConseguire: 0 },
+                { id: 'sedi_telefonia', label: 'Telefonia', amount: 1.7, mesiPerConseguire: 0 },
+                { id: 'sedi_assicurazioni', label: 'Assicurazioni', amount: 2.8, mesiPerConseguire: 0 },
+                { id: 'ga_noleggi', label: 'G&A noleggi e auto', amount: 5.6, mesiPerConseguire: 0 },
+                { id: 'ga_other', label: 'G&A other e oneri', amount: 5.6, mesiPerConseguire: 0 },
+                { id: 'it', label: 'Servizi informatici', amount: 13.4, mesiPerConseguire: 0 },
+                { id: 'marketing', label: 'Marketing', amount: 15.7, mesiPerConseguire: 0 },
+                { id: 'consulenze_altro', label: 'Consulenze e altro', amount: 8, mesiPerConseguire: 0 }
             ]
         };
     }
@@ -3261,7 +3288,7 @@
         [rTgt_1, rTgt_2, rTgt_3].forEach(row => { row.getCell(2).numFmt = '"€"#,##0'; row.getCell(3).numFmt = '"€"#,##0'; });
 
         const wsTagli = wb.addWorksheet('Tagli e Battente 2026', { views: [{ state: 'frozen', ySplit: 5 }] });
-        wsTagli.getColumn(1).width = 28;
+        wsTagli.getColumn(1).width = 38;
         for (let c = 2; c <= 7; c++) wsTagli.getColumn(c).width = 12;
         wsTagli.addRow(['Tagli e Battente 2026 – Dettaglio scenari e fasi']);
         wsTagli.mergeCells(1, 1, 1, 4);
