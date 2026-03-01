@@ -17,7 +17,9 @@
     body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
     h1, h2, h3, h4, .font-oswald { font-family: 'Oswald', sans-serif; }
     img { max-width: 100%; height: auto; }
-    .chart-wrapper { position: relative; width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; min-height: 0; }
+    .chart-wrapper { position: relative; width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; min-height: 180px; }
+    .chart-wrapper.h-64 { min-height: 256px; }
+    .chart-wrapper.h-44 { min-height: 176px; }
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -1334,15 +1336,26 @@
     let scenarioChart;
 
     function initDashboardCharts() {
+        if (typeof Chart === 'undefined') {
+            setTimeout(initDashboardCharts, 100);
+            return;
+        }
         const el = (id) => document.getElementById(id);
         if (!el('macroChart')) return;
-        new Chart(el('macroChart').getContext('2d'), {
+        const create = (id, config) => {
+            try {
+                const canvas = el(id);
+                if (!canvas || !canvas.getContext) return null;
+                return new Chart(canvas.getContext('2d'), config);
+            } catch (e) { return null; }
+        };
+        create('macroChart', {
             type: 'bar',
             data: { labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (ACEM)', 'Cruiser Usato Q2'],
                 datasets: [{ label: 'Variazione %', data: [-19.2, -9.2, -7.8, -13.0], backgroundColor: ['#be123c','#e11d48','#fb7185','#fda4af'], borderRadius: 4 }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw+'%' } } }, scales: { y: { max: 0, min: -25, grid: { color: '#e2e8f0' } } } }
         });
-        new Chart(el('tcoChart').getContext('2d'), {
+        create('tcoChart', {
             type: 'bar',
             data: { labels: ['Prezzo Acquisto Moto','Finanziamento (Anticipo)','Assicurazione RC','Abbigliamento Tecnico','Manutenzione/Stoccaggio'],
                 datasets: [
@@ -1351,19 +1364,19 @@
                 ] },
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label+': $'+ctx.raw.toLocaleString() } } }, scales: { x: { stacked: true, grid: { color: '#e2e8f0' } }, y: { stacked: true } } }
         });
-        new Chart(el('assetChart').getContext('2d'), {
+        create('assetChart', {
             type: 'doughnut',
             data: { labels: ['Immobilizzazioni + Crediti','Rimanenze Fashion','Rim. Officina + WIP','Cassa'],
                 datasets: [{ data: [769.6,201.1,103.8,12.5], backgroundColor: ['#94a3b8','#be123c','#f59e0b','#2dd4bf'], borderWidth: 1 }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
         });
-        new Chart(el('liabChart').getContext('2d'), {
+        create('liabChart', {
             type: 'doughnut',
             data: { labels: ['Patrimonio Netto','Debiti','Perdite Cumulate'],
                 datasets: [{ data: [618.8,271.6,471.5], backgroundColor: ['#0f766e','#94a3b8','#be123c'], borderWidth: 1 }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
         });
-        scenarioChart = new Chart(el('scenarioChart').getContext('2d'), {
+        scenarioChart = create('scenarioChart', {
             type: 'bar',
             data: { labels: ['Scenario Hard','Scenario Medio','Scenario Soft'],
                 datasets: [
@@ -1372,9 +1385,19 @@
                 ] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Anche i tagli massimi non bastano: servono nuovi ricavi', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
         });
+        setTimeout(function() {
+            [ 'macroChart', 'tcoChart', 'assetChart', 'liabChart', 'scenarioChart' ].forEach(function(id) {
+                var canvas = el(id);
+                if (canvas) {
+                    var ch = Chart.getChart(canvas);
+                    if (ch && ch.resize) ch.resize();
+                }
+            });
+        }, 150);
     }
 
     function toggleFinancialView() {
+        if (!finChart) return;
         const lbl = finChart.data.datasets[0].label;
         if (lbl.includes('P&L')) {
             finChart.data.labels = ['Ricavi','C.Variabili','C.Fissi','EBITDA'];
@@ -1430,6 +1453,7 @@
     function updateScenari2026() {
         const { tagli, ebitda } = getScenari2026TagliEbitda();
         const { battente2026, tagliFy2027, ebitdaBattente2026, ebitdaFy2027 } = getScenari2026BattenteEFy2027();
+        if (!scenarioChart) return;
         scenarioChart.data.datasets[0].data = tagli;
         scenarioChart.data.datasets[1].data = ebitda;
         scenarioChart.update();
@@ -2508,8 +2532,15 @@
     }
 
     function initFinancialChart() {
-        const pnl = getPnl2025ChartData();
-        finChart = new Chart(document.getElementById('financialChart').getContext('2d'), {
+        if (typeof Chart === 'undefined') {
+            setTimeout(initFinancialChart, 100);
+            return;
+        }
+        const canvas = document.getElementById('financialChart');
+        if (!canvas || !canvas.getContext) return;
+        try {
+            const pnl = getPnl2025ChartData();
+            finChart = new Chart(canvas.getContext('2d'), {
             type: 'bar',
             data: {
                 labels: pnl.labels,
@@ -2542,6 +2573,8 @@
                 scales: { y: { grid: { color: '#e2e8f0' } } }
             }
         });
+            setTimeout(function() { if (finChart && finChart.resize) finChart.resize(); }, 150);
+        } catch (e) { /* grafico P&L non creato */ }
     }
 
     let ebitdaChart;
@@ -4095,8 +4128,10 @@
         if (productsCatalog.length === 0 && SUGGESTED_COMPONENTS.length > 0) {
             SUGGESTED_COMPONENTS.forEach(p => productsCatalog.push({ ...emptyProduct(), ...p }));
         }
-        initDashboardCharts();
-        initFinancialChart();
+        setTimeout(function() {
+            initDashboardCharts();
+            initFinancialChart();
+        }, 50);
         switchBenchmark('revival', document.querySelector('#benchmarks button'));
         renderActions();
         renderPlatforms();
