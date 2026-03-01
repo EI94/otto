@@ -1286,8 +1286,13 @@
     ];
 
     // --- Scenari 2026: Importo 2025 unico, selezione per scenario (come in Excel) ---
-    // Tagli = somma Importo 2025 delle voci selezionate. EBITDA = BASE_EBITDA_2026 + tagli
-    const BASE_EBITDA_2026 = -409.6;
+    // Tagli = somma Importo 2025 delle voci selezionate. EBITDA = base EBITDA 2026 (da CE/Piano 2026) + tagli
+    // Base presa da lastYearsData[0].ebitda (CE analitico / Piano 2026) quando disponibile, altrimenti fallback
+    function getBaseEbitda2026K() {
+        if (lastYearsData && lastYearsData.length > 0 && lastYearsData[0] != null && typeof lastYearsData[0].ebitda === 'number')
+            return lastYearsData[0].ebitda / 1000;
+        return -409.6;
+    }
     const MESI_NOMI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
     const roundScenari10 = (x) => Math.round((Number(x) || 0) * 10) / 10;
 
@@ -1389,10 +1394,11 @@
     });
 
     function getScenari2026TagliEbitda() {
+        const baseEbitdaK = getBaseEbitda2026K();
         const tagli = SCENARI_2026_KEYS.map(k =>
             TAGLI_2026_VOCI_BASE.reduce((s, base, i) => s + (scenari2026Voci[k][i].selected ? (Number(base.amount) || 0) : 0), 0)
         );
-        const ebitda = tagli.map(t => roundScenari10(BASE_EBITDA_2026 + t));
+        const ebitda = tagli.map(t => roundScenari10(baseEbitdaK + t));
         return { tagli, ebitda };
     }
 
@@ -1412,11 +1418,12 @@
     }
 
     function getScenari2026BattenteEFy2027() {
+        const baseEbitdaK = getBaseEbitda2026K();
         const mese = Math.min(12, Math.max(1, mesePartenzaTagli2026 || 3));
         const battente2026 = tagliBattente2026PerScenario(mese, scenari2026Voci);
         const { tagli } = getScenari2026TagliEbitda();
-        const ebitdaBattente2026 = battente2026.map(t => roundScenari10(BASE_EBITDA_2026 + t));
-        const ebitdaFy2027 = tagli.map(t => roundScenari10(BASE_EBITDA_2026 + t));
+        const ebitdaBattente2026 = battente2026.map(t => roundScenari10(baseEbitdaK + t));
+        const ebitdaFy2027 = tagli.map(t => roundScenari10(baseEbitdaK + t));
         return { battente2026, tagliFy2027: tagli, ebitdaBattente2026, ebitdaFy2027 };
     }
 
@@ -2681,6 +2688,7 @@
         renderEbitdaChart(years);
         renderEbitdaCards(years);
         renderMixCharts(years);
+        updateScenari2026();
     }
 
     function renderRecapUpside(years) {
@@ -3283,6 +3291,7 @@
         wsTagli.addRow(['Parametro', 'Valore', '', '']);
         wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { bold: true };
         wsTagli.addRow(['Mese partenza tagli 2026', meseNome + ' (' + mesePartenza + ')', '', '']);
+        wsTagli.addRow(['EBITDA 2026 base (€k) – da CE/Piano 2026', roundScenari10(getBaseEbitda2026K()), '', '']);
         wsTagli.addRow([]);
         const { tagli: tagliPieni, ebitda: ebitdaPieni } = getScenari2026TagliEbitda();
         const { battente2026, tagliFy2027, ebitdaBattente2026, ebitdaFy2027 } = getScenari2026BattenteEFy2027();
