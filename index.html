@@ -1290,6 +1290,7 @@
     // --- Scenari 2026: Importo 2025 unico, selezione per scenario (come in Excel) ---
     // Tagli = somma Importo 2025 delle voci selezionate. EBITDA = base EBITDA 2026 (da CE/Piano 2026) + tagli
     // Base presa da lastYearsData[0].ebitda (CE analitico / Piano 2026) quando disponibile, altrimenti fallback
+    let lastYearsData = [];
     function getBaseEbitda2026K() {
         if (lastYearsData && lastYearsData.length > 0 && lastYearsData[0] != null && typeof lastYearsData[0].ebitda === 'number')
             return lastYearsData[0].ebitda / 1000;
@@ -2578,7 +2579,6 @@
     }
 
     let ebitdaChart;
-    let lastYearsData = [];
 
     function recalcFinancialPlan() {
         const fashionRadio = document.querySelector('input[name="fashionScenario"]:checked');
