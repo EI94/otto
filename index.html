@@ -2458,19 +2458,15 @@
         const fmt = (label, val) => '  ' + label + ': € ' + k(val) + 'k';
         switch (dataIndex) {
             case 3: {
-                const op = CE_ANALITICO_CV_OPERATIVI;
-                const comm = CE_ANALITICO_CV_COMMERCIALI;
-                const totOp = op.reduce((s, x) => s + x.val, 0);
-                const totComm = comm.reduce((s, x) => s + x.val, 0);
-                const totaleCV = totOp + totComm;
-                const lines = op.map(v => fmt(v.label, v.val)).concat(comm.map(v => fmt(v.label, v.val)));
-                lines.push('  Totale: € ' + k(totaleCV) + 'k');
+                const voci = scaleVociToTotal(CE_ANALITICO_CV_OPERATIVI, BASE.cv_operativi);
+                const lines = voci.map(v => fmt(v.label, v.val));
+                lines.push('  Totale: € ' + k(BASE.cv_operativi) + 'k');
                 return lines;
             }
             case 4: {
-                const voci = CE_ANALITICO_PERSONALE;
+                const voci = scaleVociToTotal(CE_ANALITICO_CV_COMMERCIALI, BASE.cv_commerciali);
                 const lines = voci.map(v => fmt(v.label, v.val));
-                lines.push('  Totale: € ' + k(voci.reduce((s, x) => s + x.val, 0)) + 'k');
+                lines.push('  Totale: € ' + k(BASE.cv_commerciali) + 'k');
                 return lines;
             }
             case 5: {
@@ -2485,6 +2481,12 @@
                 lines.push('  Totale: € ' + k(BASE.cf_ga_altro) + 'k');
                 return lines;
             }
+            case 7: {
+                const voci = scaleVociToTotal(CE_ANALITICO_PERSONALE, BASE.cf_personale);
+                const lines = voci.map(v => fmt(v.label, v.val));
+                lines.push('  Totale: € ' + k(BASE.cf_personale) + 'k');
+                return lines;
+            }
             default:
                 return null;
         }
@@ -2493,8 +2495,8 @@
     function getPnl2025ChartData() {
         const k = v => Math.round(v / 1000 * 10) / 10;
         return {
-            labels: ['Officina', 'Fashion', 'Altro', 'C.Variabili', 'Personale', 'Sedi', 'IT/Servizi'],
-            data: [k(BASE.ricavi_officina), k(BASE.ricavi_fashion), k(BASE.ricavi_altro), -k(BASE.totale_cv), -k(BASE.cf_personale), -k(BASE.cf_locali), -k(BASE.cf_ga_altro)]
+            labels: ['Officina', 'Fashion', 'Altro', 'C.Var. Operativi', 'C.Var. Commerciali e Consulenze', 'C.Fissi Operativi', 'G&A', 'Personale'],
+            data: [k(BASE.ricavi_officina), k(BASE.ricavi_fashion), k(BASE.ricavi_altro), -k(BASE.cv_operativi), -k(BASE.cv_commerciali), -k(BASE.cf_locali), -k(BASE.cf_ga_altro), -k(BASE.cf_personale)]
         };
     }
 
