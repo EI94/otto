@@ -1329,16 +1329,50 @@
     }, {});
     let mesePartenzaTagli2026 = 3;
 
-    // --- STATIC CHARTS (Sections 1-3) ---
-
-    new Chart(document.getElementById('macroChart').getContext('2d'), {
-        type: 'bar',
-        data: { labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (ACEM)', 'Cruiser Usato Q2'],
-            datasets: [{ label: 'Variazione %', data: [-19.2, -9.2, -7.8, -13.0], backgroundColor: ['#be123c','#e11d48','#fb7185','#fda4af'], borderRadius: 4 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw+'%' } } }, scales: { y: { max: 0, min: -25, grid: { color: '#e2e8f0' } } } }
-    });
-
+    // --- STATIC CHARTS (Sections 1-3) - inizializzati dopo layout (DOMContentLoaded) per evitare canvas a 0px ---
     let finChart;
+    let scenarioChart;
+
+    function initDashboardCharts() {
+        const el = (id) => document.getElementById(id);
+        if (!el('macroChart')) return;
+        new Chart(el('macroChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['Italia (ANCMA)', 'USA (MIC)', 'Europa (ACEM)', 'Cruiser Usato Q2'],
+                datasets: [{ label: 'Variazione %', data: [-19.2, -9.2, -7.8, -13.0], backgroundColor: ['#be123c','#e11d48','#fb7185','#fda4af'], borderRadius: 4 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw+'%' } } }, scales: { y: { max: 0, min: -25, grid: { color: '#e2e8f0' } } } }
+        });
+        new Chart(el('tcoChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['Prezzo Acquisto Moto','Finanziamento (Anticipo)','Assicurazione RC','Abbigliamento Tecnico','Manutenzione/Stoccaggio'],
+                datasets: [
+                    { label: 'Minimo ($)', data: [15000,3000,145,1000,1400], backgroundColor: '#f59e0b', borderRadius: 4 },
+                    { label: 'Massimo ($)', data: [0,2000,215,2000,1600], backgroundColor: '#fcd34d', borderRadius: 4 }
+                ] },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label+': $'+ctx.raw.toLocaleString() } } }, scales: { x: { stacked: true, grid: { color: '#e2e8f0' } }, y: { stacked: true } } }
+        });
+        new Chart(el('assetChart').getContext('2d'), {
+            type: 'doughnut',
+            data: { labels: ['Immobilizzazioni + Crediti','Rimanenze Fashion','Rim. Officina + WIP','Cassa'],
+                datasets: [{ data: [769.6,201.1,103.8,12.5], backgroundColor: ['#94a3b8','#be123c','#f59e0b','#2dd4bf'], borderWidth: 1 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
+        });
+        new Chart(el('liabChart').getContext('2d'), {
+            type: 'doughnut',
+            data: { labels: ['Patrimonio Netto','Debiti','Perdite Cumulate'],
+                datasets: [{ data: [618.8,271.6,471.5], backgroundColor: ['#0f766e','#94a3b8','#be123c'], borderWidth: 1 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
+        });
+        scenarioChart = new Chart(el('scenarioChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['Scenario Hard','Scenario Medio','Scenario Soft'],
+                datasets: [
+                    { label: 'Tagli Applicati (\u20ack)', data: [302.7,190.4,170.0], backgroundColor: '#94a3b8', borderRadius: 4 },
+                    { label: 'EBITDA Risultante (\u20ack)', data: [-106.9,-219.3,-239.6], backgroundColor: '#be123c', borderRadius: 4 }
+                ] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Anche i tagli massimi non bastano: servono nuovi ricavi', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
+        });
+    }
 
     function toggleFinancialView() {
         const lbl = finChart.data.datasets[0].label;
@@ -1358,40 +1392,6 @@
         }
         finChart.update();
     }
-
-    new Chart(document.getElementById('tcoChart').getContext('2d'), {
-        type: 'bar',
-        data: { labels: ['Prezzo Acquisto Moto','Finanziamento (Anticipo)','Assicurazione RC','Abbigliamento Tecnico','Manutenzione/Stoccaggio'],
-            datasets: [
-                { label: 'Minimo ($)', data: [15000,3000,145,1000,1400], backgroundColor: '#f59e0b', borderRadius: 4 },
-                { label: 'Massimo ($)', data: [0,2000,215,2000,1600], backgroundColor: '#fcd34d', borderRadius: 4 }
-            ] },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: ctx => ctx.dataset.label+': $'+ctx.raw.toLocaleString() } } }, scales: { x: { stacked: true, grid: { color: '#e2e8f0' } }, y: { stacked: true } } }
-    });
-
-    new Chart(document.getElementById('assetChart').getContext('2d'), {
-        type: 'doughnut',
-        data: { labels: ['Immobilizzazioni + Crediti','Rimanenze Fashion','Rim. Officina + WIP','Cassa'],
-            datasets: [{ data: [769.6,201.1,103.8,12.5], backgroundColor: ['#94a3b8','#be123c','#f59e0b','#2dd4bf'], borderWidth: 1 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
-    });
-
-    new Chart(document.getElementById('liabChart').getContext('2d'), {
-        type: 'doughnut',
-        data: { labels: ['Patrimonio Netto','Debiti','Perdite Cumulate'],
-            datasets: [{ data: [618.8,271.6,471.5], backgroundColor: ['#0f766e','#94a3b8','#be123c'], borderWidth: 1 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 9 }, padding: 6 } }, tooltip: { callbacks: { label: ctx => ctx.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } } }
-    });
-
-    let scenarioChart = new Chart(document.getElementById('scenarioChart').getContext('2d'), {
-        type: 'bar',
-        data: { labels: ['Scenario Hard','Scenario Medio','Scenario Soft'],
-            datasets: [
-                { label: 'Tagli Applicati (\u20ack)', data: [302.7,190.4,170.0], backgroundColor: '#94a3b8', borderRadius: 4 },
-                { label: 'EBITDA Risultante (\u20ack)', data: [-106.9,-219.3,-239.6], backgroundColor: '#be123c', borderRadius: 4 }
-            ] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Anche i tagli massimi non bastano: servono nuovi ricavi', font: { size: 11 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label+': \u20ac'+ctx.raw.toLocaleString()+'k' } } }, scales: { y: { grid: { color: '#e2e8f0' } } } }
-    });
 
     function getScenari2026TagliEbitda() {
         const baseEbitdaK = getBaseEbitda2026K();
@@ -2543,7 +2543,6 @@
             }
         });
     }
-    initFinancialChart();
 
     let ebitdaChart;
     let lastYearsData = [];
@@ -4096,6 +4095,8 @@
         if (productsCatalog.length === 0 && SUGGESTED_COMPONENTS.length > 0) {
             SUGGESTED_COMPONENTS.forEach(p => productsCatalog.push({ ...emptyProduct(), ...p }));
         }
+        initDashboardCharts();
+        initFinancialChart();
         switchBenchmark('revival', document.querySelector('#benchmarks button'));
         renderActions();
         renderPlatforms();
