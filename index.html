@@ -3469,7 +3469,7 @@
         ws1.getCell(1, 1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: TEAL } };
         ws1.getCell(1, 1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 14 };
         ws1.getCell(1, 1).alignment = { horizontal: 'center' };
-        ws1.addRow(['Ricavi per voce da fogli Topline; costi e strutture da Assumptions. Solo le azioni Core sono incluse nei totali.']);
+        ws1.addRow(['Ricavi da fogli Topline (solo azioni Core: le non-Core sono 0). Costi dal dettaglio sotto. Margine = Ricavi − Costi variabili; EBITDA = Margine − Costi fissi; EBIT = EBITDA − D&A. Project Green Team & Opex solo se Az.4 è Core.']);
         ws1.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
         ws1.mergeCells(2, 1, 2, numCols);
         ws1.getRow(2).getCell(1).alignment = { wrapText: true };
@@ -3524,6 +3524,7 @@
             ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
             ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
         ];
+        const ROW_RICAVI = 5, ROW_CV = 14, ROW_MDC = 18, ROW_CF = 20, ROW_EBITDA = 27, ROW_DA = 28, ROW_EBIT = 29;
         const ceFormulaRows = { 'COSTI VARIABILI': 0, 'MARGINE DI CONTRIBUZIONE': 2, 'COSTI FISSI': 1, 'EBITDA': 3, '  D&A (Ottodrom + Green)': 4, 'EBIT': 5 };
         let bpRow = 13;
         const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, 'EBITDA': 1, 'EBIT': 1 };
@@ -3533,22 +3534,41 @@
             bpRow++;
             const firstLabel = row[0];
             const useFormula = ceFormulaRows[firstLabel] !== undefined;
-            const r = ws1.addRow(useFormula ? [firstLabel].concat(Array(numCols - 1).fill(0)) : row);
+            const isGreenOpexRow = firstLabel === '  Project Green Team & Opex';
+            const r = ws1.addRow(useFormula ? [firstLabel].concat(Array(numCols - 1).fill(0)) : (isGreenOpexRow ? [firstLabel].concat(Array(numCols - 1).fill(0)) : row));
             if (sectionRows[firstLabel]) { r.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } }; r.getCell(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }; }
             else if (firstLabel && firstLabel.startsWith('  ')) r.getCell(1).font = { bold: true };
-            if (useFormula) {
-                const metric = ceFormulaRows[firstLabel];
+            if (isGreenOpexRow) {
                 for (let col = 2; col <= numCols; col++) {
                     const yr = yearLabelsBP[col - 2];
                     const cell = r.getCell(col);
-                    cell.value = { formula: `=Assumptions!$B$${ceRow(yr, metric)}` };
+                    cell.value = { formula: `=IF(${B}${R.azione4}="Core",Assumptions!$B$${greenPLRow(yr, 2)},0)` };
                     cell.numFmt = '"€"#,##0';
                     cell.alignment = { horizontal: 'right' };
-                    if (resultRows[firstLabel]) applyResultStyle(cell);
+                }
+            } else if (useFormula) {
+                for (let col = 2; col <= numCols; col++) {
+                    const colLetter = excelColLetter(col - 1);
+                    const cell = r.getCell(col);
+                    let formula = '';
+                    if (firstLabel === 'COSTI VARIABILI') formula = `=SUM(${colLetter}15:${colLetter}16)`;
+                    else if (firstLabel === 'MARGINE DI CONTRIBUZIONE') formula = `=${colLetter}${ROW_RICAVI}-${colLetter}${ROW_CV}`;
+                    else if (firstLabel === 'COSTI FISSI') formula = `=SUM(${colLetter}21:${colLetter}25)`;
+                    else if (firstLabel === 'EBITDA') formula = `=${colLetter}${ROW_MDC}-${colLetter}${ROW_CF}`;
+                    else if (firstLabel === '  D&A (Ottodrom + Green)') {
+                        const yr = yearLabelsBP[col - 2];
+                        formula = `=Assumptions!$B$${ceRow(yr, 4)}`;
+                    } else if (firstLabel === 'EBIT') formula = `=${colLetter}${ROW_EBITDA}-${colLetter}${ROW_DA}`;
+                    if (formula) {
+                        cell.value = { formula };
+                        cell.numFmt = '"€"#,##0';
+                        cell.alignment = { horizontal: 'right' };
+                        if (resultRows[firstLabel]) applyResultStyle(cell);
+                    }
                 }
             }
-            if (resultRows[firstLabel] && !useFormula) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
-            else if (!useFormula) r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
+            if (resultRows[firstLabel] && !useFormula && !isGreenOpexRow) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
+            else if (!useFormula && !isGreenOpexRow) r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
         ws1.getColumn(1).width = 42;
         for (let c = 2; c <= numCols; c++) ws1.getColumn(c).width = 14;
