@@ -3749,7 +3749,6 @@
         wsAss.getColumn(1).width = 52;
         wsAss.getColumn(2).width = 22;
 
-        const personnelData = getGreenPersonnelFromDOM();
         const personaleRows = [];
         (personnelData.core || []).forEach(p => {
             personaleRows.push({ nome: p.name || '', area: 'Core (team condiviso)', costo: p.costAzienda || 0, daAnno: p.yearFrom || 2026, pct: p.pctGreen || 0, costoGreen: Math.round((p.costAzienda || 0) * (p.pctGreen || 0) / 100) });
