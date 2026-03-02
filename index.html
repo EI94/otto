@@ -3220,7 +3220,7 @@
             ['Struttura del file'],
             ['• Dati Finanziari – Executive summary: KPI, Revenue Mix e confronto Core vs Inclusi Upside. Tutte le celle sono formule collegate al Conto Economico (BP) e a Recap Upside; modificando Assumptions o Topline questo foglio si aggiorna.'],
             ['• Tagli e Battente 2026 – Situazione 2025, battente FY 2026 e FY 2027. I totali (Tagli anno pieno, EBITDA, Tagli battente, ecc.) sono formule che sommano il Dettaglio voci sotto e referenziano Assumptions (mese partenza, EBITDA base). Modificare o aggiungere righe nel Dettaglio voci: i totali si aggiornano; per nuove righe copiare le formule delle colonne Hard/Medio/Soft battente €k (H, I, J).'],
-            ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions. Il dettaglio del personale (nomi e % allocazione su Green) è nel foglio Personale.'],
+            ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. La colonna 2025 (Base) legge i totali dal foglio Assumptions (B43=Ricavi, B44=Costi variabili, B45=Costi fissi): per allineare al CE consolidato incollare i valori dal proprio Conto Economico 2025 in quelle celle. Il dettaglio del personale è nel foglio Personale.'],
             ['• Personale – Elenco di tutte le persone inserite nel tool (Core e per piattaforma), con costo azienda, da anno, % Green e costo Green (€). Questi costi confluiscono nel Fixed Opex del Project Green e nel Conto Economico.'],
             ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
             ['• Topline – Fogli ricavi per voce e per anno (Officina, Altro, Fashion, Componenti, Sharing, Ottodrom Care). Ordinamento: prima i tab Core (inclusi nel BP), poi i tab Upside.'],
@@ -3388,7 +3388,7 @@
             ['Azione 5 Componenti – In piano: Core o Upside', actionCoreExcel[5] ? 'Core' : 'Upside'],
             ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside'],
             ['Mese partenza tagli 2026 (1=Gen … 12=Dic)', mesePartenza],
-            ['EBITDA 2026 base (€k) – da CE/Piano 2026 (formula da BP)', { formula: "='BP Ottodrom 2026-2036'!C27/1000" }],
+            ['EBITDA 2026 base (€k) – da CE/Piano 2026 (formula da BP)', { formula: "='BP Ottodrom 2026-2036'!C28/1000" }],
             ['Situazione 2025 – Ricavi (€)', safeNum(BASE.totale_ricavi)],
             ['Situazione 2025 – Costi variabili (€)', safeNum(BASE.totale_cv)],
             ['Situazione 2025 – Costi fissi (€)', safeNum(BASE.totale_cf)],
@@ -3478,7 +3478,7 @@
         ws1.getRow(4).eachCell((c, colNumber) => { applyHeaderStyle(c, SLATE); if (colNumber > 1) c.alignment = { horizontal: 'right' }; });
         for (let col = 2; col <= numCols; col++) {
             const colLetter = excelColLetter(col - 1);
-            ws1.getCell(5, col).value = { formula: `=SUM(${colLetter}6:${colLetter}12)` };
+            ws1.getCell(5, col).value = { formula: col === 2 ? `=Assumptions!$B$43` : `=SUM(${colLetter}6:${colLetter}12)` };
             ws1.getCell(5, col).numFmt = '"€"#,##0';
             ws1.getCell(6, col).value = { formula: `='Topline Officina'!${colLetter}3` };
             ws1.getCell(6, col).numFmt = '"€"#,##0';
@@ -3502,6 +3502,17 @@
             ws1.getCell(6 + i, 1).value = label;
             ws1.getCell(6 + i, 1).font = { bold: true };
         });
+        const yearLabelsBP = [2025, ...years.map(y => parseInt(y.label))];
+        const personnelData = typeof getGreenPersonnelFromDOM === 'function' ? getGreenPersonnelFromDOM() : { core: [], platforms: {} };
+        const altroPersonaleGreenPerYear = yearLabelsBP.map(yr => {
+            let v = 0;
+            Object.keys(personnelData.platforms || {}).forEach(pid => {
+                (personnelData.platforms[pid] || []).forEach(p => {
+                    if (p.yearFrom <= yr) v += (p.costAzienda || 0) * ((p.pctGreen || 0) / 100);
+                });
+            });
+            return v;
+        });
         const ceRest = [
             [],
             ['COSTI VARIABILI', BASE.totale_cv, ...years.map(y=>y.totale_cv)],
@@ -3515,6 +3526,7 @@
             ['  Personale lordo – Dirigenti (Edoardo)', BASE.cf_personale_dirigenti, ...years.map(y=>y.cf_personale_dirigenti)],
             ['  Personale lordo – Operai (Alessio e Carlo)', BASE.cf_personale_operai, ...years.map(y=>y.cf_personale_operai)],
             ['  G&A e Altro', BASE.cf_ga_altro, ...years.map(y=>y.cf_ga)],
+            ['  Altro personale Green (es. Agente Cina)', altroPersonaleGreenPerYear[0], ...altroPersonaleGreenPerYear.slice(1)],
             ['  Project Green Team & Opex', 0, ...years.map(y=>y.cf_green)],
             [],
             ['EBITDA', BASE.ebitda, ...years.map(y=>y.ebitda)],
@@ -3524,21 +3536,38 @@
             ['di cui: Green EBITDA', 0, ...years.map(y=>y.green_ebitda)],
             ['di cui: Green Units', 0, ...years.map(y=>Math.round(y.green_units))]
         ];
-        const ROW_RICAVI = 5, ROW_CV = 14, ROW_MDC = 18, ROW_CF = 20, ROW_EBITDA = 27, ROW_DA = 28, ROW_EBIT = 29;
+        const ROW_RICAVI = 5, ROW_CV = 14, ROW_MDC = 18, ROW_CF = 20, ROW_EBITDA = 28, ROW_DA = 29, ROW_EBIT = 30;
         const ceFormulaRows = { 'COSTI VARIABILI': 0, 'MARGINE DI CONTRIBUZIONE': 2, 'COSTI FISSI': 1, 'EBITDA': 3, '  D&A (Ottodrom + Green)': 4, 'EBIT': 5 };
         let bpRow = 13;
         const sectionRows = { 'COSTI VARIABILI': 1, 'MARGINE DI CONTRIBUZIONE': 1, 'COSTI FISSI': 1, 'EBITDA': 1, 'EBIT': 1 };
         const resultRows = { 'MARGINE DI CONTRIBUZIONE': 1, 'EBITDA': 1, 'EBIT': 1 };
-        const yearLabelsBP = [2025, ...years.map(y => parseInt(y.label))];
+        const greenPL_EbitdaRow = 25 + 2 * nPlat;
+        const greenPL_UnitsRow = 7 + nPlat;
         ceRest.forEach((row) => {
             bpRow++;
             const firstLabel = row[0];
             const useFormula = ceFormulaRows[firstLabel] !== undefined;
             const isGreenOpexRow = firstLabel === '  Project Green Team & Opex';
-            const r = ws1.addRow(useFormula ? [firstLabel].concat(Array(numCols - 1).fill(0)) : (isGreenOpexRow ? [firstLabel].concat(Array(numCols - 1).fill(0)) : row));
+            const isGreenEbitdaRow = firstLabel === 'di cui: Green EBITDA';
+            const isGreenUnitsRow = firstLabel === 'di cui: Green Units';
+            const r = ws1.addRow(useFormula || isGreenOpexRow || isGreenEbitdaRow || isGreenUnitsRow ? [firstLabel].concat(Array(numCols - 1).fill(0)) : row);
             if (sectionRows[firstLabel]) { r.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: SLATE } }; r.getCell(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }; }
             else if (firstLabel && firstLabel.startsWith('  ')) r.getCell(1).font = { bold: true };
-            if (isGreenOpexRow) {
+            if (isGreenEbitdaRow) {
+                for (let col = 2; col <= numCols; col++) {
+                    const colLetter = excelColLetter(col - 1);
+                    r.getCell(col).value = { formula: `=IF(${B}${R.azione4}="Core",'Project Green PL'!${colLetter}${greenPL_EbitdaRow},0)` };
+                    r.getCell(col).numFmt = '"€"#,##0';
+                    r.getCell(col).alignment = { horizontal: 'right' };
+                }
+            } else if (isGreenUnitsRow) {
+                for (let col = 2; col <= numCols; col++) {
+                    const colLetter = excelColLetter(col - 1);
+                    r.getCell(col).value = { formula: `=IF(${B}${R.azione4}="Core",'Project Green PL'!${colLetter}${greenPL_UnitsRow},0)` };
+                    r.getCell(col).numFmt = '#,##0';
+                    r.getCell(col).alignment = { horizontal: 'right' };
+                }
+            } else if (isGreenOpexRow) {
                 for (let col = 2; col <= numCols; col++) {
                     const yr = yearLabelsBP[col - 2];
                     const cell = r.getCell(col);
@@ -3553,7 +3582,7 @@
                     let formula = '';
                     if (firstLabel === 'COSTI VARIABILI') formula = `=SUM(${colLetter}15:${colLetter}16)`;
                     else if (firstLabel === 'MARGINE DI CONTRIBUZIONE') formula = `=${colLetter}${ROW_RICAVI}-${colLetter}${ROW_CV}`;
-                    else if (firstLabel === 'COSTI FISSI') formula = `=SUM(${colLetter}21:${colLetter}25)`;
+                    else if (firstLabel === 'COSTI FISSI') formula = `=SUM(${colLetter}21:${colLetter}26)`;
                     else if (firstLabel === 'EBITDA') formula = `=${colLetter}${ROW_MDC}-${colLetter}${ROW_CF}`;
                     else if (firstLabel === '  D&A (Ottodrom + Green)') {
                         const yr = yearLabelsBP[col - 2];
@@ -3567,9 +3596,13 @@
                     }
                 }
             }
-            if (resultRows[firstLabel] && !useFormula && !isGreenOpexRow) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
-            else if (!useFormula && !isGreenOpexRow) r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
+            if (resultRows[firstLabel] && !useFormula && !isGreenOpexRow && !isGreenEbitdaRow && !isGreenUnitsRow) r.eachCell(c => { applyResultStyle(c); if (c.col > 1 && typeof c.value === 'number') applyNumStyle(c, c.value < 0); });
+            else if (!useFormula && !isGreenOpexRow && !isGreenEbitdaRow && !isGreenUnitsRow) r.eachCell((c, colNumber) => { if (colNumber > 1 && typeof c.value === 'number') { c.alignment = { horizontal: 'right' }; c.numFmt = '"€"#,##0'; if (c.value < 0) c.font = { color: { argb: 'FFB91C1C' } }; } });
         });
+        ws1.getCell(14, 2).value = { formula: '=Assumptions!$B$44' };
+        ws1.getCell(14, 2).numFmt = '"€"#,##0';
+        ws1.getCell(20, 2).value = { formula: '=Assumptions!$B$45' };
+        ws1.getCell(20, 2).numFmt = '"€"#,##0';
         ws1.getColumn(1).width = 42;
         for (let c = 2; c <= numCols; c++) ws1.getColumn(c).width = 14;
         for (let r = 5; r <= 12; r++) ws1.getCell(r, 1).alignment = { wrapText: true };
@@ -3581,7 +3614,7 @@
         const bpRef = "'" + bpName + "'!";
         const col2025 = 'B';
         const colTgt = excelColLetter(1 + regimeIdx);
-        const bpR = { revenue: 5, mdc: 18, ebitda: 27, da: 28, ebit: 29, cv: 14, cf: 20 };
+        const bpR = { revenue: 5, mdc: 18, ebitda: 28, da: 29, ebit: 30, cv: 14, cf: 20 };
         const wsDati = wb.addWorksheet('Dati Finanziari', { views: [{ state: 'frozen', ySplit: 2 }] });
         wsDati.getColumn(1).width = 38;
         wsDati.getColumn(2).width = 20;
