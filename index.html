@@ -598,7 +598,7 @@
 </section>
 
 <!-- ===== FOCUS 3: SHARING RISORSE OFFICINA ===== -->
-<section class="py-12 bg-blue-900 text-white">
+<section id="sharing-risorse-officina" class="py-12 bg-blue-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
@@ -793,6 +793,10 @@
                         <p class="text-slate-400 text-[9px] mt-0.5 mb-2">Per ogni persona: costo azienda (€/anno), anno da cui partecipa a Green, % tempo su Green. La parte % va ai costi Green; il resto resta in Ottodrom.</p>
                         <div class="mb-2">
                             <span class="text-slate-400 text-[9px] uppercase block mb-1">Team condiviso (costo già in Ottodrom)</span>
+                            <p class="text-[10px] text-amber-200/95 bg-amber-900/25 rounded px-2 py-1.5 border border-amber-700/50 mb-2">
+                                <i class="fa-solid fa-info-circle text-amber-400 mr-1"></i>
+                                <strong>Coerenza con lo Sharing:</strong> le persone qui sotto sono le stesse della sezione <a href="#sharing-risorse-officina" class="text-teal-300 underline hover:text-teal-200">Sharing Risorse Officina</a> (Simulatori). I due operai hanno già una parte di tempo allocata a Officine 42 e Nardi: la <strong>% su Green</strong> deve essere coerente con quel dato. Se un operaio è allocato 100% in sharing (42 + Nardi), non può essere allocato su Project Green; in generale la somma (tempo in sharing + % Green) non deve superare il 100% per persona. Imposta prima le % nella sezione Sharing, poi inserisci qui la % su Green sul tempo residuo.
+                            </p>
                             <table class="w-full text-[10px]">
                                 <thead><tr class="text-slate-400 text-left"><th>Nome</th><th>Costo azienda (€)</th><th>Da anno</th><th>% su Green</th><th></th></tr></thead>
                                 <tbody id="greenPersonnelCoreBody"></tbody>
