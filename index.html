@@ -3220,7 +3220,8 @@
             ['Struttura del file'],
             ['• Dati Finanziari – Executive summary: KPI, Revenue Mix e confronto Core vs Inclusi Upside. Tutte le celle sono formule collegate al Conto Economico (BP) e a Recap Upside; modificando Assumptions o Topline questo foglio si aggiorna.'],
             ['• Tagli e Battente 2026 – Situazione 2025, battente FY 2026 e FY 2027. I totali (Tagli anno pieno, EBITDA, Tagli battente, ecc.) sono formule che sommano il Dettaglio voci sotto e referenziano Assumptions (mese partenza, EBITDA base). Modificare o aggiungere righe nel Dettaglio voci: i totali si aggiornano; per nuove righe copiare le formule delle colonne Hard/Medio/Soft battente €k (H, I, J).'],
-            ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions.'],
+            ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions. Il dettaglio del personale (nomi e % allocazione su Green) è nel foglio Personale.'],
+            ['• Personale – Elenco di tutte le persone inserite nel tool (Core e per piattaforma), con costo azienda, da anno, % Green e costo Green (€). Questi costi confluiscono nel Fixed Opex del Project Green e nel Conto Economico.'],
             ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
             ['• Topline – Fogli ricavi per voce e per anno (Officina, Altro, Fashion, Componenti, Sharing, Ottodrom Care). Ordinamento: prima i tab Core (inclusi nel BP), poi i tab Upside.'],
             ['• Project Green P&L – P&L completo Iconic Mobility Lab (unità, ricavi, COGS, D&A, EBITDA).'],
@@ -3262,20 +3263,20 @@
         wsTagli.mergeCells(2, 1, 2, 4);
         wsTagli.getCell(2, 1).font = { italic: true, size: 9, color: { argb: 'FF64748B' } };
         wsTagli.addRow([]);
-        wsTagli.addRow(['SITUAZIONE 2025 (BASE)', '', '', '']);
+        wsTagli.addRow(['SITUAZIONE 2025 (BASE) – tutti i valori in migliaia € (€k)', '', '', '']);
         wsTagli.getRow(4).getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
-        wsTagli.addRow(['Ricavi (€)', '', '', '']);
-        wsTagli.getCell(5, 2).value = { formula: '=Assumptions!$B$43' };
-        wsTagli.getCell(5, 2).numFmt = '"€"#,##0';
-        wsTagli.addRow(['Costi variabili (€)', '', '', '']);
-        wsTagli.getCell(6, 2).value = { formula: '=Assumptions!$B$44' };
-        wsTagli.getCell(6, 2).numFmt = '"€"#,##0';
-        wsTagli.addRow(['Costi fissi (€)', '', '', '']);
-        wsTagli.getCell(7, 2).value = { formula: '=Assumptions!$B$45' };
-        wsTagli.getCell(7, 2).numFmt = '"€"#,##0';
-        wsTagli.addRow(['EBITDA (€)', '', '', '']);
-        wsTagli.getCell(8, 2).value = { formula: '=Assumptions!$B$46' };
-        wsTagli.getCell(8, 2).numFmt = '"€"#,##0';
+        wsTagli.addRow(['Ricavi (€k)', '', '', '']);
+        wsTagli.getCell(5, 2).value = { formula: '=Assumptions!$B$43/1000' };
+        wsTagli.getCell(5, 2).numFmt = '#,##0.0';
+        wsTagli.addRow(['Costi variabili (€k)', '', '', '']);
+        wsTagli.getCell(6, 2).value = { formula: '=Assumptions!$B$44/1000' };
+        wsTagli.getCell(6, 2).numFmt = '#,##0.0';
+        wsTagli.addRow(['Costi fissi (€k)', '', '', '']);
+        wsTagli.getCell(7, 2).value = { formula: '=Assumptions!$B$45/1000' };
+        wsTagli.getCell(7, 2).numFmt = '#,##0.0';
+        wsTagli.addRow(['EBITDA (€k)', '', '', '']);
+        wsTagli.getCell(8, 2).value = { formula: '=Assumptions!$B$46/1000' };
+        wsTagli.getCell(8, 2).numFmt = '#,##0.0';
         wsTagli.addRow([]);
         const mesePartenza = Math.min(12, Math.max(1, mesePartenzaTagli2026 || 3));
         const meseNome = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'][mesePartenza - 1];
@@ -3387,7 +3388,7 @@
             ['Azione 5 Componenti – In piano: Core o Upside', actionCoreExcel[5] ? 'Core' : 'Upside'],
             ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside'],
             ['Mese partenza tagli 2026 (1=Gen … 12=Dic)', mesePartenza],
-            ['EBITDA 2026 base (€k) – da CE/Piano 2026', roundScenari10(getBaseEbitda2026K())],
+            ['EBITDA 2026 base (€k) – da CE/Piano 2026 (formula da BP)', { formula: "='BP Ottodrom 2026-2036'!C27/1000" }],
             ['Situazione 2025 – Ricavi (€)', safeNum(BASE.totale_ricavi)],
             ['Situazione 2025 – Costi variabili (€)', safeNum(BASE.totale_cv)],
             ['Situazione 2025 – Costi fissi (€)', safeNum(BASE.totale_cf)],
@@ -3552,6 +3553,9 @@
         ws1.getColumn(1).width = 42;
         for (let c = 2; c <= numCols; c++) ws1.getColumn(c).width = 14;
         for (let r = 5; r <= 12; r++) ws1.getCell(r, 1).alignment = { wrapText: true };
+        const bpNoteRow = ws1.addRow(['Dettaglio personale (nomi, costi e % allocazione Green): foglio Personale', ...Array(numCols - 1).fill('')]);
+        bpNoteRow.getCell(1).font = { italic: true, size: 9, color: { argb: 'FF64748B' } };
+        ws1.mergeCells(bpNoteRow.number, 1, bpNoteRow.number, numCols);
 
         const bpName = 'BP Ottodrom 2026-2036';
         const bpRef = "'" + bpName + "'!";
@@ -3653,10 +3657,16 @@
         wsAss.getRow(3).font = { bold: true };
         wsAss.getRow(3).eachCell(c => { c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF64748B' } }; c.font = { bold: true, color: { argb: 'FFFFFFFF' } }; });
         assumpRows.forEach((row, i) => {
-            const val = (typeof row[1] === 'number' && !isNaN(row[1]) && isFinite(row[1])) ? row[1] : (row[1] != null && row[1] !== '' && (typeof row[1] !== 'number' || (!isNaN(row[1]) && isFinite(row[1]))) ? row[1] : '');
+            const isFormulaCell = row[1] && typeof row[1] === 'object' && row[1].formula;
+            const val = isFormulaCell ? '' : ((typeof row[1] === 'number' && !isNaN(row[1]) && isFinite(row[1])) ? row[1] : (row[1] != null && row[1] !== '' && (typeof row[1] !== 'number' || (!isNaN(row[1]) && isFinite(row[1]))) ? row[1] : ''));
             const r = wsAss.addRow([String(row[0] != null ? row[0] : ''), val]);
             r.getCell(1).alignment = { wrapText: true, vertical: 'top' };
             applyAssumptionParamStyle(r.getCell(1));
+            if (isFormulaCell) {
+                r.getCell(2).value = row[1];
+                r.getCell(2).numFmt = '#,##0.0';
+                return;
+            }
             const isPct = String(row[0]).indexOf('%') >= 0;
             const isEuro = String(row[0]).indexOf('€') >= 0 || String(row[0]).indexOf('Prezzo') >= 0 || String(row[0]).indexOf('Overhead') >= 0 || String(row[0]).indexOf('Capex') >= 0 || String(row[0]).indexOf('Ricavi') >= 0 || String(row[0]).indexOf('Costo') >= 0;
             if (typeof val === 'number' && (isPct || isEuro)) r.getCell(2).numFmt = isPct ? '0"%"' : '"€"#,##0';
@@ -3685,6 +3695,43 @@
         });
         wsAss.getColumn(1).width = 52;
         wsAss.getColumn(2).width = 22;
+
+        const personnelData = getGreenPersonnelFromDOM();
+        const personaleRows = [];
+        (personnelData.core || []).forEach(p => {
+            personaleRows.push({ nome: p.name || '', area: 'Core (team condiviso)', costo: p.costAzienda || 0, daAnno: p.yearFrom || 2026, pct: p.pctGreen || 0, costoGreen: Math.round((p.costAzienda || 0) * (p.pctGreen || 0) / 100) });
+        });
+        for (let i = 0; i < (platsForExcel || []).length; i++) {
+            const plat = platsForExcel[i];
+            const pid = plat && (plat.id !== undefined && plat.id !== null) ? plat.id : i;
+            const arr = (personnelData.platforms && (personnelData.platforms[String(pid)] || personnelData.platforms[pid] || personnelData.platforms[String(i)] || personnelData.platforms[i])) || [];
+            const platName = (plat && plat.name) ? plat.name : 'N/D';
+            arr.forEach(p => {
+                personaleRows.push({ nome: p.name || '', area: 'Piattaforma ' + (i + 1) + ' – ' + platName, costo: p.costAzienda || 0, daAnno: p.yearFrom || 2026, pct: p.pctGreen || 0, costoGreen: Math.round((p.costAzienda || 0) * (p.pctGreen || 0) / 100) });
+            });
+        }
+        const wsPersonale = wb.addWorksheet('Personale', { views: [{ state: 'frozen', ySplit: 2 }] });
+        wsPersonale.addRow(['Personale – costi e allocazione % su Project Green']);
+        wsPersonale.mergeCells(1, 1, 1, 6);
+        wsPersonale.getCell(1, 1).font = { bold: true, size: 14, color: { argb: TEAL } };
+        wsPersonale.addRow(['Elenco completo delle persone inserite nel tool: costo azienda (€/anno), da anno, % tempo su Green. La colonna Costo Green (€) = costo × % Green. Questi costi confluiscono nel Fixed Opex del P&L Project Green.']);
+        wsPersonale.getRow(2).getCell(1).font = { italic: true, size: 10, color: { argb: 'FF64748B' } };
+        wsPersonale.mergeCells(2, 1, 2, 6);
+        wsPersonale.addRow(['Nome', 'Area / Ruolo', 'Costo azienda (€)', 'Da anno', '% Green', 'Costo Green (€)']);
+        wsPersonale.getRow(3).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'left' }; });
+        personaleRows.forEach(pr => {
+            const r = wsPersonale.addRow([pr.nome, pr.area, pr.costo, pr.daAnno, pr.pct, pr.costoGreen]);
+            r.getCell(3).numFmt = '"€"#,##0';
+            r.getCell(4).numFmt = '0';
+            r.getCell(5).numFmt = '0"%"';
+            r.getCell(6).numFmt = '"€"#,##0';
+        });
+        wsPersonale.getColumn(1).width = 28;
+        wsPersonale.getColumn(2).width = 32;
+        wsPersonale.getColumn(3).width = 18;
+        wsPersonale.getColumn(4).width = 10;
+        wsPersonale.getColumn(5).width = 10;
+        wsPersonale.getColumn(6).width = 18;
 
         function addToplineSheet(name, title) {
             const ws = wb.addWorksheet(name, { views: [{ state: 'frozen', ySplit: 2 }] });
@@ -3970,6 +4017,19 @@
             r.getCell(2).alignment = { wrapText: true };
             ws2.mergeCells(r.number, 2, r.number, Math.min(4, greenNumCols));
         }
+        ws2.addRow([]);
+        ws2.addRow(['Personale – allocazione % su Green (elenco completo nel foglio Personale)']);
+        ws2.getRow(ws2.rowCount).getCell(1).font = { bold: true, size: 12, color: { argb: 'FF0F766E' } };
+        ws2.mergeCells(ws2.rowCount, 1, ws2.rowCount, 6);
+        ws2.addRow(['Nome', 'Area / Ruolo', 'Costo azienda (€)', 'Da anno', '% Green', 'Costo Green (€)']);
+        ws2.getRow(ws2.rowCount).eachCell((c, cn) => { if (cn <= 6) applyHeaderStyle(c, SLATE); });
+        (personaleRows || []).forEach(pr => {
+            const r = ws2.addRow([pr.nome, pr.area, pr.costo, pr.daAnno, pr.pct, pr.costoGreen]);
+            r.getCell(3).numFmt = '"€"#,##0';
+            r.getCell(4).numFmt = '0';
+            r.getCell(5).numFmt = '0"%"';
+            r.getCell(6).numFmt = '"€"#,##0';
+        });
         ws2.getColumn(1).width = 34;
         for (let c = 2; c <= greenNumCols; c++) ws2.getColumn(c).width = 14;
 
