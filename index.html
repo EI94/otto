@@ -3219,7 +3219,7 @@
             [],
             ['Struttura del file'],
             ['• Dati Finanziari – Executive summary: KPI (Revenue, EBITDA, EBIT, margini), Revenue Mix attuale e target, confronto scenari Solo Core vs Inclusi Upside. Tab dedicato per presentazioni e report.'],
-            ['• Tagli e Battente 2026 – Situazione 2025, battente FY 2026 (in base al mese di partenza e ai mesi per conseguire per voce) e FY 2027 con tagli tutti operativi. Dettaglio voci per scenario Hard, Medio, Soft.'],
+            ['• Tagli e Battente 2026 – Situazione 2025, battente FY 2026 e FY 2027. I totali (Tagli anno pieno, EBITDA, Tagli battente, ecc.) sono formule che sommano il Dettaglio voci sotto e referenziano Assumptions (mese partenza, EBITDA base). Modificare o aggiungere righe nel Dettaglio voci: i totali si aggiornano; per nuove righe copiare le formule delle colonne Hard/Medio/Soft battente €k (H, I, J).'],
             ['• BP Ottodrom 2026-2036 – Conto Economico con ricavi, costi, EBITDA ed EBIT per anno. Le celle sono collegate con formule ai fogli Topline e Assumptions.'],
             ['• Highlights – Sintesi KPI e Revenue Mix (stessi contenuti del tab Dati Finanziari, formato compatto).'],
             ['• Assumptions – Tutti i parametri che guidano il piano. Modificare solo la colonna Valore (B) nella sezione in alto. Le etichette sono descrittive; la colonna è larga per evitare testo tagliato.'],
@@ -3433,7 +3433,7 @@
 
         const wsTagli = wb.addWorksheet('Tagli e Battente 2026', { views: [{ state: 'frozen', ySplit: 5 }] });
         wsTagli.getColumn(1).width = 38;
-        for (let c = 2; c <= 7; c++) wsTagli.getColumn(c).width = 12;
+        for (let c = 2; c <= 10; c++) wsTagli.getColumn(c).width = 12;
         wsTagli.addRow(['Tagli e Battente 2026 – Dettaglio scenari e fasi']);
         wsTagli.mergeCells(1, 1, 1, 4);
         wsTagli.getCell(1, 1).font = { bold: true, size: 14, color: { argb: 'FF0F766E' } };
@@ -3443,37 +3443,48 @@
         wsTagli.addRow([]);
         wsTagli.addRow(['SITUAZIONE 2025 (BASE)', '', '', '']);
         wsTagli.getRow(4).getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
-        const r2025_ric = wsTagli.addRow(['Ricavi (€)', safeNum(BASE.totale_ricavi), '', '']);
-        const r2025_cv = wsTagli.addRow(['Costi variabili (€)', safeNum(BASE.totale_cv), '', '']);
-        const r2025_cf = wsTagli.addRow(['Costi fissi (€)', safeNum(BASE.totale_cf), '', '']);
-        const r2025_ebitda = wsTagli.addRow(['EBITDA (€)', safeNum(BASE.ebitda), '', '']);
-        [r2025_ric, r2025_cv, r2025_cf, r2025_ebitda].forEach(r => { r.getCell(2).numFmt = '"€"#,##0'; });
+        wsTagli.addRow(['Ricavi (€)', '', '', '']);
+        wsTagli.getCell(5, 2).value = { formula: '=Assumptions!$B$43' };
+        wsTagli.getCell(5, 2).numFmt = '"€"#,##0';
+        wsTagli.addRow(['Costi variabili (€)', '', '', '']);
+        wsTagli.getCell(6, 2).value = { formula: '=Assumptions!$B$44' };
+        wsTagli.getCell(6, 2).numFmt = '"€"#,##0';
+        wsTagli.addRow(['Costi fissi (€)', '', '', '']);
+        wsTagli.getCell(7, 2).value = { formula: '=Assumptions!$B$45' };
+        wsTagli.getCell(7, 2).numFmt = '"€"#,##0';
+        wsTagli.addRow(['EBITDA (€)', '', '', '']);
+        wsTagli.getCell(8, 2).value = { formula: '=Assumptions!$B$46' };
+        wsTagli.getCell(8, 2).numFmt = '"€"#,##0';
         wsTagli.addRow([]);
         const mesePartenza = Math.min(12, Math.max(1, mesePartenzaTagli2026 || 3));
         const meseNome = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'][mesePartenza - 1];
         wsTagli.addRow(['Parametro', 'Valore', '', '']);
         wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { bold: true };
-        wsTagli.addRow(['Mese partenza tagli 2026', meseNome + ' (' + mesePartenza + ')', '', '']);
-        wsTagli.addRow(['EBITDA 2026 base (€k) – da CE/Piano 2026', roundScenari10(getBaseEbitda2026K()), '', '']);
+        wsTagli.addRow(['Mese partenza tagli 2026', '', '', '']);
+        wsTagli.getCell(wsTagli.rowCount, 2).value = { formula: '=Assumptions!$B$41' };
+        wsTagli.getCell(wsTagli.rowCount, 2).numFmt = '#,##0';
+        wsTagli.addRow(['EBITDA 2026 base (€k) – da CE/Piano 2026', '', '', '']);
+        wsTagli.getCell(wsTagli.rowCount, 2).value = { formula: '=Assumptions!$B$42' };
+        wsTagli.getCell(wsTagli.rowCount, 2).numFmt = '#,##0.0';
         wsTagli.addRow([]);
-        const { tagli: tagliPieni, ebitda: ebitdaPieni } = getScenari2026TagliEbitda();
-        const { battente2026, tagliFy2027, ebitdaBattente2026, ebitdaFy2027 } = getScenari2026BattenteEFy2027();
         wsTagli.addRow(['', 'Scenario Hard', 'Scenario Medio', 'Scenario Soft']);
         wsTagli.getRow(wsTagli.rowCount).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'center' }; });
-        wsTagli.addRow(['Tagli (anno pieno, €k)', roundScenari10(tagliPieni[0]), roundScenari10(tagliPieni[1]), roundScenari10(tagliPieni[2])]);
-        wsTagli.addRow(['EBITDA (anno pieno, €k)', roundScenari10(ebitdaPieni[0]), roundScenari10(ebitdaPieni[1]), roundScenari10(ebitdaPieni[2])]);
-        wsTagli.addRow(['Tagli battente 2026 (€k)', roundScenari10(battente2026[0]), roundScenari10(battente2026[1]), roundScenari10(battente2026[2])]);
-        wsTagli.addRow(['EBITDA battente 2026 (€k)', roundScenari10(ebitdaBattente2026[0]), roundScenari10(ebitdaBattente2026[1]), roundScenari10(ebitdaBattente2026[2])]);
-        wsTagli.addRow(['Tagli FY 2027 (€k)', roundScenari10(tagliFy2027[0]), roundScenari10(tagliFy2027[1]), roundScenari10(tagliFy2027[2])]);
-        wsTagli.addRow(['EBITDA FY 2027 (€k)', roundScenari10(ebitdaFy2027[0]), roundScenari10(ebitdaFy2027[1]), roundScenari10(ebitdaFy2027[2])]);
+        const TAGLI_DETAIL_FIRST = 24;
+        const TAGLI_DETAIL_LAST = 100;
+        wsTagli.addRow(['Tagli (anno pieno, €k)', { formula: `=SUM(B${TAGLI_DETAIL_FIRST}:B${TAGLI_DETAIL_LAST})` }, { formula: `=SUM(D${TAGLI_DETAIL_FIRST}:D${TAGLI_DETAIL_LAST})` }, { formula: `=SUM(F${TAGLI_DETAIL_FIRST}:F${TAGLI_DETAIL_LAST})` }]);
+        wsTagli.addRow(['EBITDA (anno pieno, €k)', { formula: `=Assumptions!$B$42+B15` }, { formula: `=Assumptions!$B$42+C15` }, { formula: `=Assumptions!$B$42+D15` }]);
+        wsTagli.addRow(['Tagli battente 2026 (€k)', { formula: `=SUM(H${TAGLI_DETAIL_FIRST}:H${TAGLI_DETAIL_LAST})` }, { formula: `=SUM(I${TAGLI_DETAIL_FIRST}:I${TAGLI_DETAIL_LAST})` }, { formula: `=SUM(J${TAGLI_DETAIL_FIRST}:J${TAGLI_DETAIL_LAST})` }]);
+        wsTagli.addRow(['EBITDA battente 2026 (€k)', { formula: `=Assumptions!$B$42+B17` }, { formula: `=Assumptions!$B$42+C17` }, { formula: `=Assumptions!$B$42+D17` }]);
+        wsTagli.addRow(['Tagli FY 2027 (€k)', { formula: '=B15' }, { formula: '=C15' }, { formula: '=D15' }]);
+        wsTagli.addRow(['EBITDA FY 2027 (€k)', { formula: '=B16' }, { formula: '=C16' }, { formula: '=D16' }]);
         for (let r = wsTagli.rowCount - 6; r <= wsTagli.rowCount; r++) {
-            for (let c = 2; c <= 4; c++) wsTagli.getCell(r, c).numFmt = '#,##0.0';
+            for (let c = 2; c <= 4; c++) { const cell = wsTagli.getCell(r, c); if (cell.value && typeof cell.value === 'object' && cell.value.formula) cell.numFmt = '#,##0.0'; }
         }
         wsTagli.addRow([]);
-        wsTagli.addRow(['Dettaglio voci per scenario (importo €k, mesi per conseguire, inclusa)']);
+        wsTagli.addRow(['Dettaglio voci per scenario (importo €k, mesi per conseguire, inclusa). Modificare/aggiungere righe sotto: i totali sopra si aggiornano.']);
         wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { bold: true, color: { argb: 'FF334155' } };
-        wsTagli.mergeCells(wsTagli.rowCount, 1, wsTagli.rowCount, 7);
-        wsTagli.addRow(['Voce', 'Hard €k', 'Hard mesi', 'Medio €k', 'Medio mesi', 'Soft €k', 'Soft mesi']);
+        wsTagli.mergeCells(wsTagli.rowCount, 1, wsTagli.rowCount, 10);
+        wsTagli.addRow(['Voce', 'Hard €k', 'Hard mesi', 'Medio €k', 'Medio mesi', 'Soft €k', 'Soft mesi', 'Hard battente €k', 'Medio battente €k', 'Soft battente €k']);
         wsTagli.getRow(wsTagli.rowCount).eachCell(c => { applyHeaderStyle(c, SLATE); c.alignment = { horizontal: 'center' }; });
         for (let i = 0; i < TAGLI_2026_VOCI_BASE.length; i++) {
             const base = TAGLI_2026_VOCI_BASE[i];
@@ -3487,15 +3498,22 @@
                 m.selected ? roundScenari10(Number(base.amount) || 0) : '',
                 m.selected ? (parseInt(base.mesiPerConseguire, 10) || 0) : '',
                 s.selected ? roundScenari10(Number(base.amount) || 0) : '',
-                s.selected ? (parseInt(base.mesiPerConseguire, 10) || 0) : ''
+                s.selected ? (parseInt(base.mesiPerConseguire, 10) || 0) : '',
+                '', '', ''
             ]);
             const row = wsTagli.rowCount;
             for (let c = 2; c <= 7; c++) if (c % 2 === 0) wsTagli.getCell(row, c).numFmt = '#,##0.0';
+            wsTagli.getCell(row, 8).value = { formula: `=IF((Assumptions!$B$41+C${row})<=12,MAX(0,(13-(Assumptions!$B$41+C${row}))/12)*B${row},0)` };
+            wsTagli.getCell(row, 9).value = { formula: `=IF((Assumptions!$B$41+E${row})<=12,MAX(0,(13-(Assumptions!$B$41+E${row}))/12)*D${row},0)` };
+            wsTagli.getCell(row, 10).value = { formula: `=IF((Assumptions!$B$41+G${row})<=12,MAX(0,(13-(Assumptions!$B$41+G${row}))/12)*F${row},0)` };
+            wsTagli.getCell(row, 8).numFmt = '#,##0.0';
+            wsTagli.getCell(row, 9).numFmt = '#,##0.0';
+            wsTagli.getCell(row, 10).numFmt = '#,##0.0';
         }
         wsTagli.addRow([]);
         wsTagli.addRow(['Fonte: Proiezioni 2026 – Tool Ottodrom. Battente 2026 = effetto tagli nel FY 2026 in base al mese di partenza e ai mesi per conseguire per ogni voce.']);
         wsTagli.getRow(wsTagli.rowCount).getCell(1).font = { italic: true, size: 9, color: { argb: 'FF94A3B8' } };
-        wsTagli.mergeCells(wsTagli.rowCount, 1, wsTagli.rowCount, 7);
+        wsTagli.mergeCells(wsTagli.rowCount, 1, wsTagli.rowCount, 10);
 
         syncConciergeFromDOM();
         const greenParams = getGreenParams();
@@ -3546,7 +3564,13 @@
             ['Azione 3 Sharing – In piano: Core o Upside', actionCoreExcel[3] ? 'Core' : 'Upside'],
             ['Azione 4 Iconic Mobility Lab – In piano: Core o Upside', actionCoreExcel[4] ? 'Core' : 'Upside'],
             ['Azione 5 Componenti – In piano: Core o Upside', actionCoreExcel[5] ? 'Core' : 'Upside'],
-            ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside']
+            ['Azione 6 Ottodrom Care – In piano: Core o Upside', actionCoreExcel[6] ? 'Core' : 'Upside'],
+            ['Mese partenza tagli 2026 (1=Gen … 12=Dic)', mesePartenza],
+            ['EBITDA 2026 base (€k) – da CE/Piano 2026', roundScenari10(getBaseEbitda2026K())],
+            ['Situazione 2025 – Ricavi (€)', safeNum(BASE.totale_ricavi)],
+            ['Situazione 2025 – Costi variabili (€)', safeNum(BASE.totale_cv)],
+            ['Situazione 2025 – Costi fissi (€)', safeNum(BASE.totale_cf)],
+            ['Situazione 2025 – EBITDA (€)', safeNum(BASE.ebitda)]
         );
         const yearLabels = [2025, ...years.map(y => parseInt(y.label))];
         const GREEN_PL_METRICS = 5;
@@ -3561,7 +3585,7 @@
                 ['Green P&L – D&A Capex sviluppo ' + yr + ' (€)', g.daCapex != null ? g.daCapex : 0]
             );
         }
-        const CE_ASSUM_BASE = ASSUM_START + 37 + 12 * GREEN_PL_METRICS;
+        const CE_ASSUM_BASE = ASSUM_START + 43 + 12 * GREEN_PL_METRICS;
         for (let yi = 0; yi < yearLabels.length; yi++) {
             const yr = yearLabels[yi];
             const y = yi === 0 ? null : years[yi - 1];
@@ -3602,13 +3626,13 @@
                 [pre + 'Perché inclusa nel piano (rationale)', rationaleDefault]
             );
         }
-        const GREEN_PL_ASSUM_BASE = ASSUM_START + 37;
+        const GREEN_PL_ASSUM_BASE = ASSUM_START + 43;
         const greenPLRow = (yr, metric) => GREEN_PL_ASSUM_BASE + (yr - 2025) * GREEN_PL_METRICS + metric;
         const CE_METRICS = 6;
         const ceRow = (yr, metric) => CE_ASSUM_BASE + (yr - 2025) * CE_METRICS + metric;
         const PLAT_ASSUM_BASE = CE_ASSUM_BASE + 12 * CE_METRICS;
         const platR = (i, j) => PLAT_ASSUM_BASE + i * ROWS_PER_PLAT + j;
-        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenCapexPilot: ASSUM_START+6, greenCapexPctPilot: ASSUM_START+7, greenMixPilotY1: ASSUM_START+8, greenMixPilotY2: ASSUM_START+9, greenMixPilotReg: ASSUM_START+10, greenOh1: ASSUM_START+11, greenOh2: ASSUM_START+12, greenOh8: ASSUM_START+13, careMoto: ASSUM_START+14, carePrezzo: ASSUM_START+15, shareBase: ASSUM_START+16, shareMark: ASSUM_START+17, offBase: ASSUM_START+18, fashion: ASSUM_START+19, altro: ASSUM_START+20, compBase: ASSUM_START+21, compY1: ASSUM_START+21, compY2: ASSUM_START+22, compY3: ASSUM_START+23, compY4: ASSUM_START+24, compY5: ASSUM_START+25, compY6: ASSUM_START+26, compY7: ASSUM_START+27, compY8: ASSUM_START+28, compY9: ASSUM_START+29, compY10: ASSUM_START+30, azione1: ASSUM_START+31, azione2: ASSUM_START+32, azione3: ASSUM_START+33, azione4: ASSUM_START+34, azione5: ASSUM_START+35, azione6: ASSUM_START+36 };
+        const R = { greenVol2026: ASSUM_START, greenVol2027: ASSUM_START+1, greenVolReg: ASSUM_START+2, greenAsp: ASSUM_START+3, greenAspWs: ASSUM_START+4, greenMoto: ASSUM_START+5, greenCapexPilot: ASSUM_START+6, greenCapexPctPilot: ASSUM_START+7, greenMixPilotY1: ASSUM_START+8, greenMixPilotY2: ASSUM_START+9, greenMixPilotReg: ASSUM_START+10, greenOh1: ASSUM_START+11, greenOh2: ASSUM_START+12, greenOh8: ASSUM_START+13, careMoto: ASSUM_START+14, carePrezzo: ASSUM_START+15, shareBase: ASSUM_START+16, shareMark: ASSUM_START+17, offBase: ASSUM_START+18, fashion: ASSUM_START+19, altro: ASSUM_START+20, compBase: ASSUM_START+21, compY1: ASSUM_START+21, compY2: ASSUM_START+22, compY3: ASSUM_START+23, compY4: ASSUM_START+24, compY5: ASSUM_START+25, compY6: ASSUM_START+26, compY7: ASSUM_START+27, compY8: ASSUM_START+28, compY9: ASSUM_START+29, compY10: ASSUM_START+30, azione1: ASSUM_START+31, azione2: ASSUM_START+32, azione3: ASSUM_START+33, azione4: ASSUM_START+34, azione5: ASSUM_START+35, azione6: ASSUM_START+36, meseTagli: ASSUM_START+37, baseEbitda2026K: ASSUM_START+38, baseRicavi2025: ASSUM_START+39, baseCV2025: ASSUM_START+40, baseCF2025: ASSUM_START+41, baseEbitda2025: ASSUM_START+42 };
         const nPlat = Math.min(excelMaxPlat, greenParams.platforms.length);
         const rowRevTotalGreen = 16 + 2 * nPlat;
         const yearCols = ['2025', ...years.map(y => y.label)];
