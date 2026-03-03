@@ -4057,11 +4057,193 @@
             }
             if (pr.type === 'ebitda' || pr.type === 'ebit' || pr.type === 'gp') r.eachCell(c => { applyResultStyle(c); });
         });
+        // --- MARKET DRIVERS ---
+        ws2.addRow([]);
+        ws2.addRow([]);
+        const mdHdrRow = ws2.addRow(['MARKET DRIVERS', '', ...greenHdr.slice(1).map(() => ''), '', 'Notes']);
+        mdHdrRow.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' }, size: 12 };
+        const notesColGreen = greenNumCols + 1;
+        ws2.getColumn(notesColGreen).width = 40;
+        const mdRows = [
+            { label: 'TAM (Total Addressable Market)', unit: '#', vals: greenHdr.slice(1).map(() => 60000), note: 'Parco BMW R2V EU' },
+            { label: 'SAM (Serviceable Available Market)', unit: '#', vals: greenHdr.slice(1).map(() => 37500), note: 'Netto Italia e haircut DE' },
+            { label: 'Market Penetration (Target)', unit: '%', vals: greenHdr.slice(1).map((yr, i) => {
+                if (yr === 2025) return '0%';
+                const d = yr - 2026;
+                if (d === 0) return '0.02%';
+                if (d === 1) return '0.27%';
+                return (0.80 + d * 0.05).toFixed(2) + '%';
+            }), note: 'Target adoption curve' },
+        ];
+        mdRows.forEach(md => {
+            const r = ws2.addRow([md.label, md.unit, ...md.vals]);
+            r.getCell(1).font = { bold: true };
+            r.getCell(notesColGreen).value = md.note || '';
+            r.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+            r.getCell(notesColGreen).alignment = { wrapText: true };
+        });
+
+        // --- PRICING (ASP) ---
+        ws2.addRow([]);
+        const prcHdr = ws2.addRow(['PRICING (ASP)', '', ...greenHdr.slice(1).map(() => ''), '', 'Notes']);
+        prcHdr.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' }, size: 11 };
+        const aspRetail = greenParams.bmw.retailASP || 5400;
+        const aspWs = greenParams.bmw.wholesaleASP || 4300;
+        const aspMoto = greenParams.bmw.motoPrice || 23000;
+        const prcRows = [
+            { label: 'Price - Kit Retail', unit: '€', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : aspRetail), note: 'Include installazione e omologa' },
+            { label: 'Price - Kit Wholesale', unit: '€', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : aspWs), note: 'Solo Hardware (No Install)' },
+            { label: 'Price - Moto Chiavi-in-mano', unit: '€', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : aspMoto), note: 'Prezzo veicolo finito' },
+        ];
+        prcRows.forEach(pr => {
+            const r = ws2.addRow([pr.label, pr.unit, ...pr.vals]);
+            r.getCell(1).font = { bold: true };
+            for (let c = 3; c <= greenNumCols; c++) r.getCell(c).numFmt = '"€"#,##0';
+            r.getCell(notesColGreen).value = pr.note || '';
+            r.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+            r.getCell(notesColGreen).alignment = { wrapText: true };
+        });
+
+        // --- UNIT COSTS (DIRECT) ---
+        ws2.addRow([]);
+        const ucHdr = ws2.addRow(['UNIT COSTS (DIRECT)', '', ...greenHdr.slice(1).map(() => ''), '', 'Notes']);
+        ucHdr.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' }, size: 11 };
+        const bomKit0 = greenParams.bmw.bomKit || 2300;
+        const omologaUnit = greenParams.bmw.omologaRetail || 500;
+        const bomMoto = greenParams.bmw.bomMoto || 15717;
+        const mdoY1 = greenParams.bmw.mdoY1 || 2500;
+        const mdoY2 = greenParams.bmw.mdoY2 || 700;
+        const mdoY3 = greenParams.bmw.mdoY3 || 400;
+        const logY1 = greenParams.bmw.logWsY1 || 1250;
+        const logY2 = greenParams.bmw.logWsY2 || 300;
+        const logY3 = greenParams.bmw.logWsY3 || 150;
+        const cac = 150;
+        const ucRows = [
+            { label: 'BOM Cost - Kit (Materiali)', unit: '€', vals: greenHdr.slice(1).map((yr) => {
+                if (yr <= 2025) return 0;
+                const d = yr - 2026;
+                let bk = bomKit0 * Math.pow(0.95, Math.min(d, 10));
+                if (yr >= (greenParams.bmw.chinaYear || 9999)) bk *= (1 - (greenParams.bmw.chinaPct || 0));
+                return Math.round(Math.max(1800, bk));
+            }), note: 'Open Book (Retrokit)' },
+            { label: 'Var Cost - Omologa (Unit)', unit: '€', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : omologaUnit), note: 'Solo su Retail' },
+            { label: 'BOM Cost - Moto (Base + Kit)', unit: '€', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : (yr === 2026 ? 0 : bomMoto)), note: 'Moto usata + Kit + Ricambi' },
+            { label: 'Direct Labor / Installazione', unit: '€', vals: greenHdr.slice(1).map((yr) => {
+                if (yr <= 2025) return 0;
+                const d = yr - 2026;
+                return d === 0 ? mdoY1 : d === 1 ? mdoY2 : mdoY3;
+            }), note: 'Variabile (Outsourced). Costo stimato €650/unità; Ottodrom si avvale di officine proprie → ridotto a €400 dal 2028 in poi.' },
+            { label: 'Logistics & Packaging', unit: '€', vals: greenHdr.slice(1).map((yr) => {
+                if (yr <= 2025) return 0;
+                const d = yr - 2026;
+                return d === 0 ? logY1 : d === 1 ? logY2 : logY3;
+            }), note: 'Costo medio EU' },
+            { label: 'CAC (Var. Marketing)', unit: '€', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : cac), note: 'Costo acq. cliente' },
+        ];
+        ucRows.forEach(uc => {
+            const r = ws2.addRow([uc.label, uc.unit, ...uc.vals]);
+            r.getCell(1).font = { bold: true };
+            for (let c = 3; c <= greenNumCols; c++) r.getCell(c).numFmt = '"€"#,##0';
+            r.getCell(notesColGreen).value = uc.note || '';
+            r.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+            r.getCell(notesColGreen).alignment = { wrapText: true };
+        });
+
+        // --- FIXED COSTS DETAIL ---
+        ws2.addRow([]);
+        const fcHdr = ws2.addRow(['FIXED COSTS DETAIL', '', ...greenHdr.slice(1).map(() => ''), '', 'Notes']);
+        fcHdr.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' }, size: 11 };
+        const personnelAllocForFC = greenHdr.slice(1).map((yr) => {
+            if (yr <= 2025) return { green: 0 };
+            return getGreenPersonnelAllocation(yr, personnelData);
+        });
+        const numActivePerYear = greenHdr.slice(1).map((yr) => {
+            if (yr <= 2025) return 0;
+            return 1 + greenParams.platforms.filter(pp => yr >= pp.launchYear).length;
+        });
+        const overheadPerYear = greenHdr.slice(1).map((yr, i) => {
+            if (yr <= 2025) return 0;
+            const yIdx = yr - 2026;
+            let base;
+            if (yIdx <= 0) base = greenParams.overheadY1 ?? 200000;
+            else if (yIdx === 1) base = greenParams.overheadY2 ?? 500000;
+            else base = greenParams.overheadFrom2028 ?? 600000;
+            const fScale = 1 + (numActivePerYear[i] - 1) * 0.2;
+            return Math.round(base * fScale);
+        });
+        const fcRows = [
+            { label: 'Payroll Core Team', vals: personnelAllocForFC.map(a => Math.round(a.green || 0)), note: 'Costo team allocato a Green (Edoardo, Alessio, Carlo + piattaforma)' },
+            { label: 'Marketing (Brand/Fixed)', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : Math.round(overheadPerYear[greenHdr.slice(1).indexOf(yr)] * 0.15)), note: 'Stimato 15% dell\'overhead fisso' },
+            { label: 'Certificazione & Omologa', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : Math.round(overheadPerYear[greenHdr.slice(1).indexOf(yr)] * 0.25)), note: 'Stimato 25% dell\'overhead fisso – certif. tipo e omologhe' },
+            { label: 'Facilities & Utilities', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : Math.round(overheadPerYear[greenHdr.slice(1).indexOf(yr)] * 0.20)), note: 'Quota affitto lab/magazzino e utenze Green' },
+            { label: 'IT & Tools', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : Math.round(overheadPerYear[greenHdr.slice(1).indexOf(yr)] * 0.15)), note: 'SW gestionale, CAD, ERP, e-commerce platform' },
+            { label: 'G&A / Legal', vals: greenHdr.slice(1).map((yr) => yr <= 2025 ? 0 : Math.round(overheadPerYear[greenHdr.slice(1).indexOf(yr)] * 0.25)), note: 'Consulenze legali, contab., assicurazioni IP' },
+        ];
+        const fcTotalLabel = ws2.addRow(['TOTALE FIXED OPEX', '€', ...greenHdr.slice(1).map(() => 0)]);
+        const fcTotalRowNum = ws2.rowCount;
+        const fcDetailFirstRow = fcTotalRowNum + 1;
+        fcRows.forEach(fc => {
+            const r = ws2.addRow([fc.label, '€', ...fc.vals]);
+            r.getCell(1).font = { bold: true };
+            for (let c = 3; c <= greenNumCols; c++) r.getCell(c).numFmt = '"€"#,##0';
+            r.getCell(notesColGreen).value = fc.note || '';
+            r.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+            r.getCell(notesColGreen).alignment = { wrapText: true };
+        });
+        const fcDetailLastRow = ws2.rowCount;
+        for (let c = 3; c <= greenNumCols; c++) {
+            const colLetter = excelColLetter(c - 1);
+            fcTotalLabel.getCell(c).value = { formula: `=SUM(${colLetter}${fcDetailFirstRow}:${colLetter}${fcDetailLastRow})` };
+            fcTotalLabel.getCell(c).numFmt = '"€"#,##0';
+        }
+        fcTotalLabel.getCell(1).font = { bold: true };
+        fcTotalLabel.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
+        fcTotalLabel.getCell(notesColGreen).value = 'Somma Payroll + Marketing + Certif. + Facilities + IT + G&A';
+        fcTotalLabel.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+
+        // --- CAPEX & CAPITALIZZAZIONE ---
+        ws2.addRow([]);
+        const capHdr = ws2.addRow(['CAPEX & CAPITALIZZAZIONE', '', ...greenHdr.slice(1).map(() => ''), '', 'Notes']);
+        capHdr.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' }, size: 11 };
+        const allPlatsCapex = [
+            { name: 'BMW R2V Airhead (Pilot)', capex: greenParams.bmw.devCapex || 100000, pct: greenParams.bmw.capexCapitalizePct || 50, launch: 2026 },
+            ...greenParams.platforms.map((p, i) => ({ name: p.name || ('Piattaforma ' + (i+1)), capex: p.devCapex || 100000, pct: p.capexCapitalizePct || 50, launch: p.launchYear }))
+        ];
+        allPlatsCapex.forEach(cp => {
+            const capAmt = cp.capex;
+            const capPct = cp.pct;
+            const capitalized = Math.round(capAmt * capPct / 100);
+            const daPerYear = Math.round(capitalized / 5);
+            const r = ws2.addRow([cp.name, '€', ...greenHdr.slice(1).map(() => '')]);
+            r.getCell(1).font = { bold: true };
+            r.getCell(notesColGreen).value = `Capex: €${Math.round(capAmt/1000)}k | ${capPct}% capitalizzato = €${Math.round(capitalized/1000)}k | D&A: €${Math.round(daPerYear/1000)}k/anno per 5 anni (dal ${cp.launch})`;
+            r.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+            r.getCell(notesColGreen).alignment = { wrapText: true };
+            for (let c = 3; c <= greenNumCols; c++) {
+                const yr = greenHdr[c - 1];
+                if (yr >= cp.launch && yr < cp.launch + 5) {
+                    r.getCell(c).value = daPerYear;
+                    r.getCell(c).numFmt = '"€"#,##0';
+                }
+            }
+        });
+
+        // --- INVESTIMENTO MOTOVELOCI S.R.L. ---
+        ws2.addRow([]);
+        const invHdr = ws2.addRow(['INVESTIMENTI (NON P&L)', '', ...greenHdr.slice(1).map(() => ''), '', 'Notes']);
+        invHdr.getCell(1).font = { bold: true, color: { argb: 'FF0F766E' }, size: 11 };
+        const invRow = ws2.addRow(['Partecipazione Motoveloci S.r.l.', '€', ...greenHdr.slice(1).map((yr) => yr === 2026 ? 200000 : '')]);
+        invRow.getCell(1).font = { bold: true };
+        invRow.getCell(3).numFmt = '"€"#,##0';
+        invRow.getCell(notesColGreen).value = 'Acquisizione partecipazione societaria – non transita in Conto Economico. Investimento in equity nel veicolo industriale per il Project Green.';
+        invRow.getCell(notesColGreen).font = { italic: true, color: { argb: 'FF64748B' } };
+        invRow.getCell(notesColGreen).alignment = { wrapText: true };
+
         ws2.addRow([]);
         ws2.addRow(['Piattaforme – Perché incluse nel piano (rationale)']);
-        ws2.getRow(plRow + 2).getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } };
-        ws2.getRow(plRow + 2).getCell(1).alignment = { wrapText: true };
-        ws2.mergeCells(plRow + 2, 1, plRow + 2, greenNumCols);
+        ws2.getRow(ws2.rowCount).getCell(1).font = { bold: true, color: { argb: 'FF0F766E' } };
+        ws2.getRow(ws2.rowCount).getCell(1).alignment = { wrapText: true };
+        ws2.mergeCells(ws2.rowCount, 1, ws2.rowCount, greenNumCols);
         for (let i = 0; i < nPlat; i++) {
             const r = ws2.addRow(['Piattaforma ' + (i + 1) + ' – ' + (platsForExcel[i].name || 'N/D'), '', '', '']);
             r.getCell(1).font = { bold: true };
